@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lot Jam</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div class="title-block">
+        <p class="eyebrow" id="puzzleNumber">Lot Jam #&mdash;</p>
+        <h1>Lot Jam</h1>
+        <p class="sub">Clear a path out of the lot. Drag the parked cars, get the <span class="target-swatch"></span> car to the exit.</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><b id="statMoves">0</b><span>moves</span></div>
+        <div class="stat"><b id="statPar">&mdash;</b><span>par</span></div>
+        <div class="stat"><b id="statTime">0:00</b><span>time</span></div>
+      </div>
+    </header>
+
+    <div class="day-strip" id="dayStrip"></div>
+
+    <p class="flavor" id="flavorText"></p>
+
+    <div class="board-shell">
+      <div class="board" id="board">
+        <div class="exit-marker" id="exitMarker">
+          <span>EXIT</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button type="button" class="btn-ghost" id="undoBtn">Undo</button>
+      <button type="button" class="btn-ghost" id="resetBtn">Reset puzzle</button>
+      <div class="best" id="bestNote"></div>
+    </div>
+
+    <footer class="note">Practice any day from the strip above &mdash; only today's puzzle counts toward your streak.</footer>
+  </div>
+
+  <div class="modal-backdrop" id="winBackdrop" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="winTitle">
+      <p class="eyebrow">Cleared the lot</p>
+      <h2 id="winTitle">&mdash;</h2>
+      <div class="win-stats">
+        <div><b id="winMoves">0</b><span>moves</span></div>
+        <div><b id="winPar">0</b><span>par</span></div>
+        <div><b id="winTime">0:00</b><span>time</span></div>
+      </div>
+      <p class="rank" id="winRank"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn-ghost" id="winClose">Close</button>
+        <button type="button" class="btn-primary" id="winCopy">Copy result</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" role="status"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

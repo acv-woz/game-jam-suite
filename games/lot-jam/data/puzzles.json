@@ -1,0 +1,100 @@
+{
+  "gridSize": 6,
+  "puzzles": [
+    {
+      "id": "p1",
+      "label": "Monday Warmup",
+      "flavor": "One car in the way. Ease into it.",
+      "par": 2,
+      "vehicles": [
+        { "id": "target", "row": 2, "col": 0, "len": 2, "orient": "H", "isTarget": true },
+        { "id": "a", "row": 2, "col": 2, "len": 2, "orient": "V" }
+      ]
+    },
+    {
+      "id": "p2",
+      "label": "Tuesday Traffic",
+      "flavor": "Two cars, two directions.",
+      "par": 3,
+      "vehicles": [
+        { "id": "target", "row": 2, "col": 0, "len": 2, "orient": "H", "isTarget": true },
+        { "id": "a", "row": 2, "col": 2, "len": 2, "orient": "V" },
+        { "id": "b", "row": 2, "col": 4, "len": 2, "orient": "V" }
+      ]
+    },
+    {
+      "id": "p3",
+      "label": "Boxed In",
+      "flavor": "Something's holding that first car in place.",
+      "par": 4,
+      "vehicles": [
+        { "id": "target", "row": 2, "col": 0, "len": 2, "orient": "H", "isTarget": true },
+        { "id": "a", "row": 2, "col": 2, "len": 2, "orient": "V" },
+        { "id": "c1", "row": 4, "col": 2, "len": 2, "orient": "H" },
+        { "id": "d1", "row": 0, "col": 2, "len": 2, "orient": "H" },
+        { "id": "b", "row": 2, "col": 4, "len": 2, "orient": "V" }
+      ]
+    },
+    {
+      "id": "p4",
+      "label": "Rush Building",
+      "flavor": "Now both lanes are pinned. Work out the order.",
+      "par": 6,
+      "vehicles": [
+        { "id": "target", "row": 2, "col": 0, "len": 2, "orient": "H", "isTarget": true },
+        { "id": "a", "row": 2, "col": 2, "len": 2, "orient": "V" },
+        { "id": "c1", "row": 4, "col": 2, "len": 2, "orient": "H" },
+        { "id": "d1", "row": 0, "col": 2, "len": 2, "orient": "H" },
+        { "id": "b", "row": 2, "col": 4, "len": 2, "orient": "V" },
+        { "id": "c2", "row": 4, "col": 4, "len": 2, "orient": "H" },
+        { "id": "d2", "row": 0, "col": 4, "len": 2, "orient": "H" }
+      ]
+    },
+    {
+      "id": "p5",
+      "label": "Rush Hour",
+      "flavor": "Every lane ahead is full. Nothing moves until something else does.",
+      "par": 8,
+      "vehicles": [
+        { "id": "target", "row": 2, "col": 0, "len": 2, "orient": "H", "isTarget": true },
+        { "id": "a2", "row": 2, "col": 2, "len": 2, "orient": "V" },
+        { "id": "a3", "row": 2, "col": 3, "len": 2, "orient": "V" },
+        { "id": "b2", "row": 2, "col": 4, "len": 2, "orient": "V" },
+        { "id": "b3", "row": 2, "col": 5, "len": 2, "orient": "V" },
+        { "id": "c1", "row": 4, "col": 2, "len": 2, "orient": "H" },
+        { "id": "c2", "row": 4, "col": 4, "len": 2, "orient": "H" },
+        { "id": "d1", "row": 0, "col": 2, "len": 2, "orient": "H" },
+        { "id": "d2", "row": 0, "col": 4, "len": 2, "orient": "H" }
+      ]
+    },
+    {
+      "id": "p6",
+      "label": "Gridlock",
+      "flavor": "The whole lot is jammed. Find the one car that unlocks everything else.",
+      "par": 10,
+      "vehicles": [
+        { "id": "target", "row": 2, "col": 0, "len": 2, "orient": "H", "isTarget": true },
+        { "id": "a2", "row": 2, "col": 2, "len": 2, "orient": "V" },
+        { "id": "a3", "row": 2, "col": 3, "len": 2, "orient": "V" },
+        { "id": "b2", "row": 2, "col": 4, "len": 2, "orient": "V" },
+        { "id": "b3", "row": 2, "col": 5, "len": 2, "orient": "V" },
+        { "id": "c1", "row": 4, "col": 2, "len": 2, "orient": "H" },
+        { "id": "c2", "row": 4, "col": 4, "len": 2, "orient": "H" },
+        { "id": "d1", "row": 0, "col": 2, "len": 2, "orient": "H" },
+        { "id": "d2", "row": 0, "col": 4, "len": 2, "orient": "H" },
+        { "id": "e1", "row": 4, "col": 0, "len": 2, "orient": "V" }
+      ]
+    },
+    {
+      "id": "p7",
+      "label": "Easy Like Sunday Morning",
+      "flavor": "A lighter one to close out the week.",
+      "par": 3,
+      "vehicles": [
+        { "id": "target", "row": 2, "col": 0, "len": 2, "orient": "H", "isTarget": true },
+        { "id": "a", "row": 2, "col": 3, "len": 2, "orient": "V" },
+        { "id": "b", "row": 2, "col": 5, "len": 2, "orient": "V" }
+      ]
+    }
+  ]
+}
