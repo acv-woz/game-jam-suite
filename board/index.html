@@ -1,0 +1,737 @@
+<title>Game Jam Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;0,700;0,900;1,500;1,600&family=Karla:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ground: #d9c7a0;
+    --ground-2: #cdb789;
+    --surface: #fbf6e9;
+    --surface-2: #f3ecd9;
+    --ink: #2b2016;
+    --ink-dim: #6b5b44;
+    --accent: #c1443d;
+    --accent-ink: #fff6f0;
+    --accent-2: #2e6e62;
+    --accent-2-ink: #f2fbf8;
+    --accent-3: #b9791f;
+    --accent-3-ink: #fffaf0;
+    --pin-shadow: rgba(43,32,22,.28);
+    --card-shadow: rgba(43,32,22,.22);
+    --hairline: rgba(43,32,22,.16);
+    --focus: #2e6e62;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ground: #12241c;
+      --ground-2: #0d1c16;
+      --surface: #1f3129;
+      --surface-2: #24382f;
+      --ink: #ede7d8;
+      --ink-dim: #ab9d80;
+      --accent: #e2726b;
+      --accent-ink: #241211;
+      --accent-2: #6cc0ac;
+      --accent-2-ink: #0d2a22;
+      --accent-3: #e2b45a;
+      --accent-3-ink: #2a1e05;
+      --pin-shadow: rgba(0,0,0,.55);
+      --card-shadow: rgba(0,0,0,.45);
+      --hairline: rgba(237,231,216,.14);
+      --focus: #6cc0ac;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground: #12241c;
+    --ground-2: #0d1c16;
+    --surface: #1f3129;
+    --surface-2: #24382f;
+    --ink: #ede7d8;
+    --ink-dim: #ab9d80;
+    --accent: #e2726b;
+    --accent-ink: #241211;
+    --accent-2: #6cc0ac;
+    --accent-2-ink: #0d2a22;
+    --accent-3: #e2b45a;
+    --accent-3-ink: #2a1e05;
+    --pin-shadow: rgba(0,0,0,.55);
+    --card-shadow: rgba(0,0,0,.45);
+    --hairline: rgba(237,231,216,.14);
+    --focus: #6cc0ac;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background: radial-gradient(120% 140% at 50% -10%, var(--ground-2), var(--ground));
+    color: var(--ink);
+    font-family: "Karla", ui-sans-serif, system-ui, sans-serif;
+    padding-inline: 20px;
+    padding-block: 28px;
+    min-height: 100%;
+  }
+  .wrap{ max-width: 1120px; margin: 0 auto; }
+
+  h1,h2,h3{ font-family: "Fraunces", Georgia, serif; margin: 0; text-wrap: balance; }
+
+  header.top{
+    display:flex; flex-wrap:wrap; gap:20px; align-items:flex-end; justify-content:space-between;
+    margin-bottom: 22px;
+  }
+  .title-block .eyebrow{
+    font-family:"IBM Plex Mono", monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+    color: var(--ink-dim); margin: 0 0 6px;
+  }
+  .title-block h1{ font-size: clamp(28px,4vw,42px); font-weight:700; font-style:italic; }
+  .title-block p{ margin: 8px 0 0; max-width: 46ch; color: var(--ink-dim); font-size:14.5px; line-height:1.5; }
+  .repo-link{
+    display:inline-flex; align-items:center; gap:6px; margin-top:10px; font-family:"IBM Plex Mono", monospace;
+    font-size:12px; color: var(--ink-dim); text-decoration:none; border-bottom: 1px dashed var(--hairline);
+  }
+  .repo-link:hover{ color: var(--ink); border-color: var(--ink-dim); }
+
+  .stats{
+    display:flex; gap:14px; font-family:"IBM Plex Mono", monospace; font-variant-numeric: tabular-nums;
+  }
+  .stat{
+    background: var(--surface); border:1px solid var(--hairline); border-radius:10px;
+    padding: 10px 16px; min-width:84px; text-align:center; box-shadow: 0 2px 0 var(--card-shadow);
+  }
+  .stat b{ display:block; font-size:20px; font-family:"Fraunces",serif; font-weight:700; }
+  .stat span{ font-size:10px; letter-spacing:.08em; text-transform:uppercase; color: var(--ink-dim); }
+
+  .toolbar{
+    display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between;
+    margin-bottom: 20px; padding-bottom:16px; border-bottom: 1px dashed var(--hairline);
+  }
+  .toolbar-left{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+  .toolbar-right{ display:flex; gap:8px; align-items:center; }
+
+  .chip{
+    font-family:"IBM Plex Mono", monospace; font-size:12px; letter-spacing:.02em;
+    border:1px solid var(--hairline); background: var(--surface); color: var(--ink-dim);
+    border-radius: 999px; padding: 6px 12px; cursor:pointer; line-height:1;
+    transition: transform .12s ease, background .15s ease, color .15s ease;
+  }
+  .chip:hover{ transform: translateY(-1px); }
+  .chip.active{ background: var(--accent-2); color: var(--accent-2-ink); border-color: transparent; }
+  .chip:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible{
+    outline: 2px solid var(--focus); outline-offset: 2px;
+  }
+
+  .seg{ display:flex; border:1px solid var(--hairline); border-radius:999px; overflow:hidden; background:var(--surface); }
+  .seg button{
+    font-family:"IBM Plex Mono", monospace; font-size:12px; border:none; background:transparent; color:var(--ink-dim);
+    padding: 7px 14px; cursor:pointer;
+  }
+  .seg button.active{ background: var(--accent); color: var(--accent-ink); }
+
+  #searchInput{
+    font-family:"Karla",sans-serif; font-size:13px; padding:7px 12px; border-radius:999px;
+    border:1px solid var(--hairline); background:var(--surface); color:var(--ink); width: 190px;
+  }
+  #searchInput::placeholder{ color: var(--ink-dim); }
+
+  .pitch-btn{
+    font-family:"IBM Plex Mono", monospace; font-size:13px; font-weight:500; letter-spacing:.02em;
+    background: var(--accent); color: var(--accent-ink); border:none; border-radius:999px;
+    padding: 10px 18px; cursor:pointer; box-shadow: 0 2px 0 var(--card-shadow);
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .pitch-btn:hover{ transform: translateY(-1px); }
+  .pitch-btn svg{ width:16px; height:16px; }
+
+  #board{
+    display:grid; grid-template-columns: repeat(auto-fill, minmax(250px,1fr)); gap:22px;
+    padding-top: 6px;
+  }
+
+  .card{
+    position:relative; background: var(--surface); border-radius: 4px 10px 10px 10px;
+    padding: 20px 18px 16px; box-shadow: 0 6px 14px -6px var(--card-shadow), 0 1px 0 var(--hairline);
+    border: 1px solid var(--hairline);
+    display:flex; flex-direction:column; gap:10px; min-height: 172px;
+    cursor: pointer; transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .card:hover{ transform: translateY(-2px); box-shadow: 0 10px 20px -8px var(--card-shadow), 0 1px 0 var(--hairline); }
+  .card .expand-hint{
+    position:absolute; top:14px; right:14px; width:20px; height:20px; border-radius:50%;
+    background: var(--surface-2); color: var(--ink-dim); display:flex; align-items:center; justify-content:center;
+  }
+  .card .expand-hint svg{ width:11px; height:11px; }
+  .spec-flag{
+    font-family:"IBM Plex Mono", monospace; font-size:10.5px; color: var(--accent-2); display:flex; align-items:center; gap:4px;
+    margin:0;
+  }
+  .spec-flag svg{ width:12px; height:12px; flex-shrink:0; }
+  #board .card:nth-child(3n+1){ transform: rotate(-0.6deg); }
+  #board .card:nth-child(3n+2){ transform: rotate(0.5deg); }
+  #board .card:nth-child(3n){ transform: rotate(-0.2deg); }
+
+  .pin{
+    position:absolute; top:-7px; left:18px; width:14px; height:14px; border-radius:50%;
+    box-shadow: 0 3px 4px var(--pin-shadow);
+    border: 2px solid rgba(255,255,255,.35);
+  }
+
+  .tag-row{ display:flex; flex-wrap:wrap; gap:6px; }
+  .tag{
+    font-family:"IBM Plex Mono", monospace; font-size:10.5px; letter-spacing:.04em; text-transform:uppercase;
+    padding: 3px 8px; border-radius:6px; line-height:1.4;
+  }
+
+  .card h3{ font-size:19px; font-weight:700; line-height:1.25; }
+  .card p.pitch{ margin:0; font-size:13.5px; line-height:1.5; color: var(--ink-dim); flex:1; }
+
+  .card-foot{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    margin-top: 4px; padding-top: 10px; border-top: 1px dashed var(--hairline);
+  }
+  .author{ display:flex; align-items:center; gap:7px; min-width:0; }
+  .author img{ width:22px; height:22px; border-radius:50%; flex-shrink:0; }
+  .author .who{ display:flex; flex-direction:column; min-width:0; }
+  .author .name{ font-size:11.5px; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:110px; }
+  .author .when{ font-family:"IBM Plex Mono", monospace; font-size:10px; color: var(--ink-dim); }
+
+  .vote-btn{
+    display:flex; align-items:center; gap:6px; border:1px solid var(--hairline); background:var(--surface-2);
+    border-radius:999px; padding: 6px 11px; cursor:pointer; font-family:"IBM Plex Mono", monospace;
+    font-size:13px; font-variant-numeric: tabular-nums; color: var(--ink); flex-shrink:0;
+    transition: background .15s ease, color .15s ease, transform .12s ease;
+  }
+  .vote-btn:hover{ transform: translateY(-1px); }
+  .vote-btn.voted{ background: var(--accent-3); color: var(--accent-3-ink); border-color: transparent; }
+  .vote-btn svg{ width:15px; height:15px; }
+
+  .empty, .loading-note{
+    grid-column: 1 / -1; text-align:center; padding: 50px 20px; color: var(--ink-dim);
+  }
+  .empty h3{ font-size:20px; margin-bottom:8px; color:var(--ink); }
+  .empty .pitch-btn{ margin-top:14px; }
+
+  .skeleton{ background: var(--surface); border-radius:4px 10px 10px 10px; border:1px solid var(--hairline);
+    min-height:172px; overflow:hidden; position:relative; }
+  .skeleton::after{
+    content:""; position:absolute; inset:0;
+    background: linear-gradient(100deg, transparent 30%, var(--surface-2) 50%, transparent 70%);
+    animation: shimmer 1.6s infinite;
+  }
+  @media (prefers-reduced-motion: reduce){ .skeleton::after{ animation:none; } }
+  @keyframes shimmer{ from{ transform: translateX(-100%);} to{ transform: translateX(100%);} }
+
+  dialog#pitchDialog{
+    border:none; border-radius:14px; padding:0; width:min(480px, 92vw);
+    background: var(--surface); color: var(--ink); box-shadow: 0 20px 44px -12px rgba(0,0,0,.45);
+  }
+  dialog#pitchDialog::backdrop{ background: rgba(18,24,20,.55); }
+  .dialog-inner{ padding: 22px 22px 20px; display:flex; flex-direction:column; gap:14px; }
+  .dialog-inner h2{ font-size:22px; font-style:italic; font-weight:700; }
+  .field label{ display:block; font-family:"IBM Plex Mono", monospace; font-size:11px; text-transform:uppercase;
+    letter-spacing:.08em; color:var(--ink-dim); margin-bottom:5px; }
+  .field input[type=text], .field textarea{
+    width:100%; font-family:"Karla",sans-serif; font-size:14px; padding:9px 11px; border-radius:8px;
+    border:1px solid var(--hairline); background: var(--surface-2); color: var(--ink); resize: vertical;
+  }
+  .field textarea{ min-height: 70px; }
+  .tag-picker{ display:flex; flex-wrap:wrap; gap:8px; }
+  .tag-picker label{
+    display:inline-flex; align-items:center; gap:6px; font-family:"IBM Plex Mono", monospace; font-size:11.5px;
+    border:1px solid var(--hairline); border-radius:999px; padding:5px 11px; cursor:pointer; color:var(--ink-dim);
+  }
+  .tag-picker input{ accent-color: var(--accent-2); }
+  .dialog-actions{ display:flex; justify-content:flex-end; gap:10px; margin-top:4px; }
+  .btn-ghost{
+    font-family:"Karla",sans-serif; font-size:13.5px; background:transparent; border:1px solid var(--hairline);
+    color: var(--ink-dim); border-radius:999px; padding:9px 16px; cursor:pointer;
+  }
+
+  dialog#detailDialog{
+    border:none; border-radius:14px; padding:0; width:min(600px, 92vw); max-height: 85vh;
+    background: var(--surface); color: var(--ink); box-shadow: 0 20px 44px -12px rgba(0,0,0,.45);
+  }
+  dialog#detailDialog::backdrop{ background: rgba(18,24,20,.55); }
+  .detail-inner{ padding: 24px 26px 22px; max-height: 85vh; overflow-y: auto; }
+  .detail-inner .tag-row{ margin-bottom: 10px; }
+  .detail-inner h2{ font-size:26px; font-style:italic; font-weight:700; margin-bottom:6px; }
+  .detail-pitch{ font-size:14.5px; color: var(--ink-dim); line-height:1.55; margin: 0 0 6px; }
+  .detail-meta{ display:flex; align-items:center; gap:10px; margin: 10px 0 18px; padding-bottom:16px; border-bottom:1px dashed var(--hairline); }
+  .spec-body h4{ font-family:"Fraunces",serif; font-size:15px; font-weight:700; margin:18px 0 6px; }
+  .spec-body h4:first-child{ margin-top:0; }
+  .spec-body p{ font-size:13.5px; line-height:1.6; color: var(--ink); margin: 0 0 10px; }
+  .spec-body p.dim{ color: var(--ink-dim); font-style:italic; }
+  .spec-body ul{ margin: 0 0 10px; padding-left:20px; }
+  .spec-body li{ font-size:13.5px; line-height:1.55; margin-bottom:5px; }
+  .detail-close-row{ display:flex; justify-content:space-between; align-items:center; margin-top:18px; padding-top:14px; border-top:1px dashed var(--hairline); }
+  #toast{
+    position:fixed; bottom: max(18px, env(safe-area-inset-bottom,0px)); left:50%; transform: translateX(-50%);
+    background: var(--ink); color: var(--ground); font-family:"Karla",sans-serif; font-size:13px;
+    padding:10px 18px; border-radius:999px; box-shadow:0 8px 20px rgba(0,0,0,.3); opacity:0; pointer-events:none;
+    transition: opacity .2s ease, transform .2s ease; z-index: 50;
+  }
+  #toast.show{ opacity:1; transform: translateX(-50%) translateY(-4px); }
+
+  footer.note{ margin-top:34px; text-align:center; font-size:12px; color: var(--ink-dim); }
+</style>
+
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="die-icon" viewBox="0 0 24 24">
+    <rect x="2.5" y="2.5" width="19" height="19" rx="4" fill="none" stroke="currentColor" stroke-width="1.6"/>
+    <circle cx="7.2" cy="7.2" r="1.6" fill="currentColor"/>
+    <circle cx="16.8" cy="7.2" r="1.6" fill="currentColor"/>
+    <circle cx="7.2" cy="16.8" r="1.6" fill="currentColor"/>
+    <circle cx="16.8" cy="16.8" r="1.6" fill="currentColor"/>
+    <circle cx="12" cy="12" r="1.6" fill="currentColor"/>
+  </symbol>
+  <symbol id="plus-icon" viewBox="0 0 24 24">
+    <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="expand-icon" viewBox="0 0 24 24">
+    <path d="M8 5l8 7-8 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </symbol>
+  <symbol id="doc-icon" viewBox="0 0 24 24">
+    <path d="M6 3.5h9l3 3V20a.5.5 0 0 1-.5.5H6a.5.5 0 0 1-.5-.5V4a.5.5 0 0 1 .5-.5Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+    <path d="M9 10h6M9 13.5h6M9 17h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+  </symbol>
+</svg>
+
+<div class="wrap">
+  <header class="top">
+    <div class="title-block">
+      <p class="eyebrow">ACV internal &middot; work in progress</p>
+      <h1>Game Jam Board</h1>
+      <p>Pitch a dealer-facing mini-game idea, vote up the ones worth building next. Live for everyone who opens this link.</p>
+      <a class="repo-link" href="https://github.com/acv-woz/game-jam-suite" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        game-jam-suite
+      </a>
+    </div>
+    <div class="stats">
+      <div class="stat"><b id="statIdeas">&mdash;</b><span>ideas</span></div>
+      <div class="stat"><b id="statVotes">&mdash;</b><span>votes cast</span></div>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <div class="toolbar-left" id="tagFilters"></div>
+    <div class="toolbar-right">
+      <input id="searchInput" type="text" placeholder="Search ideas&hellip;">
+      <div class="seg" id="sortSeg">
+        <button data-sort="top" class="active">Top</button>
+        <button data-sort="new">Newest</button>
+      </div>
+      <button class="pitch-btn" id="openPitch"><svg><use href="#plus-icon"/></svg>Pitch an idea</button>
+    </div>
+  </div>
+
+  <div id="board">
+    <div class="skeleton"></div>
+    <div class="skeleton"></div>
+    <div class="skeleton"></div>
+  </div>
+
+  <footer class="note">Ideas and votes are shared &amp; live for anyone with this link in the org. Be specific about the mechanic &mdash; vague pitches get fewer votes.</footer>
+</div>
+
+<dialog id="pitchDialog">
+  <form class="dialog-inner" id="pitchForm">
+    <h2>Pitch an idea</h2>
+    <div class="field">
+      <label for="ideaTitle">Working title</label>
+      <input type="text" id="ideaTitle" maxlength="60" placeholder="e.g. Guess the Deal" required>
+    </div>
+    <div class="field">
+      <label for="ideaPitch">The pitch &mdash; what's the loop?</label>
+      <textarea id="ideaPitch" maxlength="400" placeholder="One or two sentences: what does the player do, what's hidden, how do they score?" required></textarea>
+    </div>
+    <div class="field">
+      <label>Tags</label>
+      <div class="tag-picker" id="tagPicker"></div>
+    </div>
+    <div class="field">
+      <label for="ideaSpec">Full spec (optional)</label>
+      <textarea id="ideaSpec" maxlength="6000" placeholder="Got a fuller write-up? Paste it here — it shows up when someone clicks the card. Blank line = new paragraph, start a line with &quot;- &quot; for a bullet, &quot;## &quot; for a heading."></textarea>
+    </div>
+    <div class="dialog-actions">
+      <button type="button" class="btn-ghost" id="cancelPitch">Cancel</button>
+      <button type="submit" class="pitch-btn" id="submitPitch">Post idea</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="detailDialog">
+  <div class="detail-inner" id="detailBody"></div>
+</dialog>
+
+<div id="toast" role="status"></div>
+
+<script>
+(function(){
+  var TAGS = ["Mechanic","Theme","Data Source","Multiplayer","Solo Play","Quick Build"];
+  var TAG_VAR = {
+    "Mechanic": "--accent", "Multiplayer": "--accent",
+    "Theme": "--accent-2", "Solo Play": "--accent-2",
+    "Data Source": "--accent-3", "Quick Build": "--accent-3"
+  };
+
+  var board = document.getElementById('board');
+  var tagFiltersEl = document.getElementById('tagFilters');
+  var tagPickerEl = document.getElementById('tagPicker');
+  var searchInput = document.getElementById('searchInput');
+  var sortSeg = document.getElementById('sortSeg');
+  var statIdeas = document.getElementById('statIdeas');
+  var statVotes = document.getElementById('statVotes');
+  var dialog = document.getElementById('pitchDialog');
+  var pitchForm = document.getElementById('pitchForm');
+  var toastEl = document.getElementById('toast');
+  var detailDialog = document.getElementById('detailDialog');
+  var detailBody = document.getElementById('detailBody');
+
+  var db = null, user = null, myId = null;
+  var ideas = [];
+  var profileCache = {};
+  var activeTags = new Set();
+  var sortMode = 'top';
+  var loaded = false;
+  var dbUnavailable = false;
+  var toastTimer = null;
+
+  function toast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toastEl.classList.remove('show'); }, 2600);
+  }
+
+  function escapeHtml(s){
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  function relTime(ms){
+    if (!ms) return '';
+    var d = Date.now() - ms;
+    var m = Math.round(d / 60000);
+    if (m < 1) return 'just now';
+    if (m < 60) return m + 'm ago';
+    var h = Math.round(m / 60);
+    if (h < 24) return h + 'h ago';
+    var days = Math.round(h / 24);
+    return days + 'd ago';
+  }
+
+  function voteCount(idea){
+    var v = idea.votes || {};
+    var n = 0;
+    for (var k in v) { if (v[k] === true) n++; }
+    return n;
+  }
+
+  // ---- safe plain-text-to-HTML spec renderer (escapes all text; only
+  // structural tags come from us, never from stored content) ----
+  function renderLines(lines){
+    var isList = lines.length && lines.every(function(l){ return /^-\s+/.test(l); });
+    if (isList){
+      return '<ul>' + lines.map(function(l){
+        return '<li>' + escapeHtml(l.replace(/^-\s+/, '')) + '</li>';
+      }).join('') + '</ul>';
+    }
+    return '<p>' + lines.map(escapeHtml).join('<br>') + '</p>';
+  }
+
+  function renderSpec(spec){
+    if (!spec) return '<p class="dim">No full spec yet &mdash; just the pitch above.</p>';
+    var blocks = String(spec).split(/\n\s*\n/);
+    return blocks.map(function(block){
+      var lines = block.split('\n').filter(function(l){ return l.trim().length; });
+      if (!lines.length) return '';
+      if (/^##\s+/.test(lines[0])){
+        var heading = lines.shift().replace(/^##\s+/, '');
+        return '<h4>' + escapeHtml(heading) + '</h4>' + (lines.length ? renderLines(lines) : '');
+      }
+      return renderLines(lines);
+    }).join('');
+  }
+
+  // ---- tag chips (filter bar) ----
+  function buildTagFilters(){
+    var html = '<button type="button" class="chip active" data-tag="">All</button>';
+    TAGS.forEach(function(t){
+      html += '<button type="button" class="chip" data-tag="' + escapeHtml(t) + '">' + escapeHtml(t) + '</button>';
+    });
+    tagFiltersEl.innerHTML = html;
+    tagFiltersEl.addEventListener('click', function(e){
+      var btn = e.target.closest('.chip');
+      if (!btn) return;
+      var tag = btn.getAttribute('data-tag');
+      if (tag === '') {
+        activeTags.clear();
+      } else if (activeTags.has(tag)) {
+        activeTags.delete(tag);
+      } else {
+        activeTags.add(tag);
+      }
+      Array.prototype.forEach.call(tagFiltersEl.querySelectorAll('.chip'), function(c){
+        var ct = c.getAttribute('data-tag');
+        c.classList.toggle('active', ct === '' ? activeTags.size === 0 : activeTags.has(ct));
+      });
+      render();
+    });
+  }
+
+  function buildTagPicker(){
+    tagPickerEl.innerHTML = TAGS.map(function(t){
+      return '<label><input type="checkbox" value="' + escapeHtml(t) + '">' + escapeHtml(t) + '</label>';
+    }).join('');
+  }
+
+  sortSeg.addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if (!btn) return;
+    sortMode = btn.getAttribute('data-sort');
+    Array.prototype.forEach.call(sortSeg.querySelectorAll('button'), function(b){
+      b.classList.toggle('active', b === btn);
+    });
+    render();
+  });
+
+  searchInput.addEventListener('input', render);
+
+  document.getElementById('openPitch').addEventListener('click', function(){
+    if (!db){ toast('The live board is unavailable in this view.'); return; }
+    pitchForm.reset();
+    dialog.showModal();
+  });
+  document.getElementById('cancelPitch').addEventListener('click', function(){ dialog.close(); });
+
+  pitchForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    if (!db){ toast('The live board is unavailable in this view.'); return; }
+    var title = document.getElementById('ideaTitle').value.trim();
+    var pitch = document.getElementById('ideaPitch').value.trim();
+    if (!title || !pitch) return;
+    var tags = Array.prototype.slice.call(tagPickerEl.querySelectorAll('input:checked')).map(function(cb){ return cb.value; });
+    var spec = document.getElementById('ideaSpec').value.trim();
+    var submitBtn = document.getElementById('submitPitch');
+    submitBtn.disabled = true;
+    db.collection('ideas').add({
+      title: title.slice(0, 60),
+      pitch: pitch.slice(0, 400),
+      tags: tags,
+      spec: spec ? spec.slice(0, 6000) : null,
+      authorId: myId || null,
+      createdAt: Date.now(),
+      votes: {}
+    }).then(function(){
+      submitBtn.disabled = false;
+      dialog.close();
+      pitchForm.reset();
+    }).catch(function(err){
+      submitBtn.disabled = false;
+      if (err && err.code === 'invalid_argument') toast("You don't have permission to post here.");
+      else toast('Could not save that idea — try again.');
+    });
+  });
+
+  function handleVoteClick(id){
+    if (!db){ toast('The live board is unavailable in this view.'); return; }
+    if (!myId){ toast('Sign in to your ACV account to vote.'); return; }
+    var idea = ideas.find(function(i){ return i.id === id; });
+    if (!idea) return;
+    var already = !!(idea.votes && idea.votes[myId] === true);
+    var patch = {};
+    patch[myId] = !already;
+    db.collection('ideas').doc(id).update({ votes: patch }).catch(function(err){
+      if (err && err.code === 'invalid_argument') toast("You don't have permission to vote here.");
+      else toast('Vote failed — try again.');
+    });
+  }
+
+  board.addEventListener('click', function(e){
+    var voteBtn = e.target.closest('.vote-btn');
+    if (voteBtn){ handleVoteClick(voteBtn.getAttribute('data-id')); return; }
+    var card = e.target.closest('.card');
+    if (card) openDetail(card.getAttribute('data-id'));
+  });
+  board.addEventListener('keydown', function(e){
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var card = e.target.closest('.card');
+    if (!card) return;
+    e.preventDefault();
+    openDetail(card.getAttribute('data-id'));
+  });
+
+  function openDetail(id){
+    var idea = ideas.find(function(i){ return i.id === id; });
+    if (!idea) return;
+    var count = voteCount(idea);
+    var mine = !!(myId && idea.votes && idea.votes[myId] === true);
+    var author = idea.authorId ? profileCache[idea.authorId] : null;
+    var authorName = (author && author.name) || (idea.authorId ? 'Someone' : 'Unknown');
+    var tags = idea.tags || [];
+    var tagsHtml = tags.map(function(t){
+      var v = TAG_VAR[t] || '--accent';
+      return '<span class="tag" style="background:var(' + v + ');color:var(' + v + '-ink, var(--accent-ink));">' + escapeHtml(t) + '</span>';
+    }).join('');
+
+    detailBody.innerHTML =
+      (tagsHtml ? '<div class="tag-row">' + tagsHtml + '</div>' : '') +
+      '<h2>' + escapeHtml(idea.title) + '</h2>' +
+      '<p class="detail-pitch">' + escapeHtml(idea.pitch) + '</p>' +
+      '<div class="detail-meta">' +
+        '<span class="author"><span class="name">' + escapeHtml(authorName) + '</span></span>' +
+        '<span class="spec-flag">&middot; ' + escapeHtml(relTime(idea.createdAt)) + '</span>' +
+      '</div>' +
+      '<div class="spec-body">' + renderSpec(idea.spec) + '</div>' +
+      '<div class="detail-close-row">' +
+        '<button type="button" class="vote-btn' + (mine ? ' voted' : '') + '" data-id="' + escapeHtml(idea.id) + '" id="detailVoteBtn">' +
+          '<svg><use href="#die-icon"/></svg>' + count +
+        '</button>' +
+        '<button type="button" class="btn-ghost" id="detailCloseBtn">Close</button>' +
+      '</div>';
+
+    detailBody.querySelector('#detailVoteBtn').addEventListener('click', function(){ handleVoteClick(idea.id); });
+    detailBody.querySelector('#detailCloseBtn').addEventListener('click', function(){ detailDialog.close(); });
+    detailDialog.showModal();
+  }
+
+  function cardHtml(idea){
+    var count = voteCount(idea);
+    var mine = !!(myId && idea.votes && idea.votes[myId] === true);
+    var author = idea.authorId ? profileCache[idea.authorId] : null;
+    var authorName = (author && author.name) || (idea.authorId ? 'Someone' : 'Unknown');
+    var avatar = (author && author.avatarUrl) || '';
+    var tags = idea.tags || [];
+    var pinColor = tags.length ? ('var(' + (TAG_VAR[tags[0]] || '--accent') + ')') : 'var(--accent)';
+
+    var tagsHtml = tags.map(function(t){
+      var v = TAG_VAR[t] || '--accent';
+      return '<span class="tag" style="background:var(' + v + ');color:var(' + v + '-ink, var(--accent-ink));">' + escapeHtml(t) + '</span>';
+    }).join('');
+
+    return (
+      '<article class="card" data-id="' + escapeHtml(idea.id) + '" tabindex="0" role="button" aria-haspopup="dialog">' +
+        '<div class="pin" style="background:' + pinColor + ';"></div>' +
+        '<div class="expand-hint"><svg><use href="#expand-icon"/></svg></div>' +
+        (tagsHtml ? '<div class="tag-row">' + tagsHtml + '</div>' : '') +
+        '<h3>' + escapeHtml(idea.title) + '</h3>' +
+        '<p class="pitch">' + escapeHtml(idea.pitch) + '</p>' +
+        (idea.spec ? '<p class="spec-flag"><svg><use href="#doc-icon"/></svg>Full spec inside</p>' : '') +
+        '<div class="card-foot">' +
+          '<div class="author">' +
+            (avatar ? '<img src="' + avatar + '" alt="">' : '') +
+            '<div class="who">' +
+              '<span class="name">' + escapeHtml(authorName) + '</span>' +
+              '<span class="when">' + escapeHtml(relTime(idea.createdAt)) + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<button type="button" class="vote-btn' + (mine ? ' voted' : '') + '" data-id="' + escapeHtml(idea.id) + '">' +
+            '<svg><use href="#die-icon"/></svg>' + count +
+          '</button>' +
+        '</div>' +
+      '</article>'
+    );
+  }
+
+  function render(){
+    if (dbUnavailable){
+      board.innerHTML = '<div class="empty"><h3>Board unavailable here</h3><p>Open this artifact directly in claude.ai to pitch and vote on ideas.</p></div>';
+      return;
+    }
+    if (!loaded){
+      return; // keep skeletons
+    }
+
+    var q = searchInput.value.trim().toLowerCase();
+    var list = ideas.filter(function(idea){
+      if (activeTags.size){
+        var tags = idea.tags || [];
+        var hit = tags.some(function(t){ return activeTags.has(t); });
+        if (!hit) return false;
+      }
+      if (q){
+        var hay = ((idea.title || '') + ' ' + (idea.pitch || '')).toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+
+    list.sort(function(a, b){
+      if (sortMode === 'new') return (b.createdAt || 0) - (a.createdAt || 0);
+      var diff = voteCount(b) - voteCount(a);
+      if (diff !== 0) return diff;
+      return (b.createdAt || 0) - (a.createdAt || 0);
+    });
+
+    if (!list.length){
+      if (!ideas.length){
+        board.innerHTML = '<div class="empty"><h3>No ideas yet</h3><p>Be the first to pitch a game for the board.</p>' +
+          '<button type="button" class="pitch-btn" id="emptyPitchBtn"><svg><use href="#plus-icon"/></svg>Pitch an idea</button></div>';
+        var btn = document.getElementById('emptyPitchBtn');
+        if (btn) btn.addEventListener('click', function(){
+          if (!db) { toast('The live board is unavailable in this view.'); return; }
+          pitchForm.reset();
+          dialog.showModal();
+        });
+      } else {
+        board.innerHTML = '<div class="empty"><h3>No matches</h3><p>Try clearing the search or tag filters.</p></div>';
+      }
+      return;
+    }
+
+    board.innerHTML = list.map(cardHtml).join('');
+
+    var totalVotes = ideas.reduce(function(sum, i){ return sum + voteCount(i); }, 0);
+    statIdeas.textContent = ideas.length;
+    statVotes.textContent = totalVotes;
+  }
+
+  function refreshProfiles(){
+    if (!user) return Promise.resolve();
+    var ids = Array.from(new Set(ideas.map(function(i){ return i.authorId; }).filter(Boolean)));
+    if (!ids.length) return Promise.resolve();
+    return user.profiles(ids).then(function(p){
+      Object.assign(profileCache, p);
+    });
+  }
+
+  function onSnapshot(snap){
+    ideas = snap.docs.map(function(d){ return Object.assign({ id: d.id }, d.data()); });
+    loaded = true;
+    render();
+    refreshProfiles().then(render);
+  }
+
+  function onSnapshotError(err){
+    loaded = true;
+    dbUnavailable = true;
+    render();
+  }
+
+  async function init(){
+    buildTagFilters();
+    buildTagPicker();
+
+    try {
+      db = await window.claude.use('db');
+    } catch(e){ db = null; }
+    try {
+      user = await window.claude.use('user');
+    } catch(e){ user = null; }
+
+    if (user){
+      try { myId = await user.id(); } catch(e){ myId = null; }
+    }
+
+    if (!db){
+      dbUnavailable = true;
+      loaded = true;
+      render();
+      return;
+    }
+
+    db.collection('ideas').orderBy('createdAt', 'desc').limit(200).onSnapshot(onSnapshot, onSnapshotError);
+  }
+
+  init();
+})();
+</script>
