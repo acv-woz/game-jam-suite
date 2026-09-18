@@ -461,7 +461,15 @@
     renderBoard();
   });
 
-  fetch('../data/puzzles.json')
+  // When embedded as an MFE, this script runs inside the host page, so a
+  // relative fetch would resolve against the host's URL, not this game's
+  // origin. window.__GAME_JAM_DATA_BASE__ is set by the host wrapper before
+  // injecting this script; standalone mode leaves it unset.
+  var puzzlesUrl = window.__GAME_JAM_DATA_BASE__
+    ? window.__GAME_JAM_DATA_BASE__ + '/lot-jam/data/puzzles.json'
+    : '../data/puzzles.json';
+
+  fetch(puzzlesUrl)
     .then(function (r) { if (!r.ok) throw new Error('bad response'); return r.json(); })
     .then(loadPuzzleData)
     .catch(function () { loadPuzzleData(FALLBACK_PUZZLES); });

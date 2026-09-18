@@ -1,0 +1,157 @@
+<template>
+  <div class="app">
+
+    <GameJamBackButton />
+
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">GTD</span>
+        <span class="brand-name">Guess&nbsp;the&nbsp;Deal</span>
+      </div>
+      <div class="topbar-score" id="topbarScore" hidden>
+        <span class="score-label">Score</span>
+        <span class="score-value" id="liveScore">0</span>
+        <span class="streak" id="liveStreak" hidden></span>
+      </div>
+    </header>
+
+    <main>
+
+      <!-- START SCREEN -->
+      <section class="screen screen-start" id="screen-start">
+        <div class="hero-card">
+          <h1>How sharp is your eye on a deal?</h1>
+          <p class="subtitle">
+            You'll see an appraisal card for a sample vehicle sale.
+            One number is hidden &mdash; the sale price or the mileage.
+            Guess as close as you can. Closer guesses score higher, and
+            a hot streak earns bonus points.
+          </p>
+          <ul class="rules">
+            <li><strong>12 rounds</strong>, mixed price &amp; mileage guesses</li>
+            <li>Score up to <strong>1,000</strong> points per round</li>
+            <li>3 correct guesses in a row = <strong>streak bonus</strong></li>
+          </ul>
+          <button class="btn btn-primary btn-lg" id="btnStart">Start Game</button>
+          <button class="btn btn-ghost" id="btnShowBoard">View Leaderboard</button>
+        </div>
+      </section>
+
+      <!-- GAME SCREEN -->
+      <section class="screen screen-game" id="screen-game" hidden>
+        <div class="progress-row">
+          <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <span class="progress-label" id="progressLabel">Round 1 / 12</span>
+        </div>
+
+        <div class="card vehicle-card" id="vehicleCard">
+          <div class="vehicle-art" id="vehicleArt">
+            <svg viewBox="0 0 240 120" class="car-svg" id="carSvg" aria-hidden="true">
+              <rect x="10" y="70" width="220" height="8" rx="4" fill="var(--road)"></rect>
+              <path d="M25 82 L40 45 Q48 32 65 32 L165 32 Q182 32 190 45 L205 82 Z" fill="var(--car-body)"></path>
+              <rect x="70" y="40" width="90" height="28" rx="8" fill="var(--car-glass)"></rect>
+              <circle cx="65" cy="88" r="16" fill="var(--wheel)"></circle>
+              <circle cx="65" cy="88" r="7" fill="var(--wheel-hub)"></circle>
+              <circle cx="170" cy="88" r="16" fill="var(--wheel)"></circle>
+              <circle cx="170" cy="88" r="7" fill="var(--wheel-hub)"></circle>
+            </svg>
+          </div>
+
+          <div class="vehicle-info">
+            <div class="vehicle-title" id="vehicleTitle">2021 Ford F-150</div>
+            <div class="vehicle-trim" id="vehicleTrim">XLT SuperCrew 4x4</div>
+
+            <dl class="spec-grid" id="specGrid"></dl>
+
+            <p class="condition-notes" id="conditionNotes"></p>
+          </div>
+        </div>
+
+        <div class="card guess-card">
+          <div class="guess-question" id="guessQuestion">What did this sell for?</div>
+
+          <div class="guess-input-row">
+            <span class="guess-affix" id="guessPrefix">$</span>
+            <input type="number" id="guessNumber" class="guess-number" inputmode="numeric" />
+            <span class="guess-affix" id="guessSuffix"></span>
+          </div>
+
+          <input type="range" id="guessSlider" class="guess-slider" />
+
+          <button class="btn btn-primary btn-lg" id="btnSubmitGuess">Lock In Guess</button>
+        </div>
+      </section>
+
+      <!-- REVEAL SCREEN -->
+      <section class="screen screen-reveal" id="screen-reveal" hidden>
+        <div class="card reveal-card">
+          <div class="reveal-tier" id="revealTier">Great guess!</div>
+
+          <div class="reveal-compare">
+            <div class="reveal-col">
+              <span class="reveal-col-label">Your guess</span>
+              <span class="reveal-col-value" id="revealGuess">$0</span>
+            </div>
+            <div class="reveal-col reveal-col-actual">
+              <span class="reveal-col-label">Actual</span>
+              <span class="reveal-col-value" id="revealActual">$0</span>
+            </div>
+          </div>
+
+          <div class="reveal-bar-track">
+            <div class="reveal-bar-fill" id="revealBarFill"></div>
+            <div class="reveal-bar-marker" id="revealBarMarker"></div>
+          </div>
+          <div class="reveal-off" id="revealOff">0% off</div>
+
+          <div class="reveal-points">
+            <span id="revealPoints">+0</span> pts
+            <span class="reveal-streak-bonus" id="revealStreakBonus" hidden></span>
+          </div>
+
+          <button class="btn btn-primary btn-lg" id="btnNextRound">Next Round</button>
+        </div>
+      </section>
+
+      <!-- END SCREEN -->
+      <section class="screen screen-end" id="screen-end" hidden>
+        <div class="card end-card">
+          <div class="end-rank" id="endRank">🥈 Sharp Appraiser</div>
+          <div class="end-score-label">Final Score</div>
+          <div class="end-score" id="endScore">0</div>
+          <div class="end-sub" id="endSub">out of 12,000 possible</div>
+
+          <form class="save-score-row" id="saveScoreForm">
+            <input type="text" id="playerName" class="player-name-input" placeholder="Your name for the leaderboard" maxlength="24" />
+            <button type="submit" class="btn btn-primary">Save Score</button>
+          </form>
+
+          <div class="end-actions">
+            <button class="btn btn-primary btn-lg" id="btnPlayAgain">Play Again</button>
+            <button class="btn btn-ghost" id="btnViewBoardEnd">View Leaderboard</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- LEADERBOARD SCREEN -->
+      <section class="screen screen-board" id="screen-board" hidden>
+        <div class="card board-card">
+          <h2>Leaderboard</h2>
+          <ol class="board-list" id="boardList"></ol>
+          <p class="board-empty" id="boardEmpty" hidden>No scores yet &mdash; be the first!</p>
+          <button class="btn btn-primary btn-lg" id="btnBackFromBoard">Back</button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</template>
+
+<script setup>
+import useEmbeddedGame from '../../../shared/useEmbeddedGame';
+import GameJamBackButton from '../../../shared/GameJamBackButton.vue';
+
+useEmbeddedGame('guess-the-deal');
+</script>

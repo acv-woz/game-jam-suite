@@ -1,7 +1,13 @@
 /* Guess the Deal — client-only POC game.
    Data comes from data/seed-rounds.json when served over http(s);
    falls back to the embedded copy below when opened directly via file://
-   (fetch() of local files is blocked by most browsers under file://). */
+   (fetch() of local files is blocked by most browsers under file://).
+
+   Wrapped in an IIFE so this file can be injected as a <script> more than
+   once in the same page (e.g. mounted as an MFE component, navigated away
+   from, then mounted again) without "already declared" errors from
+   redeclaring these top-level consts in global scope. */
+(function () {
 
 const FALLBACK_ROUNDS = [
   { id: "r1", mode: "price", vehicle: { year: 2019, make: "Honda", model: "CR-V", trim: "EX-L AWD", bodyStyle: "SUV", color: "Modern Steel Metallic", conditionNotes: "Clean title, minor curb rash on rear passenger wheel, interior excellent", region: "Midwest", daysOnLot: 3 }, mileage: 42150, price: 21800 },
@@ -68,7 +74,14 @@ function shuffle(arr) {
 
 async function loadRounds() {
   try {
-    const res = await fetch("../data/seed-rounds.json", { cache: "no-store" });
+    // When embedded as an MFE, this script runs inside the host page, so a
+    // relative fetch would resolve against the host's URL, not this game's
+    // origin. window.__GAME_JAM_DATA_BASE__ is set by the host wrapper
+    // before injecting this script; standalone mode leaves it unset.
+    const dataUrl = window.__GAME_JAM_DATA_BASE__
+      ? `${window.__GAME_JAM_DATA_BASE__}/guess-the-deal/data/seed-rounds.json`
+      : "../data/seed-rounds.json";
+    const res = await fetch(dataUrl, { cache: "no-store" });
     if (!res.ok) throw new Error("bad response");
     const data = await res.json();
     if (!Array.isArray(data) || data.length === 0) throw new Error("empty data");
@@ -352,3 +365,5 @@ async function init() {
 }
 
 init();
+
+})();

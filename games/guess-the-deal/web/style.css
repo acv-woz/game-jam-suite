@@ -154,30 +154,40 @@ main {
 .rules li { font-size: 14px; color: var(--text-muted); }
 .rules strong { color: var(--text); }
 
-.btn {
+/*
+ * Qualified with the `.app` root class (not just `.btn`/`.btn-primary`/etc.)
+ * so these win against the host app's own global `.btn.btn-primary` /
+ * `.btn.btn-ghost` rules when embedded as an MFE remote — those host rules
+ * are two classes deep and outrank a plain single-class selector regardless
+ * of stylesheet load order. Harmless in standalone mode since `.app` is
+ * still this game's own root element there.
+ */
+.app.btn,
+.app .btn {
   border: none;
   border-radius: 12px;
   font-weight: 700;
   cursor: pointer;
   transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
   font-size: 15px;
+  text-transform: none;
 }
-.btn:active { transform: scale(0.97); }
-.btn-primary {
+.app .btn:active { transform: scale(0.97); }
+.app .btn.btn-primary {
   background: var(--primary);
   color: var(--primary-contrast);
   padding: 14px 20px;
 }
-.btn-primary:hover { background: var(--primary-dark); }
-.btn-lg { width: 100%; padding: 16px; font-size: 16px; }
-.btn-ghost {
+.app .btn.btn-primary:hover { background: var(--primary-dark); }
+.app .btn.btn-lg { width: 100%; padding: 16px; font-size: 16px; }
+.app .btn.btn-ghost {
   background: transparent;
   color: var(--primary);
   padding: 10px 16px;
   margin-top: 6px;
   width: 100%;
 }
-.btn-ghost:hover { background: var(--bg-accent); }
+.app .btn.btn-ghost:hover { background: var(--bg-accent); }
 
 /* GAME */
 .progress-row { display: flex; align-items: center; gap: 12px; }
