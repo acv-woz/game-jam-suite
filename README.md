@@ -19,6 +19,20 @@ A suite of small daily games for ACV's site — hackathon build, Team B
 More games move in here as their own `games/<slug>` directory once
 someone starts building them.
 
+## Play the whole suite
+
+`games/home/web` is a standalone hub page — a tile per game, linking
+straight into each one. Run one server at the repo root and open the hub
+from it so every tile's link actually resolves:
+
+```
+python3 -m http.server 8790
+```
+
+Then open `http://localhost:8790/games/home/web/`. See
+`games/home/README.md` — that folder also holds the *separate* production
+home screen for the `acv-web-vuejs` embed, which is a different thing.
+
 ## Where new game ideas come from
 
 Ideas get pitched and voted on the shared, live
