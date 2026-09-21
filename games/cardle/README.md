@@ -7,6 +7,10 @@ Drivetrain, Origin) on each guess. No backend, no real dealer data —
 the vehicle pool is a hand-authored list of well-known production
 vehicles, procedurally picked per day.
 
+**Body, Drivetrain, Origin and Tier are given up front**, not something
+you discover through feedback — see "Why the clues are free" below.
+Only Make, Model and Year are the actual puzzle.
+
 ## Run it
 
 ```
@@ -46,6 +50,24 @@ drift.)
   real Wordle's behavior), a win/loss streak counter (today's puzzle
   only; practice days don't touch it), and a spoiler-light "Copy
   result" grid of ✓/✗ symbols (no vehicle names, just which columns hit).
+- A "Today's clues" card (Body, Drivetrain, Origin, Tier of the target,
+  shown up front) with a collapsible list of every pool vehicle that
+  matches all four, live-updated to strike through ones you've already
+  guessed wrong.
+
+### Why the clues are free
+
+First pass had all six attributes as guess-only feedback, 6 guesses,
+58 possible answers — and it was nearly unplayable, because the
+"alphabet" wasn't public knowledge the way Wordle's 5-letter English
+words are. A player has no way to know the 58-vehicle pool exists, so
+guessing was closer to a memory test than a puzzle.
+
+Checked it against the actual data: revealing Body+Drivetrain+Origin+Tier
+up front narrows the field to ~2.7 candidates on average (min 1, max 6,
+across all 58 targets) — small enough to browse via the candidate list
+and reason about directly. That's the whole fix; the guess mechanic
+itself didn't change.
 
 ## Not in this POC
 
@@ -57,9 +79,10 @@ drift.)
 - No shared/multiplayer leaderboard (needs a backend) — the streak
   counter is local to the browser, same caveat as every other game in
   the suite.
-- Tier (Economy/Mainstream/Premium/Luxury) is in the data but not shown
-  as a guess column — it's a soft, debatable classification rather than
-  a fact, unlike the other five columns; wire it in if that changes.
+- Tier (Economy/Mainstream/Premium/Luxury) only appears in the clue card,
+  not as a guess-feedback column — it's a soft, debatable classification
+  rather than a fact like the other five, so it didn't feel right to
+  score a guess against it, only to use it for narrowing the field.
 
 ## Data format
 

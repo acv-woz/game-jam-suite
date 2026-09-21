@@ -12,7 +12,7 @@
       <div class="title-block">
         <p class="eyebrow" id="puzzleNumber">Cardle #&mdash;</p>
         <h1>Cardle</h1>
-        <p class="sub">Guess the daily vehicle in 6 tries &mdash; make, model, year, body, drivetrain and origin all narrow it down.</p>
+        <p class="sub">Today's vehicle, narrowed to a body style, drivetrain, origin and price tier &mdash; find the exact make, model and year in 6 tries.</p>
       </div>
       <div class="stats">
         <div class="stat"><b id="statGuesses">0/6</b><span>guesses</span></div>
@@ -21,6 +21,15 @@
     </header>
 
     <div class="day-strip" id="dayStrip"></div>
+
+    <div class="clue-card">
+      <p class="clue-heading">Today's clues</p>
+      <div class="clue-chips" id="clueChips"></div>
+      <button type="button" class="link-btn" id="toggleCandidates" aria-expanded="false" aria-controls="candidateList">
+        Show vehicles matching these clues
+      </button>
+      <ul class="candidate-list" id="candidateList" hidden></ul>
+    </div>
 
     <div class="col-labels" id="colLabels"></div>
     <div class="grid" id="grid"></div>
@@ -33,7 +42,7 @@
       <button type="submit" class="btn-primary" id="submitGuess">Guess</button>
     </form>
 
-    <footer class="note">Only real vehicles from today's pool are valid guesses &mdash; pick one from the list as you type. Practice any day from the strip above.</footer>
+    <footer class="note">Only real vehicles from today's pool are valid guesses &mdash; pick one from the list as you type, or check the clue card above if you're stuck. Practice any day from the strip above.</footer>
   </div>
 
   <div class="modal-backdrop" id="endBackdrop" hidden>

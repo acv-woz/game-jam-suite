@@ -144,6 +144,9 @@
   var endStreak = document.getElementById('endStreak');
   var endClose = document.getElementById('endClose');
   var endCopy = document.getElementById('endCopy');
+  var clueChipsEl = document.getElementById('clueChips');
+  var toggleCandidatesBtn = document.getElementById('toggleCandidates');
+  var candidateListEl = document.getElementById('candidateList');
 
   var vehicles = [];
   var todayStr = null;
@@ -217,6 +220,46 @@
   }
 
   function isWin(guess) { return vehicleKey(guess) === vehicleKey(target); }
+
+  // ---- clues & candidates ----
+  // Body/Drive/Origin/Tier are handed to the player up front instead of being
+  // feedback-only. Without them the "alphabet" here is 58 arbitrary vehicles
+  // nobody has memorized, so 6 blind guesses is closer to a memory test than
+  // a word game — these four facts narrow it to ~3 candidates on average
+  // (verified against the actual pool), which is what makes it solvable.
+  var CLUE_KEYS = ['body', 'drive', 'origin', 'tier'];
+  var CLUE_LABELS = { body: 'Body', drive: 'Drivetrain', origin: 'Origin', tier: 'Tier' };
+
+  function candidatesForTarget() {
+    return vehicles.filter(function (v) {
+      return CLUE_KEYS.every(function (k) { return v[k] === target[k]; });
+    });
+  }
+
+  function renderClues() {
+    clueChipsEl.innerHTML = CLUE_KEYS.map(function (k) {
+      return '<span class="clue-chip"><span class="k">' + CLUE_LABELS[k] + '</span>' + target[k] + '</span>';
+    }).join('');
+    renderCandidates();
+  }
+
+  function renderCandidates() {
+    var already = guessedKeys();
+    var list = candidatesForTarget().slice().sort(function (a, b) {
+      return (a.make + a.model + a.year) < (b.make + b.model + b.year) ? -1 : 1;
+    });
+    candidateListEl.innerHTML = list.map(function (v) {
+      var g = already.indexOf(vehicleKey(v)) !== -1;
+      return '<li' + (g ? ' class="guessed"' : '') + '>' + v.make + ' ' + v.model + ' · ' + v.year + '</li>';
+    }).join('');
+    toggleCandidatesBtn.textContent = (candidateListEl.hidden ? 'Show' : 'Hide') + ' vehicles matching these clues (' + list.length + ')';
+  }
+
+  toggleCandidatesBtn.addEventListener('click', function () {
+    candidateListEl.hidden = !candidateListEl.hidden;
+    toggleCandidatesBtn.setAttribute('aria-expanded', candidateListEl.hidden ? 'false' : 'true');
+    renderCandidates();
+  });
 
   // ---- rendering ----
 
@@ -334,6 +377,7 @@
     highlightIndex = -1;
     renderSuggestions();
     renderGrid();
+    renderCandidates();
     saveState(currentDateStr);
 
     if (isWin(vehicle)) {
@@ -398,6 +442,8 @@
     highlightIndex = -1;
     renderSuggestions();
     endBackdrop.hidden = true;
+    candidateListEl.hidden = true;
+    toggleCandidatesBtn.setAttribute('aria-expanded', 'false');
 
     var saved = loadState(dateStr);
     if (saved && saved.guessKeys && saved.guessKeys.length) {
@@ -414,6 +460,7 @@
       : ('Cardle · Practice ' + dateStr);
 
     renderDayStrip();
+    renderClues();
     renderGrid();
     renderStreak();
 

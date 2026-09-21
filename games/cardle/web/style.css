@@ -56,6 +56,37 @@ h1, h2{ margin: 0; font-weight: 800; letter-spacing: -.01em; }
 .day-pill.today{ border-color: var(--accent); color: var(--accent); }
 .day-pill.active{ background: var(--accent); color: var(--accent-ink); border-color: transparent; }
 
+.clue-card{
+  background: var(--card); border: 1px solid var(--hairline); border-radius: 12px;
+  padding: 14px 16px; margin-bottom: 18px;
+}
+.clue-heading{
+  margin: 0 0 9px; font-family: ui-monospace, monospace; font-size: 10.5px; letter-spacing:.08em;
+  text-transform: uppercase; color: var(--ink-dim);
+}
+.clue-chips{ display:flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
+.clue-chip{
+  background: var(--card-2); border: 1px solid var(--hairline); border-radius: 999px;
+  padding: 6px 12px; font-size: 12.5px; font-weight: 600;
+}
+.clue-chip .k{ color: var(--ink-dim); font-weight: 500; margin-right: 5px; }
+
+.link-btn{
+  font-family: ui-monospace, monospace; font-size: 11.5px; background: none; border: none;
+  color: var(--accent); text-decoration: underline; text-decoration-style: dashed; cursor: pointer;
+  padding: 6px 0 0; margin: 0;
+}
+
+.candidate-list{
+  list-style: none; margin: 10px 0 0; padding: 10px 0 0; border-top: 1px dashed var(--hairline);
+  display: flex; flex-wrap: wrap; gap: 7px;
+}
+.candidate-list li{
+  background: var(--card-2); border-radius: 7px; padding: 5px 10px; font-size: 12px;
+  font-family: ui-monospace, monospace; color: var(--ink-dim);
+}
+.candidate-list li.guessed{ text-decoration: line-through; opacity: .5; }
+
 .col-labels{
   display:grid; grid-template-columns: 1.3fr 1.25fr .85fr .95fr .8fr 1.05fr; gap: 6px;
   font-family: ui-monospace, monospace; font-size: 10px; letter-spacing:.05em; text-transform: uppercase;
