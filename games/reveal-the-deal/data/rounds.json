@@ -1,0 +1,56 @@
+{
+  "tileCols": 5,
+  "tileRows": 4,
+  "maxGuesses": 6,
+  "rounds": [
+    {
+      "id": "r1",
+      "label": "Monday Lot",
+      "flavor": "SUV, sold out of the Midwest.",
+      "vehicle": { "make": "Honda", "model": "CR-V", "year": 2019, "trim": "EX-L AWD", "color": "Modern Steel Metallic" },
+      "image": "r1.jpg"
+    },
+    {
+      "id": "r2",
+      "label": "Tuesday Lot",
+      "flavor": "Truck, sold out of the South.",
+      "vehicle": { "make": "Ford", "model": "F-150", "year": 2021, "trim": "XLT SuperCrew 4x4", "color": "Agate Black" },
+      "image": "r2.jpg"
+    },
+    {
+      "id": "r3",
+      "label": "Wednesday Lot",
+      "flavor": "Sedan, sold out of the West.",
+      "vehicle": { "make": "Toyota", "model": "Camry", "year": 2020, "trim": "SE", "color": "Celestial Silver" },
+      "image": "r3.jpg"
+    },
+    {
+      "id": "r4",
+      "label": "Thursday Lot",
+      "flavor": "SUV, sold out of the Southwest.",
+      "vehicle": { "make": "Jeep", "model": "Wrangler", "year": 2022, "trim": "Sport 4x4", "color": "Sarge Green" },
+      "image": "r4.jpg"
+    },
+    {
+      "id": "r5",
+      "label": "Friday Lot",
+      "flavor": "Truck, sold out of the Midwest.",
+      "vehicle": { "make": "Chevrolet", "model": "Silverado", "year": 2018, "trim": "LT", "color": "Summit White" },
+      "image": "r5.jpg"
+    },
+    {
+      "id": "r6",
+      "label": "Saturday Lot",
+      "flavor": "SUV, sold out of the Northeast.",
+      "vehicle": { "make": "Subaru", "model": "Outback", "year": 2021, "trim": "Limited", "color": "Crystal Black" },
+      "image": "r6.jpg"
+    },
+    {
+      "id": "r7",
+      "label": "Sunday Lot",
+      "flavor": "Sedan, sold out of the West.",
+      "vehicle": { "make": "Tesla", "model": "Model 3", "year": 2023, "trim": "Long Range", "color": "Pearl White" },
+      "image": "r7.jpg"
+    }
+  ]
+}

@@ -11,9 +11,36 @@ A suite of small daily games for ACV's site — hackathon build, Team B
 - `games/lot-jam` — "Lot Jam": Rush Hour-style sliding car puzzle, clear
   a path out of a jammed lot. Client-only POC; see its own README to
   run it.
+- `games/route-runner` — "Route Runner": LinkedIn Zip-style puzzle,
+  connect numbered delivery stops with one line covering every tile.
+  Client-only POC with a procedural daily generator; see its own README
+  to run it.
+- `games/cardle` — "Cardle": daily guess-the-vehicle game (Make, Model,
+  Year, Body, Drivetrain, Origin feedback per guess — closer to
+  Loldle/Pokedle than letter-based Wordle). Client-only POC; see its
+  own README to run it.
+- `games/reveal-the-deal` — "Reveal the Deal": Heardle-style tile
+  reveal on a sold-listing photo; guess make/model/year before it's
+  fully uncovered. Client-only POC, currently running on placeholder
+  art since Guess the Deal has no real photo pipeline yet; see its own
+  README to run it.
 
 More games move in here as their own `games/<slug>` directory once
 someone starts building them.
+
+## Play the whole suite
+
+`games/home/web` is a standalone hub page — a tile per game, linking
+straight into each one. Run one server at the repo root and open the hub
+from it so every tile's link actually resolves:
+
+```
+python3 -m http.server 8790
+```
+
+Then open `http://localhost:8790/games/home/web/`. See
+`games/home/README.md` — that folder also holds the *separate* production
+home screen for the `acv-web-vuejs` embed, which is a different thing.
 
 ## Where new game ideas come from
 

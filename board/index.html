@@ -75,7 +75,7 @@
 
   header.top{
     display:flex; flex-wrap:wrap; gap:20px; align-items:flex-end; justify-content:space-between;
-    margin-bottom: 22px;
+    margin-bottom: 20px;
   }
   .title-block .eyebrow{
     font-family:"IBM Plex Mono", monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase;
@@ -99,6 +99,21 @@
   .stat b{ display:block; font-size:20px; font-family:"Fraunces",serif; font-weight:700; }
   .stat span{ font-size:10px; letter-spacing:.08em; text-transform:uppercase; color: var(--ink-dim); }
 
+  /* ---- page-level tabs ---- */
+  .tabs{ display:flex; gap:28px; margin-bottom:26px; border-bottom:1px solid var(--hairline); }
+  .tabs button{
+    font-family:"Fraunces", Georgia, serif; font-style:italic; font-weight:700; font-size:17px;
+    background:none; border:none; color: var(--ink-dim); cursor:pointer;
+    padding: 4px 2px 13px; position:relative;
+  }
+  .tabs button.active{ color: var(--ink); }
+  .tabs button.active::after{
+    content:""; position:absolute; left:0; right:0; bottom:-1px; height:3px;
+    background: var(--accent); border-radius:2px 2px 0 0;
+  }
+  .tabs button:focus-visible{ outline:2px solid var(--focus); outline-offset:4px; }
+  .tab-panel[hidden]{ display:none; }
+
   .toolbar{
     display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between;
     margin-bottom: 20px; padding-bottom:16px; border-bottom: 1px dashed var(--hairline);
@@ -114,7 +129,7 @@
   }
   .chip:hover{ transform: translateY(-1px); }
   .chip.active{ background: var(--accent-2); color: var(--accent-2-ink); border-color: transparent; }
-  .chip:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible{
+  .chip:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible{
     outline: 2px solid var(--focus); outline-offset: 2px;
   }
 
@@ -135,10 +150,11 @@
     font-family:"IBM Plex Mono", monospace; font-size:13px; font-weight:500; letter-spacing:.02em;
     background: var(--accent); color: var(--accent-ink); border:none; border-radius:999px;
     padding: 10px 18px; cursor:pointer; box-shadow: 0 2px 0 var(--card-shadow);
-    display:inline-flex; align-items:center; gap:8px;
+    display:inline-flex; align-items:center; gap:8px; justify-content:center;
   }
   .pitch-btn:hover{ transform: translateY(-1px); }
   .pitch-btn svg{ width:16px; height:16px; }
+  .pitch-btn:disabled{ opacity:.45; cursor:default; transform:none; }
 
   #board{
     display:grid; grid-template-columns: repeat(auto-fill, minmax(250px,1fr)); gap:22px;
@@ -270,6 +286,101 @@
   #toast.show{ opacity:1; transform: translateX(-50%) translateY(-4px); }
 
   footer.note{ margin-top:34px; text-align:center; font-size:12px; color: var(--ink-dim); }
+
+  /* ---- leaderboard tab ---- */
+  .lb-intro{ margin-bottom: 22px; }
+  .lb-stats{ margin-bottom: 14px; }
+  .lb-caption{ margin: 0; font-size:13.5px; color: var(--ink-dim); line-height:1.6; max-width: 76ch; }
+  .link-btn{
+    font-family:"IBM Plex Mono", monospace; font-size:12px; background:none; border:none; color: var(--accent-2);
+    text-decoration: underline; text-decoration-style: dashed; cursor:pointer; padding:0; margin-left:2px;
+  }
+  .spec-summary{
+    margin-top:16px; padding:18px 20px; background: var(--surface); border:1px solid var(--hairline); border-radius:10px;
+    display:grid; grid-template-columns: repeat(auto-fit, minmax(210px,1fr)); gap:18px 24px;
+  }
+  .spec-summary .sp-block h4{
+    font-size:11.5px; font-family:"IBM Plex Mono",monospace; text-transform:uppercase; letter-spacing:.07em;
+    color: var(--accent-2); margin:0 0 7px; display:flex; align-items:center; gap:7px;
+  }
+  .spec-summary p, .spec-summary li{ font-size:13px; line-height:1.55; color: var(--ink); margin:0 0 4px; }
+  .spec-summary ul{ margin:0; padding-left:17px; }
+  .spec-summary .tbd-flag{ background: var(--accent-3); color: var(--accent-3-ink); font-size:8.5px; padding:2px 6px;
+    border-radius:5px; letter-spacing:.05em; text-transform:uppercase; font-family:"IBM Plex Mono",monospace; font-weight:700; }
+  .spec-summary .credit{ grid-column: 1 / -1; padding-top:10px; border-top:1px dashed var(--hairline);
+    font-family:"IBM Plex Mono",monospace; font-size:11px; color: var(--ink-dim); }
+
+  .lb-config{ display:flex; flex-direction:column; gap:16px; margin-bottom:26px; padding-bottom:20px; border-bottom:1px dashed var(--hairline); }
+  .config-row{ display:flex; flex-wrap:wrap; gap:20px 28px; align-items:flex-end; }
+  .config-group{ display:flex; flex-direction:column; gap:7px; }
+  .config-label{ font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase;
+    color: var(--ink-dim); display:flex; align-items:center; gap:6px; }
+  .day-seg{ display:flex; border:1px solid var(--hairline); border-radius:999px; overflow:hidden; background:var(--surface); }
+  .day-seg button{
+    font-family:"IBM Plex Mono", monospace; font-size:11.5px; border:none; background:transparent; color:var(--ink-dim);
+    padding:7px 12px; cursor:pointer;
+  }
+  .day-seg button.active{ background: var(--accent-2); color: var(--accent-2-ink); }
+  .day-seg button.free-play{ color: var(--accent-3); }
+  .day-seg button.free-play.active{ background: var(--accent-3); color: var(--accent-3-ink); }
+  .you-select{
+    font-family:"Karla",sans-serif; font-size:13px; padding:7px 12px; border-radius:999px;
+    border:1px solid var(--hairline); background:var(--surface); color:var(--ink); min-width:190px;
+  }
+
+  .lb-layout{ display:grid; grid-template-columns: minmax(0,1fr) 270px; gap:26px; align-items:start; }
+  @media (max-width: 760px){ .lb-layout{ grid-template-columns: 1fr; } }
+
+  .lb-board-wrap{ background: var(--surface); border:1px solid var(--hairline); border-radius:10px; padding:0;
+    box-shadow: 0 6px 14px -6px var(--card-shadow); overflow:hidden; }
+  .lb-board-head{ padding: 16px 20px 13px; border-bottom:1px dashed var(--hairline); display:flex; align-items:baseline;
+    justify-content:space-between; gap:10px; flex-wrap:wrap; }
+  .lb-board-head h2{ font-size:19px; font-style:italic; font-weight:700; }
+  .lb-sub{ margin:0; font-family:"IBM Plex Mono",monospace; font-size:11.5px; color: var(--ink-dim); }
+  .lb-sub.finalized{ color: var(--accent-3); }
+
+  .lb-list{ list-style:none; margin:0; padding:4px 0; }
+  .lb-row{ display:flex; align-items:center; gap:14px; padding:9px 20px; }
+  .lb-row + .lb-row{ border-top: 1px solid var(--hairline); }
+  .lb-row.you-row{ background: color-mix(in srgb, var(--accent-2) 12%, transparent); }
+  .lb-rank{ width:28px; flex-shrink:0; text-align:center; font-family:"IBM Plex Mono",monospace; font-weight:700;
+    font-size:13.5px; color: var(--ink-dim); font-variant-numeric: tabular-nums; }
+  .lb-rank.medal-1{ color: #a8791b; }
+  .lb-rank.medal-2{ color: #7d7566; }
+  .lb-rank.medal-3{ color: #9a5a34; }
+  .lb-avatar{ width:27px; height:27px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+    font-family:"IBM Plex Mono",monospace; font-size:10.5px; font-weight:700; color: var(--accent-2-ink); }
+  .lb-name{ flex:1; min-width:0; font-size:13.5px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .lb-you-badge{ font-family:"IBM Plex Mono",monospace; font-size:9px; letter-spacing:.05em; background: var(--accent-2);
+    color: var(--accent-2-ink); padding:2px 6px; border-radius:5px; margin-left:8px; text-transform:uppercase; }
+  .lb-score{ font-family:"IBM Plex Mono",monospace; font-size:13.5px; font-variant-numeric: tabular-nums; color: var(--ink); flex-shrink:0; }
+  .lb-score i{ font-style:normal; color: var(--ink-dim); font-size:11px; margin-left:3px; }
+
+  .lb-you-pin{ border-top:2px dashed var(--hairline); }
+  .lb-you-pin .lb-row{ padding-top:12px; padding-bottom:12px; }
+  .lb-empty{ padding:38px 20px; text-align:center; color: var(--ink-dim); font-size:13.5px; line-height:1.6; }
+  .lb-empty .glyph{ font-size:26px; display:block; margin-bottom:10px; }
+
+  .attempt-panel{ background: var(--surface); border:1px solid var(--hairline); border-radius:10px; padding:18px;
+    box-shadow: 0 6px 14px -6px var(--card-shadow); }
+  .attempt-panel h3{ font-size:15px; font-style:italic; margin:0 0 6px; }
+  .attempt-sub{ font-size:11.5px; color: var(--ink-dim); line-height:1.5; margin:0 0 14px; }
+  .attempt-pips{ display:flex; gap:8px; margin-bottom:14px; }
+  .attempt-pip{ width:26px; height:26px; border-radius:50%; border:1px solid var(--hairline); display:flex;
+    align-items:center; justify-content:center; font-family:"IBM Plex Mono",monospace; font-size:11px;
+    color: var(--ink-dim); background: var(--surface-2); }
+  .attempt-pip.used-win{ background: var(--accent-2); color: var(--accent-2-ink); border-color:transparent; }
+  .attempt-pip.used-loss{ background: var(--ink-dim); color: var(--surface); border-color:transparent; opacity:.55; }
+  .attempt-log{ list-style:none; margin:0 0 14px; padding:0; display:flex; flex-direction:column; gap:7px; min-height:4px; }
+  .attempt-log li{ font-size:11.5px; font-family:"IBM Plex Mono",monospace; display:flex; justify-content:space-between;
+    gap:8px; color: var(--ink-dim); }
+  .attempt-log li.win{ color: var(--ink); }
+  .attempt-log .outcome-win{ color: var(--accent-2); }
+  .attempt-log .outcome-loss{ color: var(--accent); }
+  .attempt-log .best-tag{ font-size:8.5px; background: var(--accent-3); color: var(--accent-3-ink); padding:1px 5px;
+    border-radius:4px; margin-left:6px; text-transform:uppercase; }
+  #simulateBtn{ width:100%; }
+  .attempt-note{ margin-top:12px; font-size:11px; color: var(--ink-dim); line-height:1.5; }
 </style>
 
 <svg width="0" height="0" style="position:absolute">
@@ -291,6 +402,15 @@
     <path d="M6 3.5h9l3 3V20a.5.5 0 0 1-.5.5H6a.5.5 0 0 1-.5-.5V4a.5.5 0 0 1 .5-.5Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
     <path d="M9 10h6M9 13.5h6M9 17h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
   </symbol>
+  <symbol id="trophy-icon" viewBox="0 0 24 24">
+    <path d="M7 4h10v4a5 5 0 0 1-10 0V4Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+    <path d="M7 5H4v2a3 3 0 0 0 3 3M17 5h3v2a3 3 0 0 1-3 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    <path d="M12 13v3M9 20h6M9.5 20c0-2 .5-3 2.5-3s2.5 1 2.5 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="dice-icon" viewBox="0 0 24 24">
+    <path d="M12 2 4 6.5v11L12 22l8-4.5v-11L12 2Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+    <path d="M12 2v20M4 6.5 12 11l8-4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+  </symbol>
 </svg>
 
 <div class="wrap">
@@ -298,37 +418,143 @@
     <div class="title-block">
       <p class="eyebrow">ACV internal &middot; work in progress</p>
       <h1>Game Jam Board</h1>
-      <p>Pitch a dealer-facing mini-game idea, vote up the ones worth building next. Live for everyone who opens this link.</p>
+      <p>Pitch a dealer-facing mini-game idea, vote up the ones worth building next &mdash; then see how the leaderboard spec would rank them.</p>
       <a class="repo-link" href="https://github.com/acv-woz/game-jam-suite" target="_blank" rel="noopener">
         <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
         game-jam-suite
       </a>
     </div>
-    <div class="stats">
+  </header>
+
+  <nav class="tabs" id="mainTabs" role="tablist">
+    <button type="button" role="tab" data-tab="ideas" class="active" id="tabBtnIdeas" aria-controls="panel-ideas" aria-selected="true">Game Ideas</button>
+    <button type="button" role="tab" data-tab="leaderboard" id="tabBtnLeaderboard" aria-controls="panel-leaderboard" aria-selected="false">Leaderboard</button>
+  </nav>
+
+  <section class="tab-panel" id="panel-ideas" role="tabpanel" aria-labelledby="tabBtnIdeas">
+    <div class="stats" style="margin-bottom:20px;">
       <div class="stat"><b id="statIdeas">&mdash;</b><span>ideas</span></div>
       <div class="stat"><b id="statVotes">&mdash;</b><span>votes cast</span></div>
     </div>
-  </header>
 
-  <div class="toolbar">
-    <div class="toolbar-left" id="tagFilters"></div>
-    <div class="toolbar-right">
-      <input id="searchInput" type="text" placeholder="Search ideas&hellip;">
-      <div class="seg" id="sortSeg">
-        <button data-sort="top" class="active">Top</button>
-        <button data-sort="new">Newest</button>
+    <div class="toolbar">
+      <div class="toolbar-left" id="tagFilters"></div>
+      <div class="toolbar-right">
+        <input id="searchInput" type="text" placeholder="Search ideas&hellip;">
+        <div class="seg" id="sortSeg">
+          <button data-sort="top" class="active">Top</button>
+          <button data-sort="new">Newest</button>
+        </div>
+        <button class="pitch-btn" id="openPitch"><svg><use href="#plus-icon"/></svg>Pitch an idea</button>
       </div>
-      <button class="pitch-btn" id="openPitch"><svg><use href="#plus-icon"/></svg>Pitch an idea</button>
     </div>
-  </div>
 
-  <div id="board">
-    <div class="skeleton"></div>
-    <div class="skeleton"></div>
-    <div class="skeleton"></div>
-  </div>
+    <div id="board">
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+    </div>
 
-  <footer class="note">Ideas and votes are shared &amp; live for anyone with this link in the org. Be specific about the mechanic &mdash; vague pitches get fewer votes.</footer>
+    <footer class="note">Ideas and votes are shared &amp; live for anyone with this link in the org. Be specific about the mechanic &mdash; vague pitches get fewer votes.</footer>
+  </section>
+
+  <section class="tab-panel" id="panel-leaderboard" role="tabpanel" aria-labelledby="tabBtnLeaderboard" hidden>
+    <div class="lb-intro">
+      <div class="stats lb-stats">
+        <div class="stat"><b>3</b><span>games</span></div>
+        <div class="stat"><b>6</b><span>leaderboards</span></div>
+        <div class="stat"><b id="lbStatDealers">&mdash;</b><span>mock dealers</span></div>
+      </div>
+      <p class="lb-caption">
+        A working model of Vikram's leaderboard spec (draft v1, project <em>Rabbit Hole</em>) &mdash;
+        pick a game, a cycle, and a day of the week below and watch the rules play out.
+        <button type="button" class="link-btn" id="toggleSpec" aria-expanded="false" aria-controls="specSummary">View spec summary</button>
+        <br>Dealers, scores and attempts here are all invented for exploring the rules &mdash; regenerated fresh each time this tab loads, not real dealer data.
+      </p>
+      <div class="spec-summary" id="specSummary" hidden>
+        <div class="sp-block">
+          <h4><svg width="12" height="12"><use href="#trophy-icon"/></svg>Identity &amp; games</h4>
+          <p>One global display name per dealer &mdash; username or real name &mdash; used across every game.</p>
+          <p>3 games at launch, each with its own independent leaderboard. No combined cross-game score.</p>
+        </div>
+        <div class="sp-block">
+          <h4>Scoring &amp; retries</h4>
+          <p>Only a <strong>win</strong> posts a score. Up to <strong>3 attempts</strong>/game/day, each a fresh puzzle. Best winning score of the day counts.</p>
+        </div>
+        <div class="sp-block">
+          <h4>Cycles</h4>
+          <p>Daily resets each active day. Weekly aggregates Mon&ndash;Sat. <strong>Sunday is free play</strong> &mdash; nothing posts. Weekly finalizes Saturday, stays visible through Sunday, resets Monday.</p>
+        </div>
+        <div class="sp-block">
+          <h4>Ranking &amp; visibility</h4>
+          <p>Tied scores share a rank (skip the next number). Public view shows top 20; every dealer can see their own rank privately.</p>
+        </div>
+        <p class="credit">Leader: Vikram Kewalramani &middot; Members: Matthew Wozniak, Conner Westover &middot;
+          <span class="tbd-flag">TBD</span> weekly aggregation formula, retroactive identity relabeling &mdash; both explorable below.</p>
+      </div>
+    </div>
+
+    <div class="lb-config">
+      <div class="config-row">
+        <div class="config-group">
+          <label class="config-label">Game</label>
+          <div class="seg" id="gameSeg"></div>
+        </div>
+        <div class="config-group">
+          <label class="config-label">Cycle</label>
+          <div class="seg" id="cycleSeg">
+            <button type="button" data-cycle="daily" class="active">Daily</button>
+            <button type="button" data-cycle="weekly">Weekly</button>
+          </div>
+        </div>
+        <div class="config-group" id="aggGroup" hidden>
+          <label class="config-label">Weekly formula <span class="tbd-flag">TBD</span></label>
+          <div class="seg" id="aggSeg">
+            <button type="button" data-agg="best" class="active">Best day</button>
+            <button type="button" data-agg="sum">Sum</button>
+            <button type="button" data-agg="avg">Average</button>
+          </div>
+        </div>
+        <div class="config-group">
+          <label class="config-label">Dealer identity</label>
+          <div class="seg" id="identitySeg">
+            <button type="button" data-identity="username" class="active">Username</button>
+            <button type="button" data-identity="real">Real name</button>
+          </div>
+        </div>
+      </div>
+      <div class="config-row">
+        <div class="config-group">
+          <label class="config-label">Simulated day</label>
+          <div class="day-seg" id="daySeg"></div>
+        </div>
+        <div class="config-group">
+          <label class="config-label" for="youSelect">Play as</label>
+          <select class="you-select" id="youSelect"></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="lb-layout">
+      <div class="lb-board-wrap">
+        <div class="lb-board-head">
+          <h2 id="lbTitle">&mdash;</h2>
+          <p class="lb-sub" id="lbSub">&mdash;</p>
+        </div>
+        <ol class="lb-list" id="lbList"></ol>
+        <div class="lb-you-pin" id="lbYouPin" hidden></div>
+      </div>
+
+      <aside class="attempt-panel">
+        <h3><svg width="14" height="14" style="vertical-align:-2px;margin-right:5px;"><use href="#dice-icon"/></svg>Today's attempts</h3>
+        <p class="attempt-sub">Up to 3 per game per day &middot; each attempt is a fresh puzzle &middot; only a win posts.</p>
+        <div class="attempt-pips" id="attemptPips"></div>
+        <ul class="attempt-log" id="attemptLog"></ul>
+        <button type="button" class="pitch-btn" id="simulateBtn"><svg><use href="#dice-icon"/></svg>Simulate an attempt</button>
+        <p class="attempt-note" id="attemptNote"></p>
+      </aside>
+    </div>
+  </section>
 </div>
 
 <dialog id="pitchDialog">
@@ -733,5 +959,413 @@
   }
 
   init();
+})();
+</script>
+
+<script>
+(function(){
+  'use strict';
+
+  // ---- tabs ----
+  var tabBtns = Array.prototype.slice.call(document.querySelectorAll('#mainTabs button'));
+  var panels = { ideas: document.getElementById('panel-ideas'), leaderboard: document.getElementById('panel-leaderboard') };
+
+  function activateTab(name, persist){
+    tabBtns.forEach(function(b){
+      var active = b.getAttribute('data-tab') === name;
+      b.classList.toggle('active', active);
+      b.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    Object.keys(panels).forEach(function(k){ panels[k].hidden = (k !== name); });
+    if (persist){
+      try { localStorage.setItem('gamejamboard-tab', name); } catch(e){ /* storage unavailable */ }
+    }
+  }
+
+  tabBtns.forEach(function(b){
+    b.addEventListener('click', function(){ activateTab(b.getAttribute('data-tab'), true); });
+  });
+
+  var startTab = 'ideas';
+  try {
+    var saved = localStorage.getItem('gamejamboard-tab');
+    if (saved === 'leaderboard') startTab = 'leaderboard';
+  } catch(e){ /* storage unavailable */ }
+  activateTab(startTab, false);
+
+  var toggleSpecBtn = document.getElementById('toggleSpec');
+  var specSummaryEl = document.getElementById('specSummary');
+  toggleSpecBtn.addEventListener('click', function(){
+    var next = specSummaryEl.hidden;
+    specSummaryEl.hidden = !next;
+    toggleSpecBtn.setAttribute('aria-expanded', next ? 'true' : 'false');
+    toggleSpecBtn.textContent = next ? 'Hide spec summary' : 'View spec summary';
+  });
+
+  // ---- leaderboard demo: games, mock dealers, mock week of scores ----
+
+  var GAMES = [
+    { id: 'guess', name: 'Guess the Deal', unit: 'pts', better: 'high', min: 380, max: 1180, step: 10, fmt: 'plain' },
+    { id: 'cardle', name: 'Cardle', unit: 'guesses', better: 'low', min: 1, max: 6, step: 1, fmt: 'plain' },
+    { id: 'lotjam', name: 'Lot Jam', unit: 's', better: 'low', min: 16, max: 140, step: 1, fmt: 'time' }
+  ];
+  var GAME_BY_ID = {};
+  GAMES.forEach(function(g){ GAME_BY_ID[g.id] = g; });
+
+  var DAY_NAMES = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  var DAY_SHORT = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+  var REAL_NAMES = ['Marcus Ibe','Priya Anand','Dana Kowalski','Leon Fischer','Grace Okafor','Tomás Rivera','Wendy Park',
+    'Andre Silva','Naomi Cohen','Caleb Stroud','Renee Duval','Sam Whitfield','Julia Ferreira','Owen Marsh','Ines Castillo',
+    'Tyler Bloom','Priyanka Rao','Dmitri Volkov','Alicia Nguyen','Ben Harding','Farah Haddad','Carter Voss',
+    "Meg O'Sullivan",'Rafael Cruz','Simone Laurent','Jordan Blake','Nadia Petrov','Evan McAllister'];
+  var USERNAMES = ['LotShark88','LastBidLarry','LaneNineLegend','ClearTitleClaire','GavelGuy','TradeInTitan','MileageMaven',
+    'CurbAppealChris','AuctionAceDeb','RunAndDriveRon','FloorboardFinn','ArbitrationAnnie','BlockPartyBlaine','OvernightOffer',
+    'SightUnseenSue','HighBidHannah','ReserveRae','CleanCarfaxCody','FrameOffFreddy','ThirdPartyTerry','PowerTrainPete',
+    'VinDecoderVic','ClosingBellCarl','FairMarketFiona','ProxyBidPaula','LaneChangeLuis','CertifiedCarla','SalvageSavvySam'];
+
+  var AVATAR_HUES = ['--accent','--accent-2','--accent-3'];
+  var AVATAR_TINTS = ['#8074cf','#4f8fae','#5a9a73','#c06a56','#6c7480','#a8791b'];
+
+  var DEALERS = REAL_NAMES.map(function(name, i){
+    return { id: 'd' + i, realName: name, username: USERNAMES[i] };
+  });
+
+  function rand(min, max, step){
+    var n = min + Math.random() * (max - min);
+    return Math.round(n / step) * step;
+  }
+
+  function randomScoreFor(game){ return rand(game.min, game.max, game.step); }
+
+  function betterOf(a, b, better){
+    if (a == null) return b;
+    if (b == null) return a;
+    return better === 'high' ? Math.max(a, b) : Math.min(a, b);
+  }
+
+  // base[gameId][dayIndex][dealerId] = score | undefined (undefined = no qualifying win that day)
+  var base = {};
+  GAMES.forEach(function(g){
+    base[g.id] = [];
+    for (var d = 0; d < 7; d++){
+      var dayMap = {};
+      DEALERS.forEach(function(dealer){
+        if (Math.random() < 0.78) dayMap[dealer.id] = randomScoreFor(g);
+      });
+      base[g.id].push(dayMap);
+    }
+  });
+
+  // Force at least one visible tie near the top of each game's Monday board,
+  // so the shared-rank rule always has something to demonstrate on load.
+  GAMES.forEach(function(g){
+    var monday = base[g.id][0];
+    var ids = Object.keys(monday);
+    if (ids.length >= 2){
+      monday[ids[0]] = monday[ids[1]];
+    }
+  });
+
+  // overrides[gameId][dayIndex][dealerId] = score | null (null = attempted, no win yet)
+  // Set only once the "you" dealer simulates an attempt for that game/day, so the
+  // simulator becomes the source of truth for that cell instead of the mock base.
+  var overrides = {};
+  GAMES.forEach(function(g){ overrides[g.id] = [{}, {}, {}, {}, {}, {}, {}]; });
+
+  // attempts[gameId + '|' + dayIndex + '|' + dealerId] = [{seed, win, score}, ...]
+  var attempts = {};
+
+  function effectiveScore(gameId, dayIndex, dealerId){
+    var o = overrides[gameId][dayIndex];
+    if (Object.prototype.hasOwnProperty.call(o, dealerId)) return o[dealerId];
+    return base[gameId][dayIndex][dealerId];
+  }
+
+  function effectiveEntries(gameId, dayIndex){
+    var out = [];
+    DEALERS.forEach(function(dealer){
+      var score = effectiveScore(gameId, dayIndex, dealer.id);
+      if (score != null) out.push({ dealerId: dealer.id, score: score });
+    });
+    return out;
+  }
+
+  // Standard competition ranking: ties share a rank, the next distinct score
+  // resumes at its true 1-based position (so a tie for 1st is followed by rank 3).
+  function rankEntries(entries, better){
+    var sorted = entries.slice().sort(function(a, b){
+      return better === 'high' ? b.score - a.score : a.score - b.score;
+    });
+    var out = [];
+    var prevScore = null, prevRank = 0;
+    sorted.forEach(function(e, i){
+      var rank = (prevScore !== null && e.score === prevScore) ? prevRank : i + 1;
+      out.push({ dealerId: e.dealerId, score: e.score, rank: rank });
+      prevScore = e.score; prevRank = rank;
+    });
+    return out;
+  }
+
+  function weeklyWindow(dayIndex){
+    // Active/scoring days are Mon-Sat (0-5); Sunday (6) never contributes, and
+    // once "today" is Sunday, the window freezes at the full Mon-Sat week.
+    var last = dayIndex >= 5 ? 5 : dayIndex;
+    var days = [];
+    for (var i = 0; i <= last; i++) days.push(i);
+    return days;
+  }
+
+  function weeklyEntries(gameId, dayIndex, agg){
+    var game = GAME_BY_ID[gameId];
+    var days = weeklyWindow(dayIndex);
+    var out = [];
+    DEALERS.forEach(function(dealer){
+      var scores = [];
+      days.forEach(function(d){
+        var s = effectiveScore(gameId, d, dealer.id);
+        if (s != null) scores.push(s);
+      });
+      if (!scores.length) return;
+      var value;
+      if (agg === 'sum') value = scores.reduce(function(a, b){ return a + b; }, 0);
+      else if (agg === 'avg') value = Math.round((scores.reduce(function(a, b){ return a + b; }, 0) / scores.length) * 10) / 10;
+      else value = scores.reduce(function(a, b){ return betterOf(a, b, game.better); });
+      out.push({ dealerId: dealer.id, score: value });
+    });
+    return out;
+  }
+
+  function fmtScore(game, value, raw){
+    if (value == null) return '—';
+    if (game.fmt === 'time' && !raw){
+      var m = Math.floor(value / 60), s = Math.round(value % 60);
+      return m + ':' + (s < 10 ? '0' : '') + s;
+    }
+    var display = (Math.round(value * 10) % 10 === 0) ? Math.round(value) : value;
+    return display + (raw ? game.unit : '');
+  }
+
+  function scoreUnitLabel(game, raw){
+    if (game.fmt === 'time' && !raw) return '';
+    return game.unit;
+  }
+
+  function initials(name){
+    var parts = name.trim().split(/\s+/);
+    var a = parts[0] ? parts[0][0] : '';
+    var b = parts.length > 1 ? parts[parts.length - 1][0] : '';
+    return (a + b).toUpperCase();
+  }
+
+  function hashStr(s){
+    var h = 0;
+    for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+    return h;
+  }
+
+  function avatarColor(dealerId){
+    return AVATAR_TINTS[hashStr(dealerId) % AVATAR_TINTS.length];
+  }
+
+  // ---- config state ----
+  var state = {
+    gameId: 'guess',
+    cycle: 'daily',
+    agg: 'best',
+    identity: 'username',
+    day: 0,
+    youId: DEALERS[24] ? DEALERS[24].id : DEALERS[0].id
+  };
+
+  function dealerName(dealer){ return state.identity === 'username' ? dealer.username : dealer.realName; }
+  function dealerById(id){ return DEALERS.filter(function(d){ return d.id === id; })[0]; }
+
+  // ---- build static config controls ----
+  var gameSegEl = document.getElementById('gameSeg');
+  gameSegEl.innerHTML = GAMES.map(function(g, i){
+    return '<button type="button" data-game="' + g.id + '" class="' + (i === 0 ? 'active' : '') + '">' + g.name + '</button>';
+  }).join('');
+
+  var daySegEl = document.getElementById('daySeg');
+  daySegEl.innerHTML = DAY_SHORT.map(function(d, i){
+    var free = i === 6;
+    return '<button type="button" data-day="' + i + '" class="' + (i === 0 ? 'active ' : '') + (free ? 'free-play' : '') + '">' + d + (free ? ' ☀' : '') + '</button>';
+  }).join('');
+
+  var youSelectEl = document.getElementById('youSelect');
+  youSelectEl.innerHTML = DEALERS.map(function(d){
+    return '<option value="' + d.id + '">' + d.realName + ' (' + d.username + ')</option>';
+  }).join('');
+  youSelectEl.value = state.youId;
+
+  document.getElementById('lbStatDealers').textContent = String(DEALERS.length);
+
+  function wireSeg(container, dataAttr, onPick){
+    container.addEventListener('click', function(e){
+      var btn = e.target.closest('button');
+      if (!btn) return;
+      Array.prototype.forEach.call(container.querySelectorAll('button'), function(b){ b.classList.toggle('active', b === btn); });
+      onPick(btn.getAttribute(dataAttr));
+    });
+  }
+
+  wireSeg(gameSegEl, 'data-game', function(v){ state.gameId = v; renderAll(); });
+  wireSeg(document.getElementById('cycleSeg'), 'data-cycle', function(v){
+    state.cycle = v;
+    document.getElementById('aggGroup').hidden = (v !== 'weekly');
+    renderAll();
+  });
+  wireSeg(document.getElementById('aggSeg'), 'data-agg', function(v){ state.agg = v; renderAll(); });
+  wireSeg(document.getElementById('identitySeg'), 'data-identity', function(v){ state.identity = v; renderAll(); });
+  wireSeg(daySegEl, 'data-day', function(v){ state.day = parseInt(v, 10); renderAll(); });
+  youSelectEl.addEventListener('change', function(){ state.youId = youSelectEl.value; renderAll(); });
+
+  // ---- rendering ----
+  var lbTitleEl = document.getElementById('lbTitle');
+  var lbSubEl = document.getElementById('lbSub');
+  var lbListEl = document.getElementById('lbList');
+  var lbYouPinEl = document.getElementById('lbYouPin');
+
+  function lbRowHtml(entry, game, you){
+    var dealer = dealerById(entry.dealerId);
+    var medal = entry.rank <= 3 ? ' medal-' + entry.rank : '';
+    return (
+      '<li class="lb-row' + (you ? ' you-row' : '') + '">' +
+        '<span class="lb-rank' + medal + '">' + entry.rank + '</span>' +
+        '<span class="lb-avatar" style="background:' + avatarColor(dealer.id) + '">' + initials(dealerName(dealer)) + '</span>' +
+        '<span class="lb-name">' + dealerName(dealer) + (you ? '<span class="lb-you-badge">You</span>' : '') + '</span>' +
+        '<span class="lb-score">' + fmtScore(game, entry.score, false) + '<i>' + scoreUnitLabel(game, false) + '</i></span>' +
+      '</li>'
+    );
+  }
+
+  function renderBoard(){
+    var game = GAME_BY_ID[state.gameId];
+    var isWeekly = state.cycle === 'weekly';
+    var isSunday = state.day === 6;
+
+    lbTitleEl.textContent = game.name + ' — ' + (isWeekly ? 'Weekly' : 'Daily');
+
+    if (!isWeekly && isSunday){
+      lbSubEl.textContent = 'Sunday · free play';
+      lbSubEl.className = 'lb-sub';
+      lbYouPinEl.hidden = true;
+      lbYouPinEl.innerHTML = '';
+      lbListEl.innerHTML = '<div class="lb-empty"><span class="glyph">☀</span>Sunday is free play — dealers can still play for fun, but nothing posts to the daily or weekly leaderboard today.</div>';
+      return;
+    }
+
+    var ranked, sub;
+    if (isWeekly){
+      ranked = rankEntries(weeklyEntries(state.gameId, state.day, state.agg), game.better);
+      var days = weeklyWindow(state.day);
+      var aggLabel = state.agg === 'sum' ? 'sum of the week' : state.agg === 'avg' ? 'average of the week' : 'best day of the week';
+      sub = isSunday
+        ? 'Final standings · Mon–Sat · ' + aggLabel + ' · resets Monday'
+        : 'In progress · through ' + DAY_NAMES[state.day] + ' · ' + aggLabel;
+      lbSubEl.className = 'lb-sub' + (isSunday ? ' finalized' : '');
+    } else {
+      ranked = rankEntries(effectiveEntries(state.gameId, state.day), game.better);
+      sub = DAY_NAMES[state.day] + ' · resets tonight';
+      lbSubEl.className = 'lb-sub';
+    }
+    lbSubEl.textContent = sub;
+
+    if (!ranked.length){
+      lbListEl.innerHTML = '<div class="lb-empty"><span class="glyph">—</span>No qualifying scores yet for this view.</div>';
+      lbYouPinEl.hidden = true;
+      return;
+    }
+
+    var top20 = ranked.slice(0, 20);
+    var inTop = top20.some(function(e){ return e.dealerId === state.youId; });
+    lbListEl.innerHTML = top20.map(function(e){ return lbRowHtml(e, game, e.dealerId === state.youId); }).join('');
+
+    var youEntry = ranked.filter(function(e){ return e.dealerId === state.youId; })[0];
+    if (youEntry && !inTop){
+      lbYouPinEl.hidden = false;
+      lbYouPinEl.innerHTML = '<ol class="lb-list" style="padding-top:0;">' + lbRowHtml(youEntry, game, true) + '</ol>';
+    } else {
+      lbYouPinEl.hidden = true;
+      lbYouPinEl.innerHTML = '';
+    }
+  }
+
+  // ---- attempt simulator ----
+  var attemptPipsEl = document.getElementById('attemptPips');
+  var attemptLogEl = document.getElementById('attemptLog');
+  var simulateBtn = document.getElementById('simulateBtn');
+  var attemptNoteEl = document.getElementById('attemptNote');
+
+  function attemptKey(){ return state.gameId + '|' + state.day + '|' + state.youId; }
+
+  function renderAttempts(){
+    var game = GAME_BY_ID[state.gameId];
+    var list = attempts[attemptKey()] || [];
+    var isSunday = state.day === 6;
+
+    var pips = '';
+    for (var i = 0; i < 3; i++){
+      var a = list[i];
+      var cls = a ? (a.win ? 'used-win' : 'used-loss') : '';
+      pips += '<span class="attempt-pip ' + cls + '">' + (i + 1) + '</span>';
+    }
+    attemptPipsEl.innerHTML = pips;
+
+    var bestWin = null;
+    list.forEach(function(a){ if (a.win) bestWin = betterOf(bestWin, a.score, game.better); });
+
+    attemptLogEl.innerHTML = list.map(function(a){
+      var isBest = a.win && a.score === bestWin;
+      return '<li class="' + (a.win ? 'win' : '') + '">' +
+        '<span>Seed ' + a.seed + '</span>' +
+        '<span class="' + (a.win ? 'outcome-win' : 'outcome-loss') + '">' +
+          (a.win ? fmtScore(game, a.score, false) + scoreUnitLabel(game, false) : 'no win') +
+          (isBest ? '<span class="best-tag">posts</span>' : '') +
+        '</span>' +
+      '</li>';
+    }).join('') || '<li style="color:var(--ink-dim);">No attempts yet today.</li>';
+
+    simulateBtn.disabled = list.length >= 3;
+    simulateBtn.textContent = list.length >= 3 ? '3 / 3 attempts used' : 'Simulate an attempt';
+
+    if (isSunday){
+      attemptNoteEl.textContent = "It's Sunday — free play. Attempts are just for fun and won't post anywhere.";
+    } else if (!list.length){
+      attemptNoteEl.textContent = 'No attempts yet — each one is a freshly generated puzzle, and only a win posts a score.';
+    } else if (bestWin == null){
+      attemptNoteEl.textContent = "No win yet today, so nothing has posted to " + game.name + "'s leaderboard.";
+    } else {
+      attemptNoteEl.textContent = 'Best winning score of the day (' + fmtScore(game, bestWin, false) + scoreUnitLabel(game, false) + ') is what posts.';
+    }
+  }
+
+  simulateBtn.addEventListener('click', function(){
+    var key = attemptKey();
+    var list = attempts[key] || (attempts[key] = []);
+    if (list.length >= 3) return;
+    var game = GAME_BY_ID[state.gameId];
+    var win = Math.random() < 0.72;
+    var seed = Math.random().toString(36).slice(2, 6).toUpperCase();
+    var score = win ? randomScoreFor(game) : null;
+    list.push({ seed: seed, win: win, score: score });
+
+    if (state.day !== 6){
+      var dayOverrides = overrides[state.gameId][state.day];
+      var bestWin = null;
+      list.forEach(function(a){ if (a.win) bestWin = betterOf(bestWin, a.score, game.better); });
+      dayOverrides[state.youId] = bestWin; // null until a win lands, matching "loss posts nothing"
+    }
+
+    renderAll();
+  });
+
+  function renderAll(){
+    renderBoard();
+    renderAttempts();
+  }
+
+  renderAll();
 })();
 </script>
