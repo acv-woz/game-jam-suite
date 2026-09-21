@@ -36,6 +36,13 @@ const games = [
     href: '/game-jam/lot-jam',
     accent: '#ffb020',
   },
+  {
+    slug: 'car-trivia',
+    title: 'Car Trivia',
+    description: 'Five daily questions on supercars, logos, movies, and automotive history.',
+    href: '/game-jam/car-trivia',
+    accent: '#0a1172',
+  },
 ];
 </script>
 

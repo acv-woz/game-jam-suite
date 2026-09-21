@@ -23,3 +23,11 @@
       title: 'Lot Jam',
     },
   },
+  {
+    path: '/game-jam/car-trivia',
+    name: 'CarTrivia',
+    component: () => import('@/views/GameJam/CarTriviaPage.vue'),
+    meta: {
+      title: 'Car Trivia',
+    },
+  },
