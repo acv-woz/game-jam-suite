@@ -13,7 +13,10 @@
 html, body{ height: 100%; }
 body{
   margin: 0;
-  background: radial-gradient(120% 140% at 50% -10%, var(--asphalt-2), var(--asphalt));
+  background:
+    linear-gradient(180deg, rgba(13,14,18,.55) 0%, rgba(13,14,18,.82) 40%, var(--asphalt) 78%),
+    url(images/gameHubBackground.png) center top / cover no-repeat,
+    var(--asphalt);
   color: var(--ink);
   font-family: "Segoe UI", ui-sans-serif, system-ui, sans-serif;
   padding: 32px 16px 44px;
@@ -44,11 +47,15 @@ h1{ margin: 0; font-weight: 800; letter-spacing: -.01em; font-size: 34px; }
 .tile:focus-visible{ outline: 2px solid var(--tile-accent, #fff); outline-offset: 3px; }
 
 .tile-thumb{
-  width: 100%; aspect-ratio: 16/9; border-radius: 10px; display: flex; align-items: center; justify-content: center;
+  position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 10px; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
   background: var(--tile-accent, #666);
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.12);
 }
-.tile-initial{ font-size: 30px; font-weight: 800; color: rgba(0,0,0,.55); }
+.tile-thumb img{
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+}
+.tile-initial{ position: relative; font-size: 30px; font-weight: 800; color: rgba(0,0,0,.55); }
 
 .tile h2{ margin: 0; font-size: 17px; font-weight: 700; }
 .tile p{ margin: 0; font-size: 13px; color: var(--ink-dim); line-height: 1.5; flex: 1; }

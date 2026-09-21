@@ -3,7 +3,10 @@
 
   // Add a new game here when it moves from the board into games/<slug> —
   // nothing else on this page needs to change. `path` is relative to this
-  // file (games/home/web/index.html), same shape for every entry.
+  // file (games/home/web/index.html), same shape for every entry. Drop a
+  // `<slug>.png` into images/ for the tile art — see images/README.md;
+  // until it's there (or if it fails to load), the tile falls back to a
+  // plain accent-colored initial.
   var GAMES = [
     {
       slug: 'guess-the-deal',
@@ -35,7 +38,10 @@
   function tileHtml(game) {
     return (
       '<a class="tile" href="' + game.path + '" style="--tile-accent:' + game.accent + '">' +
-        '<div class="tile-thumb"><span class="tile-initial">' + initial(game.title) + '</span></div>' +
+        '<div class="tile-thumb">' +
+          '<img src="images/' + game.slug + '.png" alt="" onerror="this.remove()">' +
+          '<span class="tile-initial">' + initial(game.title) + '</span>' +
+        '</div>' +
         '<h2>' + game.title + '</h2>' +
         '<p>' + game.tagline + '</p>' +
         '<span class="play">Play &rarr;</span>' +
