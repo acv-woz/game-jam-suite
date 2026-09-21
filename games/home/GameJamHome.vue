@@ -50,6 +50,20 @@ const games = [
     href: '/game-jam/cardle',
     accent: '#8074cf',
   },
+  {
+    slug: 'reveal-the-deal',
+    title: 'Reveal the Deal',
+    description: 'Each guess flips more tiles on a real sold listing’s photo — name it before it’s fully revealed.',
+    href: '/game-jam/reveal-the-deal',
+    accent: '#e2635a',
+  },
+  {
+    slug: 'route-runner',
+    title: 'Route Runner',
+    description: 'Connect every numbered stop with one line that covers the whole board, no crossing your own path.',
+    href: '/game-jam/route-runner',
+    accent: '#3bb5a0',
+  },
 ];
 </script>
 

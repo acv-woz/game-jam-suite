@@ -20,6 +20,8 @@ export default defineConfig({
         './LotJamApp': './games/lot-jam/web/mfe/LotJamApp.vue',
         './CarTriviaApp': './games/car-trivia/web/mfe/CarTriviaApp.vue',
         './CardleApp': './games/cardle/web/mfe/CardleApp.vue',
+        './RevealTheDealApp': './games/reveal-the-deal/web/mfe/RevealTheDealApp.vue',
+        './RouteRunnerApp': './games/route-runner/web/mfe/RouteRunnerApp.vue',
         './GameJamHome': './games/home/GameJamHome.vue',
       },
       shared: {

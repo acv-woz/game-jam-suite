@@ -10,10 +10,15 @@ import { onMounted, onBeforeUnmount } from 'vue';
  * app.js reads window.__GAME_JAM_DATA_BASE__ to fetch its data/*.json over
  * the correct origin when embedded (its own relative fetch path resolves
  * against the *host* page's URL, not this remote's, once injected there).
+ *
+ * `extraScripts` (e.g. Route Runner's `generator.js`) are loaded, in order,
+ * before app.js — each one is awaited via its `onload` event rather than
+ * just appended, since dynamically inserted <script> tags don't otherwise
+ * guarantee execution order relative to each other.
  */
-export default function useEmbeddedGame(gameSlug) {
+export default function useEmbeddedGame(gameSlug, { extraScripts = [] } = {}) {
   const remoteBase = import.meta.env.VITE_GAME_JAM_REMOTE_URI ?? '';
-  let scriptEl = null;
+  let scriptEls = [];
 
   const injectStylesheet = () => {
     const linkId = `game-jam-${gameSlug}-styles`;
@@ -26,15 +31,30 @@ export default function useEmbeddedGame(gameSlug) {
     document.head.appendChild(link);
   };
 
-  onMounted(() => {
-    injectStylesheet();
-    window.__GAME_JAM_DATA_BASE__ = remoteBase;
-    scriptEl = document.createElement('script');
-    scriptEl.src = `${remoteBase}/${gameSlug}/web/app.js`;
+  const loadScript = (filename) => new Promise((resolve, reject) => {
+    const scriptEl = document.createElement('script');
+    scriptEl.src = `${remoteBase}/${gameSlug}/web/${filename}`;
+    scriptEl.onload = () => resolve(scriptEl);
+    scriptEl.onerror = reject;
+    scriptEls.push(scriptEl);
     document.body.appendChild(scriptEl);
   });
 
+  onMounted(async () => {
+    injectStylesheet();
+    window.__GAME_JAM_DATA_BASE__ = remoteBase;
+    try {
+      for (const filename of [...extraScripts, 'app.js']) {
+        // eslint-disable-next-line no-await-in-loop -- must load in order
+        await loadScript(filename);
+      }
+    } catch (e) {
+      /* a script failed to load — nothing more we can do here */
+    }
+  });
+
   onBeforeUnmount(() => {
-    scriptEl?.remove();
+    scriptEls.forEach((el) => el.remove());
+    scriptEls = [];
   });
 }

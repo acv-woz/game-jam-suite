@@ -39,3 +39,19 @@
       title: 'Cardle',
     },
   },
+  {
+    path: '/game-jam/reveal-the-deal',
+    name: 'RevealTheDeal',
+    component: () => import('@/views/GameJam/RevealTheDealPage.vue'),
+    meta: {
+      title: 'Reveal the Deal',
+    },
+  },
+  {
+    path: '/game-jam/route-runner',
+    name: 'RouteRunner',
+    component: () => import('@/views/GameJam/RouteRunnerPage.vue'),
+    meta: {
+      title: 'Route Runner',
+    },
+  },

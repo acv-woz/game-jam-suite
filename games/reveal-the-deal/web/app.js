@@ -342,8 +342,11 @@
       mulberry32(seedFromString(round.id))
     );
 
+    var imageBase = window.__GAME_JAM_DATA_BASE__
+      ? window.__GAME_JAM_DATA_BASE__ + '/reveal-the-deal/web/images/'
+      : 'images/';
     revealImg.onerror = null;
-    revealImg.src = 'images/' + round.image;
+    revealImg.src = imageBase + round.image;
     var placeholder = placeholderDataUri(round.id);
     revealImg.onerror = function () { revealImg.onerror = null; revealImg.src = placeholder; };
 
@@ -372,9 +375,17 @@
     loadPuzzle(todayIndex);
   }
 
+  // When embedded as an MFE, this script runs inside the host page, so a
+  // relative fetch would resolve against the host's URL, not this game's
+  // origin. window.__GAME_JAM_DATA_BASE__ is set by the host wrapper before
+  // injecting this script; standalone mode leaves it unset.
+  var dataBase = window.__GAME_JAM_DATA_BASE__
+    ? window.__GAME_JAM_DATA_BASE__ + '/reveal-the-deal/data/'
+    : '../data/';
+
   Promise.all([
-    fetch('../data/rounds.json').then(function (r) { if (!r.ok) throw new Error('bad'); return r.json(); }),
-    fetch('../data/vehicles.json').then(function (r) { if (!r.ok) throw new Error('bad'); return r.json(); })
+    fetch(dataBase + 'rounds.json').then(function (r) { if (!r.ok) throw new Error('bad'); return r.json(); }),
+    fetch(dataBase + 'vehicles.json').then(function (r) { if (!r.ok) throw new Error('bad'); return r.json(); })
   ])
     .then(function (results) { loadData(results[0], results[1]); })
     .catch(function () { loadData(FALLBACK_ROUNDS, { vehicles: FALLBACK_VEHICLES }); });
