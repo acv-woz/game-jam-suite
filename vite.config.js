@@ -23,6 +23,7 @@ export default defineConfig({
         './RevealTheDealApp': './games/reveal-the-deal/web/mfe/RevealTheDealApp.vue',
         './RouteRunnerApp': './games/route-runner/web/mfe/RouteRunnerApp.vue',
         './GameJamHome': './games/home/GameJamHome.vue',
+        './LeaderboardPage': './games/leaderboard/LeaderboardPage.vue',
       },
       shared: {
         vue: {},

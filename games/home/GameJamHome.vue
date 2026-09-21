@@ -1,8 +1,15 @@
 <template>
   <div class="game-jam-home">
     <header class="game-jam-home__header">
-      <h1 class="game-jam-home__title">Game Jam</h1>
-      <p class="game-jam-home__subtitle">Pick a game to play</p>
+      <div class="game-jam-home__header-spacer" />
+      <div>
+        <h1 class="game-jam-home__title">Game Jam</h1>
+        <p class="game-jam-home__subtitle">Pick a game to play</p>
+      </div>
+      <a
+        class="game-jam-home__leaderboard-link"
+        href="/game-jam/leaderboard"
+      >Leaderboard</a>
     </header>
 
     <div class="game-jam-home__grid">
@@ -75,8 +82,35 @@ const games = [
 }
 
 .game-jam-home__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
   margin-bottom: 28px;
   text-align: center;
+}
+
+.game-jam-home__header-spacer,
+.game-jam-home__leaderboard-link {
+  flex: 1 0 0;
+}
+
+.game-jam-home__leaderboard-link {
+  display: inline-flex;
+  justify-content: flex-end;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1c2434;
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid #e2e6f0;
+  background: #fff;
+  white-space: nowrap;
+}
+
+.game-jam-home__leaderboard-link:hover {
+  background: #f3f4fa;
 }
 
 .game-jam-home__title {
@@ -109,5 +143,13 @@ const games = [
 
 @media (max-width: 520px) {
   .game-jam-home__grid { grid-template-columns: 1fr; }
+
+  .game-jam-home__header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .game-jam-home__header-spacer { display: none; }
+  .game-jam-home__leaderboard-link { justify-content: center; }
 }
 </style>

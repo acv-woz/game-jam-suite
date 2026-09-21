@@ -55,3 +55,11 @@
       title: 'Route Runner',
     },
   },
+  {
+    path: '/game-jam/leaderboard',
+    name: 'GameJamLeaderboard',
+    component: () => import('@/views/GameJam/LeaderboardPage.vue'),
+    meta: {
+      title: 'Leaderboard',
+    },
+  },
