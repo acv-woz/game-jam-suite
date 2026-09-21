@@ -31,3 +31,11 @@
       title: 'Car Trivia',
     },
   },
+  {
+    path: '/game-jam/cardle',
+    name: 'Cardle',
+    component: () => import('@/views/GameJam/CardlePage.vue'),
+    meta: {
+      title: 'Cardle',
+    },
+  },

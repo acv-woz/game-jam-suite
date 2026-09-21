@@ -52,11 +52,12 @@ relative to that repo's root. There are two kinds of entries:
 |---|---|---|---|
 | `.env` | `.env` | modification | Adds `VITE_GAME_JAM_REMOTE_URI`, the base URL the host resolves the `gameJam` remote from (`localhost:4444` in dev). |
 | `src/constants/federationRemotes.js` | `src/constants/federationRemotes.js` | modification | Adds the `gameJam` entry to `buildRemoteUrls()`, pointing at `${VITE_GAME_JAM_REMOTE_URI}/assets/game-jam-remote-entry.js`. |
-| `src/constants/routes/index.js` | `src/constants/routes/index.js` | modification | Adds the `/game-jam`, `/game-jam/guess-the-deal`, `/game-jam/lot-jam`, and `/game-jam/car-trivia` routes. |
+| `src/constants/routes/index.js` | `src/constants/routes/index.js` | modification | Adds the `/game-jam`, `/game-jam/guess-the-deal`, `/game-jam/lot-jam`, `/game-jam/car-trivia`, and `/game-jam/cardle` routes. |
 | `src/views/GameJam/GameJamHomePage.vue` | `src/views/GameJam/GameJamHomePage.vue` | new file | Thin wrapper that federated-imports `gameJam/GameJamHome` (the tile grid of all games — see `games/home/` in this repo). |
 | `src/views/GameJam/GuessTheDealPage.vue` | `src/views/GameJam/GuessTheDealPage.vue` | new file | Thin wrapper that federated-imports `gameJam/GuessTheDealApp`. |
 | `src/views/GameJam/LotJamPage.vue` | `src/views/GameJam/LotJamPage.vue` | new file | Thin wrapper that federated-imports `gameJam/LotJamApp`. |
 | `src/views/GameJam/CarTriviaPage.vue` | `src/views/GameJam/CarTriviaPage.vue` | new file | Thin wrapper that federated-imports `gameJam/CarTriviaApp`. |
+| `src/views/GameJam/CardlePage.vue` | `src/views/GameJam/CardlePage.vue` | new file | Thin wrapper that federated-imports `gameJam/CardleApp`. |
 
 Every "page" wrapper follows the same pattern: a tiny `<script setup>` that
 `defineAsyncComponent`s a federated import, wrapped in a `div.game-jam-page`

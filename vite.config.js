@@ -19,6 +19,7 @@ export default defineConfig({
         './GuessTheDealApp': './games/guess-the-deal/web/mfe/GuessTheDealApp.vue',
         './LotJamApp': './games/lot-jam/web/mfe/LotJamApp.vue',
         './CarTriviaApp': './games/car-trivia/web/mfe/CarTriviaApp.vue',
+        './CardleApp': './games/cardle/web/mfe/CardleApp.vue',
         './GameJamHome': './games/home/GameJamHome.vue',
       },
       shared: {

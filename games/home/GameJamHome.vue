@@ -43,6 +43,13 @@ const games = [
     href: '/game-jam/car-trivia',
     accent: '#0a1172',
   },
+  {
+    slug: 'cardle',
+    title: 'Cardle',
+    description: "Guess today's vehicle by make, model, and year in 6 tries — clues included.",
+    href: '/game-jam/cardle',
+    accent: '#8074cf',
+  },
 ];
 </script>
 
