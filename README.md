@@ -19,6 +19,11 @@ A suite of small daily games for ACV's site — hackathon build, Team B
   Year, Body, Drivetrain, Origin feedback per guess — closer to
   Loldle/Pokedle than letter-based Wordle). Client-only POC; see its
   own README to run it.
+- `games/reveal-the-deal` — "Reveal the Deal": Heardle-style tile
+  reveal on a sold-listing photo; guess make/model/year before it's
+  fully uncovered. Client-only POC, currently running on placeholder
+  art since Guess the Deal has no real photo pipeline yet; see its own
+  README to run it.
 
 More games move in here as their own `games/<slug>` directory once
 someone starts building them.

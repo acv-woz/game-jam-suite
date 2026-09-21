@@ -35,6 +35,13 @@
       tagline: 'Guess the daily vehicle in 6 tries — make, model, year, body, drivetrain, origin.',
       accent: '#8074cf',
       path: '../../cardle/web/index.html'
+    },
+    {
+      slug: 'reveal-the-deal',
+      title: 'Reveal the Deal',
+      tagline: 'Every guess flips more tiles off a listing photo — name the make, model and year first.',
+      accent: '#e2635a',
+      path: '../../reveal-the-deal/web/index.html'
     }
   ];
 
