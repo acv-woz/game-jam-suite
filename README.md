@@ -11,6 +11,10 @@ A suite of small daily games for ACV's site — hackathon build, Team B
 - `games/lot-jam` — "Lot Jam": Rush Hour-style sliding car puzzle, clear
   a path out of a jammed lot. Client-only POC; see its own README to
   run it.
+- `games/route-runner` — "Route Runner": LinkedIn Zip-style puzzle,
+  connect numbered delivery stops with one line covering every tile.
+  Client-only POC with a procedural daily generator; see its own README
+  to run it.
 
 More games move in here as their own `games/<slug>` directory once
 someone starts building them.
