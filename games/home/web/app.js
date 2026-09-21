@@ -42,6 +42,13 @@
       tagline: 'Every guess flips more tiles off a listing photo — name the make, model and year first.',
       accent: '#e2635a',
       path: '../../reveal-the-deal/web/index.html'
+    },
+    {
+      slug: 'car-trivia',
+      title: 'Car Trivia',
+      tagline: 'Jeopardy-style trivia rounds about famous, iconic and unusual cars.',
+      accent: '#f5c518',
+      path: '../../car-trivia/web/index.html'
     }
   ];
 
