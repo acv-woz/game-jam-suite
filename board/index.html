@@ -991,6 +991,12 @@
     var saved = localStorage.getItem('gamejamboard-tab');
     if (saved === 'leaderboard') startTab = 'leaderboard';
   } catch(e){ /* storage unavailable */ }
+  // A #leaderboard (or #ideas) link — e.g. a "Leaderboard" nav link from one
+  // of the games — always wins over whatever tab this browser last had open,
+  // so a deep link reliably lands where it says it will.
+  if (window.location.hash === '#leaderboard' || window.location.hash === '#ideas') {
+    startTab = window.location.hash.slice(1);
+  }
   activateTab(startTab, false);
 
   var toggleSpecBtn = document.getElementById('toggleSpec');
