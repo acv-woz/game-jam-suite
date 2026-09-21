@@ -28,6 +28,13 @@
       tagline: 'Zip-style puzzle — connect the numbered stops with one line covering every tile.',
       accent: '#3bb5a0',
       path: '../../route-runner/web/index.html'
+    },
+    {
+      slug: 'cardle',
+      title: 'Cardle',
+      tagline: 'Guess the daily vehicle in 6 tries — make, model, year, body, drivetrain, origin.',
+      accent: '#8074cf',
+      path: '../../cardle/web/index.html'
     }
   ];
 

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cardle</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div class="title-block">
+        <p class="eyebrow" id="puzzleNumber">Cardle #&mdash;</p>
+        <h1>Cardle</h1>
+        <p class="sub">Guess the daily vehicle in 6 tries &mdash; make, model, year, body, drivetrain and origin all narrow it down.</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><b id="statGuesses">0/6</b><span>guesses</span></div>
+        <div class="stat"><b id="statStreak">0</b><span>streak</span></div>
+      </div>
+    </header>
+
+    <div class="day-strip" id="dayStrip"></div>
+
+    <div class="col-labels" id="colLabels"></div>
+    <div class="grid" id="grid"></div>
+
+    <form class="guess-form" id="guessForm" autocomplete="off">
+      <div class="guess-input-wrap">
+        <input type="text" id="guessInput" placeholder="Type a make or model&hellip;" autocomplete="off" aria-label="Guess a vehicle">
+        <ul class="suggestions" id="suggestions" hidden></ul>
+      </div>
+      <button type="submit" class="btn-primary" id="submitGuess">Guess</button>
+    </form>
+
+    <footer class="note">Only real vehicles from today's pool are valid guesses &mdash; pick one from the list as you type. Practice any day from the strip above.</footer>
+  </div>
+
+  <div class="modal-backdrop" id="endBackdrop" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="endTitle">
+      <p class="eyebrow" id="endEyebrow">&mdash;</p>
+      <h2 id="endTitle">&mdash;</h2>
+      <p class="end-answer" id="endAnswer"></p>
+      <div class="win-stats">
+        <div><b id="endGuesses">0</b><span>guesses</span></div>
+        <div><b id="endStreak">0</b><span>streak</span></div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-ghost" id="endClose">Close</button>
+        <button type="button" class="btn-primary" id="endCopy">Copy result</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" role="status"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

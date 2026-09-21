@@ -15,6 +15,10 @@ A suite of small daily games for ACV's site — hackathon build, Team B
   connect numbered delivery stops with one line covering every tile.
   Client-only POC with a procedural daily generator; see its own README
   to run it.
+- `games/cardle` — "Cardle": daily guess-the-vehicle game (Make, Model,
+  Year, Body, Drivetrain, Origin feedback per guess — closer to
+  Loldle/Pokedle than letter-based Wordle). Client-only POC; see its
+  own README to run it.
 
 More games move in here as their own `games/<slug>` directory once
 someone starts building them.
