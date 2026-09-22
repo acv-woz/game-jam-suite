@@ -20,5 +20,6 @@ const GameJamHome = defineAsyncComponent(
 <style scoped>
 .game-jam-page {
   min-height: inherit;
+  background: var(--asphalt, #1d1f25);
 }
 </style>

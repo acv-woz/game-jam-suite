@@ -1,17 +1,20 @@
 # Game Jam Home
 
-Two different "home page" things live in this folder — don't mix them up:
+Same POC pattern as every other game: `web/{index.html,style.css,app.js}`
+is the real, standalone implementation — a grid of tiles, one per game,
+each linking to that game's own page. `GameJamHome.vue` is a thin wrapper
+around those same three files (via `useEmbeddedGame('home')`), exposed as
+`gameJam/GameJamHome` for Module Federation into `acv-web-vuejs` (see
+`filesToImportIntoAcvWebVue/README.md`). There's no separate Vue-rendered
+tile grid to keep in sync — both modes run the exact same `app.js`.
 
-- **`web/`** — a standalone, client-only hub page: a grid of tiles, one per
-  game, that links straight to each game's own `web/index.html`. This is
-  for playing the suite locally / sharing a build, same POC pattern as
-  every other `games/<slug>/web`.
-- **`GameJamHome.vue` / `GameTile.vue`** — the production home screen for
-  the Module Federation export into `acv-web-vuejs` (see
-  `filesToImportIntoAcvWebVue/README.md`). Different routing (`/game-jam/*`
-  inside the host app), different styling (Bootstrap-safe namespacing),
-  not runnable standalone. Update this when a game is ready to ship inside
-  the real site.
+`app.js` picks each tile's link based on whether it's running standalone or
+embedded (`window.__GAME_JAM_DATA_BASE__` is only set when embedded, by
+`useEmbeddedGame.js`): standalone uses the relative path to that game's own
+`web/index.html`; embedded links to the host's `/game-jam/<slug>` route
+instead. The Leaderboard entry is `embeddedOnly: true` — it only exists as
+a federated Vue component with no standalone page of its own, so it's
+hidden entirely outside the host.
 
 ## Run the hub
 
@@ -42,4 +45,5 @@ Then open `http://localhost:8790/games/home/web/`.
 
 Add one entry to the `GAMES` array in `web/app.js` (slug, title, tagline,
 accent color, relative path to that game's `web/index.html`). Nothing
-else on the page needs to change.
+else on the page needs to change — `GameJamHome.vue` picks it up
+automatically since it just wraps the same `app.js`.

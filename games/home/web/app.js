@@ -3,10 +3,16 @@
 
   // Add a new game here when it moves from the board into games/<slug> —
   // nothing else on this page needs to change. `path` is relative to this
-  // file (games/home/web/index.html), same shape for every entry. Drop a
-  // `<slug>.png` into images/ for the tile art — see images/README.md;
-  // until it's there (or if it fails to load), the tile falls back to a
-  // plain accent-colored initial.
+  // file (games/home/web/index.html) and is what standalone mode
+  // (python3 -m http.server) links to. Drop a `<slug>.png` into images/ for
+  // the tile art — see images/README.md; until it's there (or if it fails
+  // to load), the tile falls back to a plain accent-colored initial.
+  //
+  // `embeddedOnly: true` (currently just the leaderboard) hides an entry in
+  // standalone mode instead of linking it — the leaderboard only exists as
+  // a Vue component exposed via Module Federation, with no equivalent
+  // standalone page under games/, so there's nothing for a relative link
+  // to point to outside the host.
   var GAMES = [
     {
       slug: 'guess-the-deal',
@@ -49,6 +55,14 @@
       tagline: 'Jeopardy-style trivia rounds about famous, iconic and unusual cars.',
       accent: '#f5c518',
       path: '../../car-trivia/web/index.html'
+    },
+    {
+      slug: 'leaderboard',
+      title: 'Leaderboard',
+      tagline: 'See how dealers rank across every game, by day or by week.',
+      accent: '#c1443d',
+      cta: 'View',
+      embeddedOnly: true
     }
   ];
 
@@ -56,26 +70,50 @@
 
   function initial(title) { return title.trim().charAt(0).toUpperCase(); }
 
+  // When embedded as an MFE, standalone relative paths (into a sibling
+  // game's own games/<slug>/web/index.html) don't correspond to anything in
+  // the host's SPA — the host routes each game at /game-jam/<slug> instead.
+  // window.__GAME_JAM_DATA_BASE__ is only set when embedded (see
+  // useEmbeddedGame.js), so its presence is what distinguishes the two.
+  function isEmbedded() { return !!window.__GAME_JAM_DATA_BASE__; }
+
+  function gameHref(game) {
+    return isEmbedded() ? '/game-jam/' + game.slug : game.path;
+  }
+
+  // Unlike style.css's `url(images/gameHubBackground.png)` — which the
+  // browser resolves against that *stylesheet's* own URL regardless of
+  // where it's embedded — this HTML gets inserted into the *host* page via
+  // innerHTML, so a relative <img src> would resolve against the host's
+  // origin, not this remote's. Needs the same window.__GAME_JAM_DATA_BASE__
+  // treatment as every other cross-origin fetch/src in this suite.
+  function tileImageUrl(slug) {
+    return isEmbedded()
+      ? window.__GAME_JAM_DATA_BASE__ + '/home/web/images/' + slug + '.png'
+      : 'images/' + slug + '.png';
+  }
+
   function tileHtml(game) {
     return (
-      '<a class="tile" href="' + game.path + '" style="--tile-accent:' + game.accent + '">' +
+      '<a class="tile" href="' + gameHref(game) + '" style="--tile-accent:' + game.accent + '">' +
         '<div class="tile-thumb">' +
-          '<img src="images/' + game.slug + '.png" alt="" onerror="this.remove()">' +
+          '<img src="' + tileImageUrl(game.slug) + '" alt="" onerror="this.remove()">' +
           '<span class="tile-initial">' + initial(game.title) + '</span>' +
         '</div>' +
         '<h2>' + game.title + '</h2>' +
         '<p>' + game.tagline + '</p>' +
-        '<span class="play">Play &rarr;</span>' +
+        '<span class="play">' + (game.cta || 'Play') + ' &rarr;</span>' +
       '</a>'
     );
   }
 
   function render() {
-    if (!GAMES.length) {
+    var visible = GAMES.filter(function (g) { return !g.embeddedOnly || isEmbedded(); });
+    if (!visible.length) {
       gridEl.innerHTML = '<div class="empty">No games wired up yet.</div>';
       return;
     }
-    gridEl.innerHTML = GAMES.map(tileHtml).join('');
+    gridEl.innerHTML = visible.map(tileHtml).join('');
   }
 
   render();

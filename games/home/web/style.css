@@ -11,7 +11,7 @@
 
 *{ box-sizing: border-box; }
 html, body{ height: 100%; }
-body{
+body, .home-root{
   margin: 0;
   background:
     linear-gradient(180deg, rgba(13,14,18,.55) 0%, rgba(13,14,18,.82) 40%, var(--asphalt) 78%),
@@ -21,6 +21,19 @@ body{
   font-family: "Segoe UI", ui-sans-serif, system-ui, sans-serif;
   padding: 32px 16px 44px;
 }
+
+/*
+ * `.home-root` repeats the `body` rule above verbatim, for when this page
+ * is embedded as an MFE: the host page wraps this component in its own div
+ * with its own opaque background (see GameJamHomePage.vue in
+ * acv-web-vuejs), which sits in front of and fully hides `body` — the same
+ * issue Lot Jam's page background hit first (see its style.css / README).
+ * Painting the identical background on `.home-root` instead means it's
+ * visible regardless of DOM position, and the image's relative `url()`
+ * above still resolves correctly since it's resolved against *this
+ * stylesheet's* origin either way, not the document embedding it.
+ */
+.home-root{ min-height: 100%; }
 
 .wrap{ max-width: 920px; margin: 0 auto; }
 

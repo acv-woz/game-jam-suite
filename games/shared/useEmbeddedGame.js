@@ -17,7 +17,13 @@ import { onMounted, onBeforeUnmount } from 'vue';
  * guarantee execution order relative to each other.
  */
 export default function useEmbeddedGame(gameSlug, { extraScripts = [] } = {}) {
-  const remoteBase = import.meta.env.VITE_GAME_JAM_REMOTE_URI ?? '';
+  // Every URL built from this (here and via window.__GAME_JAM_DATA_BASE__ in
+  // each game's app.js) does `${remoteBase}/${path}` — a trailing slash on
+  // the env var turns that into a double slash, which some static hosts
+  // (e.g. Vercel) don't collapse and will 404 on. Stripped here, once, at
+  // the single source, so every downstream consumer is protected regardless
+  // of how the env var happens to be formatted.
+  const remoteBase = (import.meta.env.VITE_GAME_JAM_REMOTE_URI ?? '').replace(/\/+$/, '');
   let scriptEls = [];
 
   const injectStylesheet = () => {

@@ -1,155 +1,42 @@
 <template>
-  <div class="game-jam-home">
-    <header class="game-jam-home__header">
-      <div class="game-jam-home__header-spacer" />
-      <div>
-        <h1 class="game-jam-home__title">Game Jam</h1>
-        <p class="game-jam-home__subtitle">Pick a game to play</p>
-      </div>
-      <a
-        class="game-jam-home__leaderboard-link"
-        href="/game-jam/leaderboard"
-      >Leaderboard</a>
-    </header>
+  <div class="home-root">
+    <div class="wrap">
+      <header class="top">
+        <p class="eyebrow">ACV internal &middot; hackathon build</p>
+        <h1>Game Jam Suite</h1>
+        <p class="sub">Pick a game to play. Each one's a standalone, client-only build &mdash; no account, no setup.</p>
+      </header>
 
-    <div class="game-jam-home__grid">
-      <GameTile
-        v-for="game in games"
-        :key="game.slug"
-        :title="game.title"
-        :description="game.description"
-        :href="game.href"
-        :accent="game.accent"
-      />
+      <div
+        id="grid"
+        class="grid"
+      ></div>
+
+      <footer class="note">
+        Source &amp; READMEs: <a
+          href="https://github.com/acv-woz/game-jam-suite"
+          target="_blank"
+          rel="noopener"
+        >game-jam-suite</a>
+        &middot; Got an idea for the next one? <a
+          href="https://claude.ai/artifact/2zow4XXrz3z93xAvcRYF4q"
+          target="_blank"
+          rel="noopener"
+        >pitch it on the board</a>.
+      </footer>
     </div>
   </div>
 </template>
 
 <script setup>
-import GameTile from './GameTile.vue';
+import useEmbeddedGame from '../shared/useEmbeddedGame';
 
-const games = [
-  {
-    slug: 'guess-the-deal',
-    title: 'Guess the Deal',
-    description: 'How sharp is your eye on a deal? Guess the hidden sale price or mileage.',
-    href: '/game-jam/guess-the-deal',
-    accent: '#2f5dfc',
-  },
-  {
-    slug: 'lot-jam',
-    title: 'Lot Jam',
-    description: 'Clear a path out of the lot by sliding the parked cars out of the way.',
-    href: '/game-jam/lot-jam',
-    accent: '#ffb020',
-  },
-  {
-    slug: 'car-trivia',
-    title: 'Car Trivia',
-    description: 'Five daily questions on supercars, logos, movies, and automotive history.',
-    href: '/game-jam/car-trivia',
-    accent: '#0a1172',
-  },
-  {
-    slug: 'cardle',
-    title: 'Cardle',
-    description: "Guess today's vehicle by make, model, and year in 6 tries — clues included.",
-    href: '/game-jam/cardle',
-    accent: '#8074cf',
-  },
-  {
-    slug: 'reveal-the-deal',
-    title: 'Reveal the Deal',
-    description: 'Each guess flips more tiles on a real sold listing’s photo — name it before it’s fully revealed.',
-    href: '/game-jam/reveal-the-deal',
-    accent: '#e2635a',
-  },
-  {
-    slug: 'route-runner',
-    title: 'Route Runner',
-    description: 'Connect every numbered stop with one line that covers the whole board, no crossing your own path.',
-    href: '/game-jam/route-runner',
-    accent: '#3bb5a0',
-  },
-];
+/*
+ * Wraps the same standalone games/home/web/{index.html,style.css,app.js}
+ * every other game's MFE component wraps (see e.g.
+ * games/guess-the-deal/web/mfe/GuessTheDealApp.vue) — one tile grid, driven
+ * entirely by app.js, works identically standalone (python3 -m http.server)
+ * and embedded here. No GameJamBackButton: this already is the home page.
+ */
+useEmbeddedGame('home');
 </script>
-
-<style scoped>
-.game-jam-home {
-  padding: 32px 24px 48px;
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
-.game-jam-home__header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 28px;
-  text-align: center;
-}
-
-.game-jam-home__header-spacer,
-.game-jam-home__leaderboard-link {
-  flex: 1 0 0;
-}
-
-.game-jam-home__leaderboard-link {
-  display: inline-flex;
-  justify-content: flex-end;
-  font-size: 13px;
-  font-weight: 600;
-  color: #1c2434;
-  text-decoration: none;
-  padding: 8px 16px;
-  border-radius: 999px;
-  border: 1px solid #e2e6f0;
-  background: #fff;
-  white-space: nowrap;
-}
-
-.game-jam-home__leaderboard-link:hover {
-  background: #f3f4fa;
-}
-
-.game-jam-home__title {
-  font-size: 28px;
-  font-weight: 800;
-  margin: 0 0 6px;
-  color: #1c2434;
-}
-
-.game-jam-home__subtitle {
-  font-size: 14px;
-  color: #64708a;
-  margin: 0;
-}
-
-/* 4 tiles per row, stepping down at narrower widths. */
-.game-jam-home__grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-}
-
-@media (max-width: 1100px) {
-  .game-jam-home__grid { grid-template-columns: repeat(3, 1fr); }
-}
-
-@media (max-width: 820px) {
-  .game-jam-home__grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 520px) {
-  .game-jam-home__grid { grid-template-columns: 1fr; }
-
-  .game-jam-home__header {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .game-jam-home__header-spacer { display: none; }
-  .game-jam-home__leaderboard-link { justify-content: center; }
-}
-</style>
