@@ -8,61 +8,52 @@
   // the tile art — see images/README.md; until it's there (or if it fails
   // to load), the tile falls back to a plain accent-colored initial.
   //
-  // `embeddedOnly: true` (currently just the leaderboard) hides an entry in
-  // standalone mode instead of linking it — the leaderboard only exists as
-  // a Vue component exposed via Module Federation, with no equivalent
-  // standalone page under games/, so there's nothing for a relative link
-  // to point to outside the host.
+  // The leaderboard isn't in this list — it's not a game, so it doesn't get
+  // a tile. It's a top-right nav button instead (see renderTopNav below),
+  // matching how every game page links to it, rather than competing for
+  // space in the grid.
   var GAMES = [
     {
       slug: 'guess-the-deal',
       title: 'Guess the Deal',
       tagline: 'Guess the hidden sale price or mileage against real closed-auction vehicles.',
-      accent: '#5b82ff',
+      accent: '#2196f5', // ACV informational
       path: '../../guess-the-deal/web/index.html'
     },
     {
       slug: 'lot-jam',
       title: 'Lot Jam',
       tagline: 'Rush Hour-style sliding puzzle — clear a path out of the jammed lot.',
-      accent: '#ffb020',
+      accent: '#ffc000', // ACV caution
       path: '../../lot-jam/web/index.html'
     },
     {
       slug: 'route-runner',
       title: 'Route Runner',
       tagline: 'Zip-style puzzle — connect the numbered stops with one line covering every tile.',
-      accent: '#3bb5a0',
+      accent: '#004e7d', // ACV secondary
       path: '../../route-runner/web/index.html'
     },
     {
       slug: 'cardle',
       title: 'Cardle',
       tagline: 'Guess the daily vehicle in 6 tries — make, model, year, body, drivetrain, origin.',
-      accent: '#8074cf',
+      accent: '#7b61ff', // ACV focus
       path: '../../cardle/web/index.html'
     },
     {
       slug: 'reveal-the-deal',
       title: 'Reveal the Deal',
       tagline: 'Every guess flips more tiles off a listing photo — name the make, model and year first.',
-      accent: '#e2635a',
+      accent: '#ff5449', // ACV error
       path: '../../reveal-the-deal/web/index.html'
     },
     {
       slug: 'car-trivia',
       title: 'Car Trivia',
       tagline: 'Jeopardy-style trivia rounds about famous, iconic and unusual cars.',
-      accent: '#f5c518',
+      accent: '#f26522', // ACV primary
       path: '../../car-trivia/web/index.html'
-    },
-    {
-      slug: 'leaderboard',
-      title: 'Leaderboard',
-      tagline: 'See how dealers rank across every game, by day or by week.',
-      accent: '#c1443d',
-      cta: 'View',
-      embeddedOnly: true
     }
   ];
 
@@ -79,6 +70,16 @@
 
   function gameHref(game) {
     return isEmbedded() ? '/game-jam/' + game.slug : game.path;
+  }
+
+  // Top-right "Leaderboard" button — same embedded-only treatment as each
+  // game page's own nav link (see e.g. guess-the-deal/web/app.js's
+  // renderGameNav): the leaderboard has no standalone page to link to, so
+  // this stays hidden outside the host instead of linking nowhere useful.
+  function renderTopNav() {
+    var navEl = document.getElementById('topNav');
+    if (!navEl || !isEmbedded()) return;
+    navEl.innerHTML = '<a href="/game-jam/leaderboard">Leaderboard &rarr;</a>';
   }
 
   // Unlike style.css's `url(images/gameHubBackground.png)` — which the
@@ -108,13 +109,13 @@
   }
 
   function render() {
-    var visible = GAMES.filter(function (g) { return !g.embeddedOnly || isEmbedded(); });
-    if (!visible.length) {
+    if (!GAMES.length) {
       gridEl.innerHTML = '<div class="empty">No games wired up yet.</div>';
       return;
     }
-    gridEl.innerHTML = visible.map(tileHtml).join('');
+    gridEl.innerHTML = GAMES.map(tileHtml).join('');
   }
 
   render();
+  renderTopNav();
 })();

@@ -1,19 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+/* ACV brand tokens — see the write-up in games/guess-the-deal/web/style.css. */
 :root{
-  --asphalt: #1d1f25;
-  --asphalt-2: #26282f;
-  --card: #2b2e36;
-  --card-2: #333743;
-  --ink: #f1efe6;
-  --ink-dim: #9a9ba6;
-  --hairline: rgba(255,255,255,.08);
-  --shadow: rgba(0,0,0,.45);
-  --accent: #8074cf;
-  --accent-ink: #100c22;
-  --match: #3bb54f;
-  --match-ink: #06210b;
-  --miss: #3a3d47;
-  --close: #d9a441;
-  --close-ink: #241a02;
+  --asphalt: #fafafa;
+  --asphalt-2: #f1f1f1;
+  --card: #ffffff;
+  --card-2: #f5f5f5;
+  --ink: #212121;
+  --ink-dim: #757575;
+  --hairline: rgba(33,33,33,.12);
+  --shadow: rgba(33,33,33,.15);
+  --accent: #7b61ff;
+  --accent-ink: #ffffff;
+  --match: #00a576;
+  --match-ink: #ffffff;
+  --miss: #e0e0e0;
+  --close: #ffc000;
+  --close-ink: #212121;
 }
 
 *{ box-sizing: border-box; }
@@ -22,7 +25,7 @@ body{
   margin: 0;
   background: radial-gradient(120% 140% at 50% -10%, var(--asphalt-2), var(--asphalt));
   color: var(--ink);
-  font-family: "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Roboto", ui-sans-serif, system-ui, sans-serif;
   padding: 22px 16px 40px;
 }
 
@@ -179,8 +182,8 @@ h1, h2{ margin: 0; font-weight: 800; letter-spacing: -.01em; }
 .cardle-root .modal-backdrop[hidden]{ display: none; }
 .cardle-root .modal{
   display: block; position: relative; top: auto; left: auto; z-index: auto; overflow: visible; opacity: 1;
-  background-color: var(--card, #2b2e36); border-radius: 16px; padding: 26px 24px; width: min(380px, 100%); height: auto;
-  box-shadow: 0 24px 50px -14px var(--shadow, rgba(0,0,0,.45)); text-align:center;
+  background-color: var(--card, #ffffff); border-radius: 8px; padding: 26px 24px; width: min(380px, 100%); height: auto;
+  box-shadow: 0 8px 24px -8px var(--shadow, rgba(33,33,33,.2)); text-align:center;
 }
 .modal h2{ font-size: 22px; margin: 4px 0 10px; }
 .end-answer{ font-size: 13.5px; color: var(--ink-dim); margin: 0 0 16px; line-height: 1.5; }

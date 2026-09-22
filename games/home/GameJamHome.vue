@@ -2,6 +2,10 @@
   <div class="home-root">
     <div class="wrap">
       <header class="top">
+        <nav
+          id="topNav"
+          class="top-nav"
+        ></nav>
         <p class="eyebrow">ACV internal &middot; hackathon build</p>
         <h1>Game Jam Suite</h1>
         <p class="sub">Pick a game to play. Each one's a standalone, client-only build &mdash; no account, no setup.</p>

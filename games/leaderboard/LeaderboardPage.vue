@@ -327,79 +327,62 @@ const top20 = computed(() => rankedEntries.value.slice(0, 20));
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;0,700;0,900;1,500;1,600&family=Karla:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 /*
- * Namespaced under `lp-` and `.leaderboard-page` — see the write-up in
- * games/car-trivia/web/style.css on why generic names (`.btn`, `.modal`,
- * `.seg`, `.stat`, ...) collide with Bootstrap once embedded in
- * acv-web-vuejs.
+ * ACV brand tokens — see the write-up in games/guess-the-deal/web/style.css.
+ * The warm parchment/Fraunces theme is replaced with ACV's light theme and
+ * Roboto; variable names are unchanged so every var(--lp-x) usage below
+ * still resolves, only the values (and the font stack) changed. Also
+ * dropped the prefers-color-scheme dark variant this page used to have,
+ * same reasoning as every other game — ACV's own product doesn't
+ * auto-dark-mode.
  */
 .leaderboard-page {
-  --lp-ground: #d9c7a0;
-  --lp-ground-2: #cdb789;
-  --lp-surface: #fbf6e9;
-  --lp-surface-2: #f3ecd9;
-  --lp-ink: #2b2016;
-  --lp-ink-dim: #6b5b44;
-  --lp-accent: #c1443d;
-  --lp-accent-ink: #fff6f0;
-  --lp-accent-2: #2e6e62;
-  --lp-accent-2-ink: #f2fbf8;
-  --lp-accent-3: #b9791f;
-  --lp-accent-3-ink: #fffaf0;
-  --lp-card-shadow: rgba(43, 32, 22, .22);
-  --lp-hairline: rgba(43, 32, 22, .16);
-  --lp-focus: #2e6e62;
+  --lp-ground: #fafafa;
+  --lp-ground-2: #f1f1f1;
+  --lp-surface: #ffffff;
+  --lp-surface-2: #f5f5f5;
+  --lp-ink: #212121;
+  --lp-ink-dim: #757575;
+  --lp-accent: #ff5449;
+  --lp-accent-ink: #ffffff;
+  --lp-accent-2: #004e7d;
+  --lp-accent-2-ink: #ffffff;
+  --lp-accent-3: #ffc000;
+  --lp-accent-3-ink: #212121;
+  --lp-card-shadow: rgba(33, 33, 33, .15);
+  --lp-hairline: rgba(33, 33, 33, .12);
+  --lp-focus: #7b61ff;
 
   min-height: inherit;
   background: radial-gradient(120% 140% at 50% -10%, var(--lp-ground-2), var(--lp-ground));
   color: var(--lp-ink);
-  font-family: "Karla", ui-sans-serif, system-ui, sans-serif;
-}
-
-@media (prefers-color-scheme: dark) {
-  .leaderboard-page {
-    --lp-ground: #12241c;
-    --lp-ground-2: #0d1c16;
-    --lp-surface: #1f3129;
-    --lp-surface-2: #24382f;
-    --lp-ink: #ede7d8;
-    --lp-ink-dim: #ab9d80;
-    --lp-accent: #e2726b;
-    --lp-accent-ink: #241211;
-    --lp-accent-2: #6cc0ac;
-    --lp-accent-2-ink: #0d2a22;
-    --lp-accent-3: #e2b45a;
-    --lp-accent-3-ink: #2a1e05;
-    --lp-card-shadow: rgba(0, 0, 0, .45);
-    --lp-hairline: rgba(237, 231, 216, .14);
-    --lp-focus: #6cc0ac;
-  }
+  font-family: "Roboto", ui-sans-serif, system-ui, sans-serif;
 }
 
 .leaderboard-page h1, .leaderboard-page h2 {
-  font-family: "Fraunces", Georgia, serif;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
   margin: 0;
 }
 
 .lp-wrap { max-width: 900px; margin: 0 auto; padding: 12px 20px 40px; }
 
 .lp-top { margin-bottom: 20px; }
-.lp-title-block h1 { font-size: clamp(28px, 4vw, 42px); font-weight: 700; font-style: italic; }
+.lp-title-block h1 { font-size: clamp(28px, 4vw, 42px); font-weight: 700; }
 .lp-tagline { margin: 8px 0 0; max-width: 52ch; color: var(--lp-ink-dim); font-size: 14.5px; line-height: 1.5; }
 
 .lp-config { display: flex; flex-direction: column; gap: 16px; margin-bottom: 26px; padding-bottom: 20px; border-bottom: 1px dashed var(--lp-hairline); }
 .lp-config-row { display: flex; flex-wrap: wrap; gap: 20px 28px; align-items: flex-end; }
 .lp-config-group { display: flex; flex-direction: column; gap: 7px; }
 .lp-config-label {
-  font-family: "IBM Plex Mono", monospace; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase;
+  font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; font-weight: 500;
   color: var(--lp-ink-dim); display: flex; align-items: center; gap: 6px;
 }
 
 .lp-seg, .lp-day-seg { display: flex; border: 1px solid var(--lp-hairline); border-radius: 999px; overflow: hidden; background: var(--lp-surface); }
 .lp-seg button, .lp-day-seg button {
-  font-family: "IBM Plex Mono", monospace; font-size: 12px; border: none; background: transparent; color: var(--lp-ink-dim);
+  font-size: 12px; border: none; background: transparent; color: var(--lp-ink-dim);
   padding: 7px 14px; cursor: pointer;
 }
 .lp-day-seg button { font-size: 11.5px; padding: 7px 12px; }
@@ -409,24 +392,24 @@ const top20 = computed(() => rankedEntries.value.slice(0, 20));
 .lp-day-seg button.free-play.active { background: var(--lp-accent-3); color: var(--lp-accent-3-ink); }
 .lp-tbd-flag {
   background: var(--lp-accent-3); color: var(--lp-accent-3-ink); font-size: 8.5px; padding: 2px 6px;
-  border-radius: 5px; letter-spacing: .05em; text-transform: uppercase; font-family: "IBM Plex Mono", monospace; font-weight: 700;
+  border-radius: 5px; letter-spacing: .05em; text-transform: uppercase; font-weight: 700;
 }
 
 .lp-select {
-  font-family: "Karla", sans-serif; font-size: 13px; padding: 7px 12px; border-radius: 999px;
+  font-family: "Roboto", sans-serif; font-size: 13px; padding: 7px 12px; border-radius: 999px;
   border: 1px solid var(--lp-hairline); background: var(--lp-surface); color: var(--lp-ink); min-width: 190px;
 }
 
 .lp-board-wrap {
-  background: var(--lp-surface); border: 1px solid var(--lp-hairline); border-radius: 10px;
-  box-shadow: 0 6px 14px -6px var(--lp-card-shadow); overflow: hidden;
+  background: var(--lp-surface); border: 1px solid var(--lp-hairline); border-radius: 8px;
+  box-shadow: 0 2px 8px -2px var(--lp-card-shadow); overflow: hidden;
 }
 .lp-board-head {
   padding: 16px 20px 13px; border-bottom: 1px dashed var(--lp-hairline); display: flex; align-items: baseline;
   justify-content: space-between; gap: 10px; flex-wrap: wrap;
 }
-.lp-board-head h2 { font-size: 19px; font-style: italic; font-weight: 700; }
-.lp-sub { margin: 0; font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--lp-ink-dim); }
+.lp-board-head h2 { font-size: 19px; font-weight: 700; }
+.lp-sub { margin: 0; font-size: 11.5px; color: var(--lp-ink-dim); }
 
 .lp-list { list-style: none; margin: 0; padding: 4px 0; }
 .lp-empty { padding: 38px 20px; text-align: center; color: var(--lp-ink-dim); font-size: 13.5px; line-height: 1.6; }

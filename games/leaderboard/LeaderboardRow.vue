@@ -52,7 +52,7 @@ const scoreUnit = computed(() => (props.game.fmt === 'time' ? '' : props.game.un
 .lp-row { display: flex; align-items: center; gap: 14px; padding: 9px 20px; }
 .lp-row + .lp-row { border-top: 1px solid var(--lp-hairline); }
 .lp-rank {
-  width: 28px; flex-shrink: 0; text-align: center; font-family: "IBM Plex Mono", monospace; font-weight: 700;
+  width: 28px; flex-shrink: 0; text-align: center; font-weight: 700;
   font-size: 13.5px; color: var(--lp-ink-dim); font-variant-numeric: tabular-nums;
 }
 .lp-rank.medal-1 { color: #a8791b; }
@@ -60,9 +60,9 @@ const scoreUnit = computed(() => (props.game.fmt === 'time' ? '' : props.game.un
 .lp-rank.medal-3 { color: #9a5a34; }
 .lp-avatar {
   width: 27px; height: 27px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-  font-family: "IBM Plex Mono", monospace; font-size: 10.5px; font-weight: 700; color: var(--lp-accent-2-ink);
+  font-size: 10.5px; font-weight: 700; color: var(--lp-accent-2-ink);
 }
 .lp-name { flex: 1; min-width: 0; font-size: 13.5px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.lp-score { font-family: "IBM Plex Mono", monospace; font-size: 13.5px; font-variant-numeric: tabular-nums; color: var(--lp-ink); flex-shrink: 0; }
+.lp-score { font-size: 13.5px; font-variant-numeric: tabular-nums; color: var(--lp-ink); flex-shrink: 0; }
 .lp-score i { font-style: normal; color: var(--lp-ink-dim); font-size: 11px; margin-left: 3px; }
 </style>

@@ -1,24 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+/*
+ * ACV brand tokens — see the write-up in games/guess-the-deal/web/style.css.
+ * Also dropped the dark hero photo (images/gameHubBackground.png) and its
+ * dimming gradient in favor of ACV's plain light background — a moody
+ * full-bleed photo backdrop doesn't read as ACV branding, so simpler is
+ * more "on brand" here than trying to reuse it under a lighter overlay.
+ */
 :root{
-  --asphalt: #1d1f25;
-  --asphalt-2: #26282f;
-  --card: #2b2e36;
-  --card-2: #333743;
-  --ink: #f1efe6;
-  --ink-dim: #9a9ba6;
-  --hairline: rgba(255,255,255,.08);
-  --shadow: rgba(0,0,0,.45);
+  --asphalt: #fafafa;
+  --asphalt-2: #f1f1f1;
+  --card: #ffffff;
+  --card-2: #f5f5f5;
+  --ink: #212121;
+  --ink-dim: #757575;
+  --hairline: #dcdfe8;
+  --shadow: rgba(33,33,33,.15);
 }
 
 *{ box-sizing: border-box; }
 html, body{ height: 100%; }
 body, .home-root{
   margin: 0;
-  background:
-    linear-gradient(180deg, rgba(13,14,18,.55) 0%, rgba(13,14,18,.82) 40%, var(--asphalt) 78%),
-    url(images/gameHubBackground.png) center top / cover no-repeat,
-    var(--asphalt);
+  background: var(--asphalt);
   color: var(--ink);
-  font-family: "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Roboto", ui-sans-serif, system-ui, sans-serif;
   padding: 32px 16px 44px;
 }
 
@@ -37,7 +43,13 @@ body, .home-root{
 
 .wrap{ max-width: 920px; margin: 0 auto; }
 
-.top{ text-align: center; margin-bottom: 34px; }
+.top{ position: relative; text-align: center; margin-bottom: 34px; }
+.top-nav{ display: flex; justify-content: flex-end; margin-bottom: 12px; }
+.top-nav a{
+  font-size: 12px; font-weight: 600; color: #f26522; text-decoration: none;
+  padding: 5px 11px; border-radius: 999px; border: 1px solid var(--hairline); background: var(--card);
+}
+.top-nav a:hover{ background: var(--card-2); }
 .eyebrow{
   font-family: "SFMono-Regular", ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: .1em;
   text-transform: uppercase; color: var(--ink-dim); margin: 0 0 8px;
@@ -51,13 +63,13 @@ h1{ margin: 0; font-weight: 800; letter-spacing: -.01em; font-size: 34px; }
 
 .tile{
   display: flex; flex-direction: column; gap: 12px; padding: 20px;
-  border-radius: 14px; border: 1px solid var(--hairline); background: var(--card);
+  border-radius: 8px; border: 1px solid var(--hairline); background: var(--card);
   text-decoration: none; color: inherit;
-  box-shadow: 0 10px 22px -12px var(--shadow);
+  box-shadow: 0 2px 8px -2px var(--shadow);
   transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
 }
-.tile:hover{ transform: translateY(-3px); background: var(--card-2); box-shadow: 0 16px 30px -14px var(--shadow); }
-.tile:focus-visible{ outline: 2px solid var(--tile-accent, #fff); outline-offset: 3px; }
+.tile:hover{ transform: translateY(-3px); background: var(--card-2); box-shadow: 0 4px 14px -4px var(--shadow); }
+.tile:focus-visible{ outline: 2px solid var(--tile-accent, #212121); outline-offset: 3px; }
 
 .tile-thumb{
   position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 10px; overflow: hidden;

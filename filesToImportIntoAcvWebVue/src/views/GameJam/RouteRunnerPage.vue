@@ -22,8 +22,8 @@ const RouteRunnerApp = defineAsyncComponent(
   min-height: inherit;
   background: radial-gradient(
     120% 140% at 50% -10%,
-    var(--asphalt-2, #26282f),
-    var(--asphalt, #1d1f25)
+    var(--asphalt-2, #f1f1f1),
+    var(--asphalt, #fafafa)
   );
 }
 </style>

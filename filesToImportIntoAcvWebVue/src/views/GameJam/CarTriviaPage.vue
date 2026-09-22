@@ -22,8 +22,8 @@ const CarTriviaApp = defineAsyncComponent(
   min-height: inherit;
   background: radial-gradient(
     140% 120% at 50% -10%,
-    var(--ct-board-2, #0d1a8f),
-    var(--ct-board, #0a1172)
+    var(--ct-board-2, #f1f1f1),
+    var(--ct-board, #fafafa)
   );
 }
 </style>

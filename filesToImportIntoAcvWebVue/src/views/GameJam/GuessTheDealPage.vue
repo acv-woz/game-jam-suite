@@ -20,6 +20,6 @@ const GuessTheDealApp = defineAsyncComponent(
 <style scoped>
 .game-jam-page {
   min-height: inherit;
-  background: var(--bg, #f4f6fb);
+  background: var(--bg, #fafafa);
 }
 </style>

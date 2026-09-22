@@ -1,43 +1,35 @@
-:root {
-  --bg: #f4f6fb;
-  --bg-accent: #eef1fa;
-  --surface: #ffffff;
-  --text: #1c2434;
-  --text-muted: #64708a;
-  --border: #e2e6f0;
-  --primary: #2f5dfc;
-  --primary-dark: #1f42c7;
-  --primary-contrast: #ffffff;
-  --success: #1fa370;
-  --warning: #d99a1f;
-  --danger: #e0483f;
-  --road: #c7cddb;
-  --car-body: #2f5dfc;
-  --car-glass: #cfe0ff;
-  --wheel: #2a2f3a;
-  --wheel-hub: #aab2c4;
-  --shadow: 0 12px 30px -12px rgba(31, 45, 90, 0.25);
-  --radius: 18px;
-}
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0f1320;
-    --bg-accent: #151a2c;
-    --surface: #1a2036;
-    --text: #eef1fb;
-    --text-muted: #9aa4c2;
-    --border: #2a3150;
-    --primary: #5b7dff;
-    --primary-dark: #3f5ce0;
-    --primary-contrast: #ffffff;
-    --road: #2a3150;
-    --car-body: #5b7dff;
-    --car-glass: #38406b;
-    --wheel: #0c0f1a;
-    --wheel-hub: #4a5480;
-    --shadow: 0 12px 30px -12px rgba(0, 0, 0, 0.55);
-  }
+/*
+ * ACV brand tokens (see docs/style-guide in acv-web-vuejs and
+ * @acv/shared-vuejs's tailwind.config.js — colors.primary/success/error/
+ * informational/caution/grey/text/background/border). Variable *names*
+ * are unchanged from the original theme so every existing var(--x) usage
+ * below still works; only the values were remapped to ACV's palette.
+ * Dropped the prefers-color-scheme dark variant that used to live here —
+ * ACV's own product surfaces don't auto-dark-mode, so a single light
+ * theme keeps this consistent with the rest of the site.
+ */
+:root {
+  --bg: #fafafa;
+  --bg-accent: #f1f1f1;
+  --surface: #ffffff;
+  --text: #212121;
+  --text-muted: #757575;
+  --border: #dcdfe8;
+  --primary: #f26522;
+  --primary-dark: #d44d0c;
+  --primary-contrast: #ffffff;
+  --success: #00a576;
+  --warning: #ffc000;
+  --danger: #ff5449;
+  --road: #dcdfe8;
+  --car-body: #f26522;
+  --car-glass: #ade0ff;
+  --wheel: #212121;
+  --wheel-hub: #a1a1a1;
+  --shadow: 0 2px 8px rgba(33, 33, 33, 0.12);
+  --radius: 8px;
 }
 
 * { box-sizing: border-box; }
@@ -47,7 +39,7 @@ html, body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
 }
 
 body {

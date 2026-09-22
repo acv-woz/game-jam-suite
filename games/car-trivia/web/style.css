@@ -1,17 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+/*
+ * ACV brand tokens — see the write-up in games/guess-the-deal/web/style.css.
+ * The Jeopardy-style navy/gold theme is replaced with ACV's light theme;
+ * `--ct-gold` (now ACV primary orange) is still the CTA/accent color, and
+ * `--ct-gold-ink` is new — text sitting on that accent needs to stay white
+ * regardless of the page background, which `--ct-board` used to double as
+ * back when it was dark navy.
+ */
 :root {
-  --ct-board: #0a1172;
-  --ct-board-2: #0d1a8f;
-  --ct-tile: #10218f;
-  --ct-tile-hover: #1830b8;
-  --ct-tile-selected: #2540d6;
-  --ct-gold: #f5c518;
-  --ct-gold-dark: #c99e0a;
-  --ct-ink: #fdfdfd;
-  --ct-ink-dim: #b9c2f2;
-  --ct-correct: #1fa370;
-  --ct-wrong: #e0483f;
-  --ct-shadow: 0 14px 32px -14px rgba(0, 0, 0, 0.55);
-  --ct-radius: 14px;
+  --ct-board: #fafafa;
+  --ct-board-2: #f1f1f1;
+  --ct-tile: #ffffff;
+  --ct-tile-hover: #f5f5f5;
+  --ct-tile-selected: #fac9b2;
+  --ct-gold: #f26522;
+  --ct-gold-dark: #d44d0c;
+  --ct-gold-ink: #ffffff;
+  --ct-ink: #212121;
+  --ct-ink-dim: #757575;
+  --ct-correct: #00a576;
+  --ct-wrong: #ff5449;
+  --ct-shadow: 0 2px 8px rgba(33, 33, 33, 0.12);
+  --ct-radius: 8px;
 }
 
 /*
@@ -28,7 +39,7 @@ html, body {
   margin: 0;
   background: radial-gradient(140% 120% at 50% -10%, var(--ct-board-2), var(--ct-board));
   color: var(--ct-ink);
-  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
 }
 
 body {
@@ -46,11 +57,11 @@ body {
   display: flex; align-items: center; justify-content: space-between; gap: 10px;
   padding: 8px 20px;
   padding-top: calc(8px + env(safe-area-inset-top, 0px));
-  background: rgba(0, 0, 0, 0.28);
+  border-bottom: 1px solid var(--ct-board-2);
 }
 .game-nav a {
   font-size: 12px; font-weight: 600; color: var(--ct-ink-dim); text-decoration: none;
-  padding: 5px 11px; border-radius: 999px; border: 1px solid rgba(255,255,255,.15); background: rgba(255,255,255,.05);
+  padding: 5px 11px; border-radius: 999px; border: 1px solid rgba(33,33,33,.12); background: rgba(33,33,33,.03);
 }
 .game-nav a:hover { color: var(--ct-ink); }
 .game-nav a.nav-lb { color: var(--ct-gold); border-color: transparent; }
@@ -71,7 +82,7 @@ body {
 .ct-brand { display: flex; align-items: center; gap: 10px; }
 .ct-brand-mark {
   background: var(--ct-gold);
-  color: var(--ct-board);
+  color: var(--ct-gold-ink);
   font-weight: 800;
   font-size: 13px;
   padding: 6px 8px;
@@ -141,7 +152,7 @@ main {
 .ct-btn[disabled] { opacity: 0.5; cursor: not-allowed; }
 .ct-btn-primary {
   background: var(--ct-gold);
-  color: var(--ct-board);
+  color: var(--ct-gold-ink);
   padding: 14px 20px;
 }
 .ct-btn-primary:hover:not([disabled]) { background: var(--ct-gold-dark); }
@@ -154,14 +165,14 @@ main {
   margin-top: 10px;
   width: 100%;
 }
-.ct-btn-ghost:hover { background: rgba(245, 197, 24, 0.12); }
+.ct-btn-ghost:hover { background: rgba(242, 101, 34, 0.12); }
 
 /* GAME */
 .ct-progress-row { display: flex; align-items: center; gap: 12px; }
 .ct-progress-track {
   flex: 1;
   height: 8px;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(33, 33, 33, 0.1);
   border-radius: 6px;
   overflow: hidden;
 }
@@ -188,7 +199,7 @@ main {
 .ct-theme-badge {
   align-self: center;
   background: var(--ct-gold);
-  color: var(--ct-board);
+  color: var(--ct-gold-ink);
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -214,7 +225,7 @@ main {
 
 .ct-option {
   background: var(--ct-tile);
-  border: 2px solid rgba(245, 197, 24, 0.4);
+  border: 2px solid rgba(242, 101, 34, 0.4);
   border-radius: 12px;
   color: var(--ct-ink);
   font-size: 15px;
@@ -295,7 +306,7 @@ main {
 .ct-player-name-input {
   flex: 1;
   padding: 12px 14px;
-  border: 1px solid rgba(245, 197, 24, 0.4);
+  border: 1px solid rgba(242, 101, 34, 0.4);
   border-radius: 10px;
   background: rgba(0, 0, 0, 0.25);
   color: var(--ct-ink);

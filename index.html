@@ -11,6 +11,15 @@
     This file only exists because Vite's build needs an HTML entry point.
     Run individual games standalone via each games/<slug>/web/index.html
     (see their own READMEs), or run/build this repo to serve the remote.
+
+    The leaderboard is the one exception with no standalone triplet of its
+    own (it's a Vue SFC, exposed only via Module Federation) — a bare
+    createApp() mount here was tried and doesn't work: the federation
+    plugin's shared `vue` resolution intercepts `import ... from 'vue'`
+    even outside its own runtime, in dev mode, and doesn't export the
+    Composition API surface a plain mount needs. Verifying its look
+    currently requires going through the real host
+    (localhost:8080/game-jam/leaderboard in acv-web-vuejs).
   -->
 </body>
 </html>

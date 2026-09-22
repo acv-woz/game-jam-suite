@@ -1,23 +1,33 @@
-:root{
-  --asphalt: #1d1f25;
-  --asphalt-2: #26282f;
-  --card: #2b2e36;
-  --card-2: #333743;
-  --ink: #f1efe6;
-  --ink-dim: #9a9ba6;
-  --line: #ffcc33;
-  --hairline: rgba(255,255,255,.08);
-  --accent: #ffb020;
-  --accent-ink: #271a02;
-  --accent-2: #3bb5a0;
-  --accent-2-ink: #04211c;
-  --shadow: rgba(0,0,0,.45);
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
-  --v-slate: #6c7480;
-  --v-violet: #8074cf;
-  --v-blue: #4f8fae;
-  --v-brick: #c06a56;
-  --v-green: #5a9a73;
+/*
+ * ACV brand tokens — see the write-up in games/guess-the-deal/web/style.css.
+ * Variable names unchanged; values remapped from the original dark
+ * "asphalt" theme to ACV's light palette. The 5 decorative vehicle colors
+ * (--v-*) keep some hue variety for gameplay legibility, tinted toward
+ * ACV's own accent set (informational, success, error, focus) so they
+ * still read as "this app's palette" rather than a random rainbow.
+ */
+:root{
+  --asphalt: #fafafa;
+  --asphalt-2: #f1f1f1;
+  --card: #ffffff;
+  --card-2: #f5f5f5;
+  --ink: #212121;
+  --ink-dim: #757575;
+  --line: #dcdfe8;
+  --hairline: rgba(33,33,33,.12);
+  --accent: #f26522;
+  --accent-ink: #ffffff;
+  --accent-2: #004e7d;
+  --accent-2-ink: #ffffff;
+  --shadow: rgba(33,33,33,.15);
+
+  --v-slate: #757575;
+  --v-violet: #7b61ff;
+  --v-blue: #2196f5;
+  --v-brick: #ff5449;
+  --v-green: #00a576;
 }
 
 *{ box-sizing: border-box; }
@@ -26,7 +36,7 @@ body{
   margin: 0;
   background: radial-gradient(120% 140% at 50% -10%, var(--asphalt-2), var(--asphalt));
   color: var(--ink);
-  font-family: "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Roboto", ui-sans-serif, system-ui, sans-serif;
   padding: 22px 16px 40px;
 }
 
@@ -151,8 +161,8 @@ h1, h2{ margin: 0; font-weight: 800; letter-spacing: -.01em; }
 .lot-jam-root .modal-backdrop[hidden]{ display: none; }
 .lot-jam-root .modal{
   display: block; position: relative; top: auto; left: auto; z-index: auto; overflow: visible; opacity: 1;
-  background-color: var(--card, #2b2e36); border-radius: 16px; padding: 26px 24px; width: min(360px, 100%); height: auto;
-  box-shadow: 0 24px 50px -14px var(--shadow, rgba(0,0,0,.45)); text-align:center;
+  background-color: var(--card, #ffffff); border-radius: 8px; padding: 26px 24px; width: min(360px, 100%); height: auto;
+  box-shadow: 0 8px 24px -8px var(--shadow, rgba(33,33,33,.2)); text-align:center;
 }
 .modal h2{ font-size: 22px; margin: 4px 0 14px; }
 .win-stats{ display:flex; justify-content:center; gap: 22px; margin-bottom: 12px; }
