@@ -72,7 +72,7 @@ body {
   justify-content: space-between;
   padding: 14px 20px;
   padding-top: calc(14px + env(safe-area-inset-top, 0px));
-  background: rgba(0, 0, 0, 0.18);
+  background: var(--ct-tile);
   border-bottom: 2px solid var(--ct-gold);
   position: sticky;
   top: 0;
@@ -308,7 +308,7 @@ main {
   padding: 12px 14px;
   border: 1px solid rgba(242, 101, 34, 0.4);
   border-radius: 10px;
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--ct-board-2);
   color: var(--ct-ink);
   font-size: 14px;
   outline: none;
@@ -342,7 +342,7 @@ main {
   gap: 10px;
   padding: 10px 12px;
   border-radius: 10px;
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--ct-board-2);
   font-size: 14px;
 }
 .ct-board-rank { font-weight: 800; width: 28px; color: var(--ct-gold); }
