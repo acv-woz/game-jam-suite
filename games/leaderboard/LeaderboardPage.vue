@@ -221,7 +221,19 @@ GAMES.forEach((g) => {
   if (ids.length >= 2) todayBoard[ids[0]] = todayBoard[ids[1]];
 });
 
-const gameId = ref(GAMES[0].id);
+// Each game's "Leaderboard →" link (see games/guess-the-deal/web/app.js's
+// renderGameNav) points here with `?game=<slug>`, so arriving from a
+// specific game pre-selects it in the dropdown instead of always
+// defaulting to the first one.
+function initialGameId() {
+  try {
+    const requested = new URLSearchParams(window.location.search).get('game');
+    return GAME_BY_ID[requested] ? requested : GAMES[0].id;
+  } catch (e) {
+    return GAMES[0].id;
+  }
+}
+const gameId = ref(initialGameId());
 const cycle = ref('daily');
 const agg = ref('best');
 const identity = ref('username');

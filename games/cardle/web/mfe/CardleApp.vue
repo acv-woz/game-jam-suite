@@ -1,6 +1,6 @@
 <template>
   <div class="cardle-root">
-    <GameJamBackButton />
+    <nav class="game-nav" id="gameNav"></nav>
 
     <div class="wrap">
       <header class="top">
@@ -62,7 +62,6 @@
 
 <script setup>
 import useEmbeddedGame from '../../../shared/useEmbeddedGame';
-import GameJamBackButton from '../../../shared/GameJamBackButton.vue';
 
 useEmbeddedGame('cardle');
 </script>

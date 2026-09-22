@@ -10,6 +10,19 @@
    redeclaring these top-level consts in global scope. */
 (function () {
 
+// Shared "Home" / "Leaderboard" nav — see guess-the-deal/web/app.js for the
+// full write-up. window.__GAME_JAM_DATA_BASE__ is only set when embedded.
+(function renderGameNav() {
+  const navEl = document.getElementById("gameNav");
+  if (!navEl) return;
+  const embedded = !!window.__GAME_JAM_DATA_BASE__;
+  let html = `<a href="${embedded ? "/game-jam" : "../../home/web/index.html"}">&larr; Home</a>`;
+  if (embedded) {
+    html += `<a href="/game-jam/leaderboard?game=car-trivia" class="nav-lb">Leaderboard &rarr;</a>`;
+  }
+  navEl.innerHTML = html;
+})();
+
 const FALLBACK_QUESTIONS = [
   { id: "ss1", theme: "supercars-speed", question: "Which Italian brand produces the Aventador and Huracán?", options: ["Lamborghini", "Maserati", "Pagani", "Alfa Romeo"], correctIndex: 0 },
   { id: "ss2", theme: "supercars-speed", question: "Which car set a production-car speed record of 240.1 mph in 1998, a record that stood for years?", options: ["Ferrari F50", "Jaguar XJ220", "McLaren F1", "Lamborghini Diablo"], correctIndex: 2 },

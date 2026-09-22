@@ -1,6 +1,20 @@
 (function () {
   'use strict';
 
+  // Shared "Home" / "Leaderboard" nav — see guess-the-deal/web/app.js for
+  // the full write-up. window.__GAME_JAM_DATA_BASE__ is only set when
+  // embedded.
+  (function renderGameNav() {
+    var navEl = document.getElementById('gameNav');
+    if (!navEl) return;
+    var embedded = !!window.__GAME_JAM_DATA_BASE__;
+    var html = '<a href="' + (embedded ? '/game-jam' : '../../home/web/index.html') + '">&larr; Home</a>';
+    if (embedded) {
+      html += '<a href="/game-jam/leaderboard?game=cardle" class="nav-lb">Leaderboard &rarr;</a>';
+    }
+    navEl.innerHTML = html;
+  })();
+
   // Same pool as ../data/vehicles.json, embedded so the game still works
   // when index.html is opened directly (file://), where fetch() is
   // blocked. Keep this in sync with data/vehicles.json when editing the

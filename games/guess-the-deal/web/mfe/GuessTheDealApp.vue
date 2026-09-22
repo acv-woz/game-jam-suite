@@ -1,7 +1,7 @@
 <template>
   <div class="app">
 
-    <GameJamBackButton />
+    <nav class="game-nav" id="gameNav"></nav>
 
     <header class="topbar">
       <div class="brand">
@@ -151,7 +151,6 @@
 
 <script setup>
 import useEmbeddedGame from '../../../shared/useEmbeddedGame';
-import GameJamBackButton from '../../../shared/GameJamBackButton.vue';
 
 useEmbeddedGame('guess-the-deal');
 </script>

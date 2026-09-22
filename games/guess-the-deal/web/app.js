@@ -9,6 +9,24 @@
    redeclaring these top-level consts in global scope. */
 (function () {
 
+// Shared "Home" / "Leaderboard" nav, populated into the empty <nav
+// id="gameNav"> present in both index.html and this game's MFE wrapper.
+// window.__GAME_JAM_DATA_BASE__ is only set when embedded (see
+// useEmbeddedGame.js) — same signal games/home/web/app.js uses to pick
+// between standalone and host-routed links. Leaderboard has no standalone
+// page (it's federation-only), so it's hidden outside the host, same
+// treatment as its tile on the home hub.
+(function renderGameNav() {
+  const navEl = document.getElementById("gameNav");
+  if (!navEl) return;
+  const embedded = !!window.__GAME_JAM_DATA_BASE__;
+  let html = `<a href="${embedded ? "/game-jam" : "../../home/web/index.html"}">&larr; Home</a>`;
+  if (embedded) {
+    html += `<a href="/game-jam/leaderboard?game=guess-the-deal" class="nav-lb">Leaderboard &rarr;</a>`;
+  }
+  navEl.innerHTML = html;
+})();
+
 const FALLBACK_ROUNDS = [
   { id: "r1", mode: "price", vehicle: { year: 2019, make: "Honda", model: "CR-V", trim: "EX-L AWD", bodyStyle: "SUV", color: "Modern Steel Metallic", conditionNotes: "Clean title, minor curb rash on rear passenger wheel, interior excellent", region: "Midwest", daysOnLot: 3 }, mileage: 42150, price: 21800 },
   { id: "r2", mode: "mileage", vehicle: { year: 2021, make: "Ford", model: "F-150", trim: "XLT SuperCrew 4x4", bodyStyle: "Truck", color: "Agate Black", conditionNotes: "Bed liner installed, small dent on tailgate, tires at 80%", region: "South", daysOnLot: 6 }, mileage: 38900, price: 34200 },

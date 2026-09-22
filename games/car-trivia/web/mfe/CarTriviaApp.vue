@@ -1,6 +1,6 @@
 <template>
   <div class="ct-app">
-    <GameJamBackButton />
+    <nav class="game-nav" id="gameNav"></nav>
 
     <header class="ct-topbar">
       <div class="ct-brand">
@@ -103,7 +103,6 @@
 
 <script setup>
 import useEmbeddedGame from '../../../shared/useEmbeddedGame';
-import GameJamBackButton from '../../../shared/GameJamBackButton.vue';
 
 useEmbeddedGame('car-trivia');
 </script>

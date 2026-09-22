@@ -17,25 +17,30 @@
         stroke-linejoin="round"
       />
     </svg>
-    <span>All games</span>
+    <span>Home</span>
   </a>
 </template>
 
 <script setup>
 /*
- * Shared across every game's MFE wrapper (GuessTheDealApp.vue, LotJamApp.vue,
- * ...) so "back to the game jam home" looks and behaves the same everywhere.
+ * Used by LeaderboardPage.vue for its own "back to the game jam home" link.
+ * The 6 games each render their own Home + Leaderboard nav pair from their
+ * own app.js instead (see games/guess-the-deal/web/app.js's renderGameNav
+ * for the pattern) — this component isn't shared by them anymore, since
+ * that nav needs to work identically in standalone mode too, where there's
+ * no Vue component at all. The leaderboard page has no standalone
+ * counterpart, so a plain Vue component is fine here.
+ *
  * A plain `<a href="/game-jam">` rather than a router-link: vue-router isn't
  * a shared module between this remote and the host (see vite.config.js), so
  * this can't assume a router instance exists — same reasoning GameTile.vue
  * uses for its own links.
  *
- * Deliberately NOT a fixed/floating overlay: each game's own header already
- * occupies the top-left corner (brand mark, title), so this renders as its
- * own slim bar ABOVE a game's markup instead of overlapping it. Uses its own
- * self-contained colors rather than either game's CSS variables, since it's
- * meant to look identical regardless of which game's (light or dark) theme
- * it's placed above.
+ * Deliberately NOT a fixed/floating overlay: the leaderboard's own header
+ * already occupies the top-left corner, so this renders as its own slim bar
+ * ABOVE the page's markup instead of overlapping it. Uses its own
+ * self-contained colors rather than the leaderboard's CSS variables, since
+ * it's meant to look identical regardless of theme.
  */
 </script>
 
