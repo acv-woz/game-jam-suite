@@ -27,49 +27,47 @@
   navEl.innerHTML = html;
 })();
 
+// Keep in sync with data/seed-rounds.json — only vehicles we have a real
+// photo for (see games/reveal-the-deal/web/images, the verified source for
+// these 7 photos). Guess the Deal shows exactly one of these per day.
 const FALLBACK_ROUNDS = [
-  { id: "r1", mode: "price", vehicle: { year: 2019, make: "Honda", model: "CR-V", trim: "EX-L AWD", bodyStyle: "SUV", color: "Modern Steel Metallic", conditionNotes: "Clean title, minor curb rash on rear passenger wheel, interior excellent", region: "Midwest", daysOnLot: 3 }, mileage: 42150, price: 21800 },
-  { id: "r2", mode: "mileage", vehicle: { year: 2021, make: "Ford", model: "F-150", trim: "XLT SuperCrew 4x4", bodyStyle: "Truck", color: "Agate Black", conditionNotes: "Bed liner installed, small dent on tailgate, tires at 80%", region: "South", daysOnLot: 6 }, mileage: 38900, price: 34200 },
-  { id: "r3", mode: "price", vehicle: { year: 2020, make: "Tesla", model: "Model 3", trim: "Long Range AWD", bodyStyle: "Sedan", color: "Pearl White", conditionNotes: "One owner, autopilot hardware 3.0, battery health 96%", region: "West", daysOnLot: 1 }, mileage: 51200, price: 27900 },
-  { id: "r4", mode: "mileage", vehicle: { year: 2017, make: "Toyota", model: "Camry", trim: "SE", bodyStyle: "Sedan", color: "Celestial Silver", conditionNotes: "Fleet vehicle, well maintained, small windshield chip", region: "Northeast", daysOnLot: 9 }, mileage: 89400, price: 12600 },
-  { id: "r5", mode: "price", vehicle: { year: 2022, make: "Jeep", model: "Wrangler", trim: "Rubicon 4-Door", bodyStyle: "SUV", color: "Firecracker Red", conditionNotes: "Aftermarket lift kit, off-road tires, otherwise stock", region: "Mountain", daysOnLot: 4 }, mileage: 21300, price: 41500 },
-  { id: "r6", mode: "mileage", vehicle: { year: 2018, make: "Chevrolet", model: "Silverado 1500", trim: "LT Crew Cab", bodyStyle: "Truck", color: "Summit White", conditionNotes: "Tow package, some paint fade on hood, mechanically sound", region: "South", daysOnLot: 11 }, mileage: 96700, price: 22300 },
-  { id: "r7", mode: "price", vehicle: { year: 2020, make: "BMW", model: "3 Series", trim: "330i xDrive", bodyStyle: "Sedan", color: "Jet Black", conditionNotes: "Sport package, minor curb rash on two wheels, recent brake service", region: "Northeast", daysOnLot: 5 }, mileage: 33800, price: 28700 },
-  { id: "r8", mode: "mileage", vehicle: { year: 2016, make: "Nissan", model: "Altima", trim: "SV", bodyStyle: "Sedan", color: "Gun Metallic", conditionNotes: "Rental history, average interior wear, new tires all around", region: "South", daysOnLot: 14 }, mileage: 104200, price: 9800 },
-  { id: "r9", mode: "price", vehicle: { year: 2021, make: "Subaru", model: "Outback", trim: "Limited", bodyStyle: "Wagon/SUV", color: "Wilderness Green", conditionNotes: "One owner, non-smoker, small scratch on rear bumper", region: "Northeast", daysOnLot: 2 }, mileage: 29600, price: 26100 },
-  { id: "r10", mode: "mileage", vehicle: { year: 2019, make: "Mazda", model: "CX-5", trim: "Grand Touring", bodyStyle: "SUV", color: "Machine Gray", conditionNotes: "Leather seats show light wear, service records complete", region: "West", daysOnLot: 7 }, mileage: 47800, price: 19500 },
-  { id: "r11", mode: "price", vehicle: { year: 2015, make: "Hyundai", model: "Elantra", trim: "SE", bodyStyle: "Sedan", color: "Titanium Gray", conditionNotes: "Budget unit, cosmetic wear throughout, runs and drives well", region: "Midwest", daysOnLot: 18 }, mileage: 118500, price: 6900 },
-  { id: "r12", mode: "mileage", vehicle: { year: 2022, make: "Kia", model: "Telluride", trim: "SX Prestige", bodyStyle: "SUV", color: "Ebony Black", conditionNotes: "Loaded trim, showroom condition, single owner", region: "South", daysOnLot: 2 }, mileage: 18200, price: 43800 },
-  { id: "r13", mode: "price", vehicle: { year: 2020, make: "Audi", model: "Q5", trim: "Premium Plus", bodyStyle: "SUV", color: "Glacier White", conditionNotes: "Panoramic roof, minor wear on driver seat bolster", region: "Northeast", daysOnLot: 8 }, mileage: 40100, price: 31200 },
-  { id: "r14", mode: "mileage", vehicle: { year: 2023, make: "Ram", model: "1500", trim: "Big Horn Crew Cab", bodyStyle: "Truck", color: "Diamond Black", conditionNotes: "Like new, bed cover installed, no accidents reported", region: "Mountain", daysOnLot: 1 }, mileage: 9800, price: 38900 }
+  { id: "r1", label: "Monday Lot", mode: "price", vehicle: { year: 2019, make: "Honda", model: "CR-V", trim: "EX-L AWD", bodyStyle: "SUV", color: "Modern Steel Metallic", conditionNotes: "Clean title, minor curb rash on rear passenger wheel, interior excellent", region: "Midwest", daysOnLot: 3 }, mileage: 42150, price: 21800, image: "r1.jpg" },
+  { id: "r2", label: "Tuesday Lot", mode: "mileage", vehicle: { year: 2021, make: "Ford", model: "F-150", trim: "XLT SuperCrew 4x4", bodyStyle: "Truck", color: "Agate Black", conditionNotes: "Bed liner installed, small dent on tailgate, tires at 80%", region: "South", daysOnLot: 6 }, mileage: 38900, price: 34200, image: "r2.jpg" },
+  { id: "r3", label: "Wednesday Lot", mode: "price", vehicle: { year: 2020, make: "Toyota", model: "Camry", trim: "SE", bodyStyle: "Sedan", color: "Celestial Silver", conditionNotes: "One owner, well maintained, small windshield chip", region: "Northeast", daysOnLot: 9 }, mileage: 46800, price: 19800, image: "r3.jpg" },
+  { id: "r4", label: "Thursday Lot", mode: "mileage", vehicle: { year: 2022, make: "Jeep", model: "Wrangler", trim: "Sport", bodyStyle: "SUV", color: "Diamond Black Crystal", conditionNotes: "Soft top, aftermarket grille guard, otherwise stock", region: "Mountain", daysOnLot: 4 }, mileage: 21300, price: 34500, image: "r4.jpg" },
+  { id: "r5", label: "Friday Lot", mode: "price", vehicle: { year: 2018, make: "Chevrolet", model: "Silverado 1500", trim: "LT Crew Cab", bodyStyle: "Truck", color: "Silver Ice Metallic", conditionNotes: "Tow package, some paint fade on hood, mechanically sound", region: "South", daysOnLot: 11 }, mileage: 96700, price: 22300, image: "r5.jpg" },
+  { id: "r6", label: "Saturday Lot", mode: "mileage", vehicle: { year: 2021, make: "Subaru", model: "Outback", trim: "Limited", bodyStyle: "Wagon/SUV", color: "Crimson Red Pearl", conditionNotes: "One owner, non-smoker, small scratch on rear bumper", region: "Northeast", daysOnLot: 2 }, mileage: 29600, price: 26100, image: "r6.jpg" },
+  { id: "r7", label: "Sunday Lot", mode: "price", vehicle: { year: 2023, make: "Tesla", model: "Model 3", trim: "Long Range AWD", bodyStyle: "Sedan", color: "Deep Blue Metallic", conditionNotes: "One owner, autopilot hardware 3.0, battery health 96%", region: "West", daysOnLot: 1 }, mileage: 51200, price: 27900, image: "r7.jpg" }
 ];
 
-const ROUNDS_PER_GAME = 12;
-const STREAK_BONUS_THRESHOLD = 3;
-const STREAK_BONUS_POINTS = 100;
+// Same epoch as Lot Jam (games/lot-jam/web/app.js) so "day N" lines up
+// across the suite's daily games.
+const EPOCH = Date.UTC(2026, 8, 14);
 const QUALIFYING_SCORE = 650;
 const LEADERBOARD_KEY = "gtd_leaderboard";
 const LEADERBOARD_MAX = 10;
 
+function daysSinceEpoch() {
+  return Math.max(0, Math.floor((Date.now() - EPOCH) / 86400000));
+}
+
 const state = {
   allRounds: [],
-  order: [],
-  currentIndex: 0,
+  round: null,
+  dayNumber: 1,
   score: 0,
-  streak: 0,
-  bestStreak: 0,
 };
 
 const el = {};
 [
   "screen-start", "screen-game", "screen-reveal", "screen-end", "screen-board",
   "btnStart", "btnShowBoard", "btnBackFromBoard", "btnViewBoardEnd",
-  "topbarScore", "liveScore", "liveStreak",
-  "progressFill", "progressLabel",
-  "vehicleTitle", "vehicleTrim", "specGrid", "conditionNotes", "carSvg",
+  "topbarScore", "liveScore",
+  "progressLabel",
+  "vehicleTitle", "vehicleTrim", "specGrid", "conditionNotes", "carSvg", "vehiclePhoto",
   "guessQuestion", "guessPrefix", "guessSuffix", "guessNumber", "guessSlider", "btnSubmitGuess",
   "revealTier", "revealGuess", "revealActual", "revealBarFill", "revealBarMarker",
-  "revealOff", "revealPoints", "revealStreakBonus", "btnNextRound",
+  "revealOff", "revealPoints", "btnNextRound",
   "endRank", "endScore", "endSub", "saveScoreForm", "playerName",
   "btnPlayAgain", "boardList", "boardEmpty",
 ].forEach((id) => { el[id] = document.getElementById(id); });
@@ -79,15 +77,6 @@ function showScreen(name) {
     el[`screen-${n}`].hidden = n !== name;
   });
   el.topbarScore.hidden = name === "start";
-}
-
-function shuffle(arr) {
-  const copy = arr.slice();
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
 }
 
 async function loadRounds() {
@@ -130,7 +119,7 @@ function animateNumber(node, from, to, duration = 500) {
 }
 
 function currentRound() {
-  return state.allRounds[state.order[state.currentIndex]];
+  return state.round;
 }
 
 function getSliderConfig(round) {
@@ -177,8 +166,32 @@ function renderRound() {
   el.guessNumber.max = cfg.max;
   el.guessNumber.step = cfg.step;
 
-  el.progressLabel.textContent = `Round ${state.currentIndex + 1} / ${state.order.length}`;
-  el.progressFill.style.width = `${(state.currentIndex / state.order.length) * 100}%`;
+  el.progressLabel.textContent = `${round.label ? round.label + " · " : ""}Guess the Deal #${state.dayNumber}`;
+
+  // carSvg is an SVGElement — the `.hidden` IDL property is only defined on
+  // HTMLElement, so `el.carSvg.hidden = ...` silently sets an inert expando
+  // instead of reflecting the `hidden` attribute. Use setAttribute/removeAttribute
+  // directly so the [hidden] CSS selector actually matches.
+  const setSvgHidden = (hide) => {
+    if (hide) el.carSvg.setAttribute("hidden", "");
+    else el.carSvg.removeAttribute("hidden");
+  };
+  if (round.image) {
+    const imageBase = window.__GAME_JAM_DATA_BASE__
+      ? `${window.__GAME_JAM_DATA_BASE__}/guess-the-deal/web/images/`
+      : "images/";
+    el.vehiclePhoto.onerror = () => {
+      el.vehiclePhoto.hidden = true;
+      setSvgHidden(false);
+    };
+    el.vehiclePhoto.src = imageBase + round.image;
+    el.vehiclePhoto.alt = `${v.year} ${v.make} ${v.model}`;
+    el.vehiclePhoto.hidden = false;
+    setSvgHidden(true);
+  } else {
+    el.vehiclePhoto.hidden = true;
+    setSvgHidden(false);
+  }
 
   el.carSvg.classList.remove("pop");
   requestAnimationFrame(() => el.carSvg.classList.add("pop"));
@@ -214,21 +227,14 @@ function submitGuess() {
   const actual = round.mode === "price" ? round.price : round.mileage;
   const { points, pctError } = scoreForGuess(guess, actual);
 
-  const qualifies = points >= QUALIFYING_SCORE;
-  state.streak = qualifies ? state.streak + 1 : 0;
-  state.bestStreak = Math.max(state.bestStreak, state.streak);
-  const bonus = state.streak >= STREAK_BONUS_THRESHOLD ? STREAK_BONUS_POINTS : 0;
+  pendingRoundResult = { round, guess, actual, points, pctError };
+  state.score = points;
 
-  pendingRoundResult = { round, guess, actual, points, bonus, pctError };
-
-  const prevScore = state.score;
-  state.score = prevScore + points + bonus;
-
-  showReveal(pendingRoundResult, prevScore);
+  showReveal(pendingRoundResult);
 }
 
-function showReveal(result, prevScore) {
-  const { round, guess, actual, points, bonus, pctError } = result;
+function showReveal(result) {
+  const { round, guess, actual, points, pctError } = result;
   const tierLabel = tierForPoints(points);
   const isPrice = round.mode === "price";
   const fmt = isPrice ? formatCurrency : formatMiles;
@@ -244,29 +250,11 @@ function showReveal(result, prevScore) {
   el.revealBarMarker.style.left = `${markerPct}%`;
 
   el.revealPoints.textContent = `+${points}`;
-  if (bonus > 0) {
-    el.revealStreakBonus.hidden = false;
-    el.revealStreakBonus.textContent = `🔥 streak bonus +${bonus}`;
-  } else {
-    el.revealStreakBonus.hidden = true;
-  }
-
-  el.liveStreak.hidden = state.streak < 2;
-  el.liveStreak.textContent = `🔥 x${state.streak}`;
 
   showScreen("reveal");
-  animateNumber(el.liveScore, prevScore, state.score, 600);
+  animateNumber(el.liveScore, 0, state.score, 600);
   el.revealPoints.classList.remove("pop");
   requestAnimationFrame(() => el.revealPoints.classList.add("pop"));
-}
-
-function nextRound() {
-  state.currentIndex += 1;
-  if (state.currentIndex >= state.order.length) {
-    endGame();
-  } else {
-    renderRound();
-  }
 }
 
 function rankForScore(score, maxScore) {
@@ -279,9 +267,9 @@ function rankForScore(score, maxScore) {
 }
 
 function endGame() {
-  const maxScore = state.order.length * 1000;
+  const maxScore = 1000;
   el.endRank.textContent = rankForScore(state.score, maxScore);
-  el.endSub.textContent = `out of ${maxScore.toLocaleString("en-US")} possible · best streak x${state.bestStreak}`;
+  el.endSub.textContent = `out of ${maxScore.toLocaleString("en-US")} possible today`;
   el.playerName.value = "";
   showScreen("end");
   animateNumber(el.endScore, 0, state.score, 900);
@@ -330,13 +318,11 @@ function escapeHtml(str) {
 }
 
 function startGame() {
-  state.order = shuffle(state.allRounds.map((_, i) => i)).slice(0, Math.min(ROUNDS_PER_GAME, state.allRounds.length));
-  state.currentIndex = 0;
+  const day = daysSinceEpoch();
+  state.dayNumber = day + 1;
+  state.round = state.allRounds[day % state.allRounds.length];
   state.score = 0;
-  state.streak = 0;
-  state.bestStreak = 0;
   el.liveScore.textContent = "0";
-  el.liveStreak.hidden = true;
   renderRound();
 }
 
@@ -364,7 +350,7 @@ function bindEvents() {
     if (!Number.isNaN(v)) el.guessSlider.value = String(v);
   });
 
-  el.btnNextRound.addEventListener("click", nextRound);
+  el.btnNextRound.addEventListener("click", endGame);
 
   el.saveScoreForm.addEventListener("submit", (e) => {
     e.preventDefault();

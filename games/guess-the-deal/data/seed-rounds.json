@@ -1,6 +1,7 @@
 [
   {
     "id": "r1",
+    "label": "Monday Lot",
     "mode": "price",
     "vehicle": {
       "year": 2019,
@@ -14,10 +15,12 @@
       "daysOnLot": 3
     },
     "mileage": 42150,
-    "price": 21800
+    "price": 21800,
+    "image": "r1.jpg"
   },
   {
     "id": "r2",
+    "label": "Tuesday Lot",
     "mode": "mileage",
     "vehicle": {
       "year": 2021,
@@ -31,210 +34,102 @@
       "daysOnLot": 6
     },
     "mileage": 38900,
-    "price": 34200
+    "price": 34200,
+    "image": "r2.jpg"
   },
   {
     "id": "r3",
+    "label": "Wednesday Lot",
     "mode": "price",
     "vehicle": {
       "year": 2020,
-      "make": "Tesla",
-      "model": "Model 3",
-      "trim": "Long Range AWD",
-      "bodyStyle": "Sedan",
-      "color": "Pearl White",
-      "conditionNotes": "One owner, autopilot hardware 3.0, battery health 96%",
-      "region": "West",
-      "daysOnLot": 1
-    },
-    "mileage": 51200,
-    "price": 27900
-  },
-  {
-    "id": "r4",
-    "mode": "mileage",
-    "vehicle": {
-      "year": 2017,
       "make": "Toyota",
       "model": "Camry",
       "trim": "SE",
       "bodyStyle": "Sedan",
       "color": "Celestial Silver",
-      "conditionNotes": "Fleet vehicle, well maintained, small windshield chip",
+      "conditionNotes": "One owner, well maintained, small windshield chip",
       "region": "Northeast",
       "daysOnLot": 9
     },
-    "mileage": 89400,
-    "price": 12600
+    "mileage": 46800,
+    "price": 19800,
+    "image": "r3.jpg"
   },
   {
-    "id": "r5",
-    "mode": "price",
+    "id": "r4",
+    "label": "Thursday Lot",
+    "mode": "mileage",
     "vehicle": {
       "year": 2022,
       "make": "Jeep",
       "model": "Wrangler",
-      "trim": "Rubicon 4-Door",
+      "trim": "Sport",
       "bodyStyle": "SUV",
-      "color": "Firecracker Red",
-      "conditionNotes": "Aftermarket lift kit, off-road tires, otherwise stock",
+      "color": "Diamond Black Crystal",
+      "conditionNotes": "Soft top, aftermarket grille guard, otherwise stock",
       "region": "Mountain",
       "daysOnLot": 4
     },
     "mileage": 21300,
-    "price": 41500
+    "price": 34500,
+    "image": "r4.jpg"
   },
   {
-    "id": "r6",
-    "mode": "mileage",
+    "id": "r5",
+    "label": "Friday Lot",
+    "mode": "price",
     "vehicle": {
       "year": 2018,
       "make": "Chevrolet",
       "model": "Silverado 1500",
       "trim": "LT Crew Cab",
       "bodyStyle": "Truck",
-      "color": "Summit White",
+      "color": "Silver Ice Metallic",
       "conditionNotes": "Tow package, some paint fade on hood, mechanically sound",
       "region": "South",
       "daysOnLot": 11
     },
     "mileage": 96700,
-    "price": 22300
+    "price": 22300,
+    "image": "r5.jpg"
   },
   {
-    "id": "r7",
-    "mode": "price",
-    "vehicle": {
-      "year": 2020,
-      "make": "BMW",
-      "model": "3 Series",
-      "trim": "330i xDrive",
-      "bodyStyle": "Sedan",
-      "color": "Jet Black",
-      "conditionNotes": "Sport package, minor curb rash on two wheels, recent brake service",
-      "region": "Northeast",
-      "daysOnLot": 5
-    },
-    "mileage": 33800,
-    "price": 28700
-  },
-  {
-    "id": "r8",
+    "id": "r6",
+    "label": "Saturday Lot",
     "mode": "mileage",
-    "vehicle": {
-      "year": 2016,
-      "make": "Nissan",
-      "model": "Altima",
-      "trim": "SV",
-      "bodyStyle": "Sedan",
-      "color": "Gun Metallic",
-      "conditionNotes": "Rental history, average interior wear, new tires all around",
-      "region": "South",
-      "daysOnLot": 14
-    },
-    "mileage": 104200,
-    "price": 9800
-  },
-  {
-    "id": "r9",
-    "mode": "price",
     "vehicle": {
       "year": 2021,
       "make": "Subaru",
       "model": "Outback",
       "trim": "Limited",
       "bodyStyle": "Wagon/SUV",
-      "color": "Wilderness Green",
+      "color": "Crimson Red Pearl",
       "conditionNotes": "One owner, non-smoker, small scratch on rear bumper",
       "region": "Northeast",
       "daysOnLot": 2
     },
     "mileage": 29600,
-    "price": 26100
+    "price": 26100,
+    "image": "r6.jpg"
   },
   {
-    "id": "r10",
-    "mode": "mileage",
-    "vehicle": {
-      "year": 2019,
-      "make": "Mazda",
-      "model": "CX-5",
-      "trim": "Grand Touring",
-      "bodyStyle": "SUV",
-      "color": "Machine Gray",
-      "conditionNotes": "Leather seats show light wear, service records complete",
-      "region": "West",
-      "daysOnLot": 7
-    },
-    "mileage": 47800,
-    "price": 19500
-  },
-  {
-    "id": "r11",
+    "id": "r7",
+    "label": "Sunday Lot",
     "mode": "price",
-    "vehicle": {
-      "year": 2015,
-      "make": "Hyundai",
-      "model": "Elantra",
-      "trim": "SE",
-      "bodyStyle": "Sedan",
-      "color": "Titanium Gray",
-      "conditionNotes": "Budget unit, cosmetic wear throughout, runs and drives well",
-      "region": "Midwest",
-      "daysOnLot": 18
-    },
-    "mileage": 118500,
-    "price": 6900
-  },
-  {
-    "id": "r12",
-    "mode": "mileage",
-    "vehicle": {
-      "year": 2022,
-      "make": "Kia",
-      "model": "Telluride",
-      "trim": "SX Prestige",
-      "bodyStyle": "SUV",
-      "color": "Ebony Black",
-      "conditionNotes": "Loaded trim, showroom condition, single owner",
-      "region": "South",
-      "daysOnLot": 2
-    },
-    "mileage": 18200,
-    "price": 43800
-  },
-  {
-    "id": "r13",
-    "mode": "price",
-    "vehicle": {
-      "year": 2020,
-      "make": "Audi",
-      "model": "Q5",
-      "trim": "Premium Plus",
-      "bodyStyle": "SUV",
-      "color": "Glacier White",
-      "conditionNotes": "Panoramic roof, minor wear on driver seat bolster",
-      "region": "Northeast",
-      "daysOnLot": 8
-    },
-    "mileage": 40100,
-    "price": 31200
-  },
-  {
-    "id": "r14",
-    "mode": "mileage",
     "vehicle": {
       "year": 2023,
-      "make": "Ram",
-      "model": "1500",
-      "trim": "Big Horn Crew Cab",
-      "bodyStyle": "Truck",
-      "color": "Diamond Black",
-      "conditionNotes": "Like new, bed cover installed, no accidents reported",
-      "region": "Mountain",
+      "make": "Tesla",
+      "model": "Model 3",
+      "trim": "Long Range AWD",
+      "bodyStyle": "Sedan",
+      "color": "Deep Blue Metallic",
+      "conditionNotes": "One owner, autopilot hardware 3.0, battery health 96%",
+      "region": "West",
       "daysOnLot": 1
     },
-    "mileage": 9800,
-    "price": 38900
+    "mileage": 51200,
+    "price": 27900,
+    "image": "r7.jpg"
   }
 ]
