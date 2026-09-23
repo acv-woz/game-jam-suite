@@ -42,6 +42,7 @@
   var winCopy = document.getElementById('winCopy');
   var saveScoreForm = document.getElementById('saveScoreForm');
   var playerName = document.getElementById('playerName');
+  var btnSaveScore = document.getElementById('btnSaveScore');
 
   // Shared player-identity convention across every game in the suite — see
   // guess-the-deal/web/app.js for the full write-up.
@@ -66,6 +67,7 @@
   var cellEls = [];
   var pathCells = [];
   var solved = false;
+  var scoreSaved = false;
   var dragActive = false;
   var timerStartTs = null;
   var timerInterval = null;
@@ -133,6 +135,10 @@
     elapsedMs = 0;
     hadRetrace = false;
     pointerDownCount = 0;
+    scoreSaved = false;
+    playerName.disabled = false;
+    btnSaveScore.disabled = false;
+    btnSaveScore.textContent = 'Save Score';
     clearInterval(timerInterval);
     timerInterval = null;
     timerStartTs = null;
@@ -434,6 +440,7 @@
 
   saveScoreForm.addEventListener('submit', function (e) {
     e.preventDefault();
+    if (scoreSaved) return;
     var name = playerName.value.trim();
     rememberUsername(name);
     if (window.__GAME_JAM_SAVE_SCORE__) {
@@ -445,6 +452,10 @@
         username: name
       });
     }
+    scoreSaved = true;
+    playerName.disabled = true;
+    btnSaveScore.disabled = true;
+    btnSaveScore.textContent = 'Saved';
     toast('Score saved');
   });
 

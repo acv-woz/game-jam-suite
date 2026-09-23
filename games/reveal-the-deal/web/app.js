@@ -125,6 +125,7 @@
   var endCopy = document.getElementById('endCopy');
   var saveScoreForm = document.getElementById('saveScoreForm');
   var playerName = document.getElementById('playerName');
+  var btnSaveScore = document.getElementById('btnSaveScore');
 
   // Shared player-identity convention across every game in the suite — see
   // guess-the-deal/web/app.js for the full write-up.
@@ -155,6 +156,7 @@
   var toastTimer = null;
   var roundStartTs = null;
   var finalAttemptSec = 0;
+  var scoreSaved = false;
 
   function toast(msg) {
     toastEl.textContent = msg;
@@ -307,6 +309,7 @@
 
   saveScoreForm.addEventListener('submit', function (e) {
     e.preventDefault();
+    if (scoreSaved) return;
     var name = playerName.value.trim();
     rememberUsername(name);
     if (window.__GAME_JAM_SAVE_SCORE__) {
@@ -317,6 +320,10 @@
         username: name
       });
     }
+    scoreSaved = true;
+    playerName.disabled = true;
+    btnSaveScore.disabled = true;
+    btnSaveScore.textContent = 'Saved';
     toast('Score saved');
   });
 
@@ -376,6 +383,10 @@
     guesses = [];
     done = false;
     roundStartTs = Date.now();
+    scoreSaved = false;
+    playerName.disabled = false;
+    btnSaveScore.disabled = false;
+    btnSaveScore.textContent = 'Save Score';
     guessInput.disabled = false;
     guessInput.value = '';
     currentSuggestions = [];

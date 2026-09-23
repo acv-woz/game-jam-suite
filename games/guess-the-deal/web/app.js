@@ -58,6 +58,7 @@ const state = {
   bestStreak: 0,
   gameStartTs: null,
   finalAttemptSec: 0,
+  scoreSaved: false,
 };
 
 const el = {};
@@ -70,7 +71,7 @@ const el = {};
   "guessQuestion", "guessPrefix", "guessSuffix", "guessNumber", "guessSlider", "btnSubmitGuess",
   "revealTier", "revealGuess", "revealActual", "revealBarFill", "revealBarMarker",
   "revealOff", "revealPoints", "revealStreakBonus", "btnNextRound",
-  "endRank", "endScore", "endSub", "saveScoreForm", "playerName", "btnCopyResult",
+  "endRank", "endScore", "endSub", "saveScoreForm", "playerName", "btnSaveScore", "btnCopyResult",
   "btnPlayAgain",
 ].forEach((id) => { el[id] = document.getElementById(id); });
 
@@ -319,6 +320,10 @@ function startGame() {
   state.streak = 0;
   state.bestStreak = 0;
   state.gameStartTs = Date.now();
+  state.scoreSaved = false;
+  el.playerName.disabled = false;
+  el.btnSaveScore.disabled = false;
+  el.btnSaveScore.textContent = "Save Score";
   el.liveScore.textContent = "0";
   el.liveStreak.hidden = true;
   renderRound();
@@ -345,6 +350,7 @@ function bindEvents() {
 
   el.saveScoreForm.addEventListener("submit", (e) => {
     e.preventDefault();
+    if (state.scoreSaved) return;
     const name = el.playerName.value.trim();
     rememberUsername(name);
     if (window.__GAME_JAM_SAVE_SCORE__) {
@@ -355,7 +361,10 @@ function bindEvents() {
         username: name,
       });
     }
-    goToLeaderboard();
+    state.scoreSaved = true;
+    el.playerName.disabled = true;
+    el.btnSaveScore.disabled = true;
+    el.btnSaveScore.textContent = "Saved";
   });
 
   el.btnCopyResult.addEventListener("click", () => {

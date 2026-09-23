@@ -88,6 +88,7 @@ const state = {
   timerInterval: null,
   elapsedMs: 0,
   finalElapsedMs: 0,
+  scoreSaved: false,
 };
 
 const el = {};
@@ -99,7 +100,7 @@ const el = {};
   "themeBadge", "clueQuestion", "options",
   "btnSubmit", "btnNext",
   "feedback", "feedbackBanner", "feedbackIcon", "feedbackText",
-  "endRank", "endScore", "endSub", "saveScoreForm", "playerName", "btnCopyResult",
+  "endRank", "endScore", "endSub", "saveScoreForm", "playerName", "btnSaveScore", "btnCopyResult",
   "btnPlayAgain",
 ].forEach((id) => { el[id] = document.getElementById(id); });
 
@@ -355,6 +356,10 @@ function startGame() {
   el.liveTime.textContent = "0:00";
   state.elapsedMs = 0;
   state.finalElapsedMs = 0;
+  state.scoreSaved = false;
+  el.playerName.disabled = false;
+  el.btnSaveScore.disabled = false;
+  el.btnSaveScore.textContent = "Save Score";
   startTimer();
   renderQuestion();
 }
@@ -369,6 +374,7 @@ function bindEvents() {
 
   el.saveScoreForm.addEventListener("submit", (e) => {
     e.preventDefault();
+    if (state.scoreSaved) return;
     const name = el.playerName.value.trim();
     rememberUsername(name);
     if (window.__GAME_JAM_SAVE_SCORE__) {
@@ -379,7 +385,10 @@ function bindEvents() {
         username: name,
       });
     }
-    goToLeaderboard();
+    state.scoreSaved = true;
+    el.playerName.disabled = true;
+    el.btnSaveScore.disabled = true;
+    el.btnSaveScore.textContent = "Saved";
   });
 
   el.btnCopyResult.addEventListener("click", () => {
