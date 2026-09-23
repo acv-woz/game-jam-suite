@@ -188,6 +188,12 @@ h1, h2{ margin: 0; font-weight: 800; letter-spacing: -.01em; }
 .bonus-item.missed{ color: var(--ink-dim); opacity: .65; }
 .bonus-item.missed .bonus-icon{ background: rgba(224,90,78,.16); color: #e05a4e; }
 .bonus-item.missed .bonus-icon::before{ content: "\2715"; }
+.save-score-row{ display:flex; gap:8px; margin: 0 0 14px; }
+.player-name-input{
+  flex:1; padding: 10px 12px; border:1px solid var(--hairline); border-radius: 10px;
+  background: var(--card-2); color: var(--ink); font-size: 13.5px; outline:none; min-width:0;
+}
+.player-name-input:focus{ border-color: var(--accent); }
 .modal-actions{ display:flex; gap: 10px; justify-content:center; }
 
 #toast{

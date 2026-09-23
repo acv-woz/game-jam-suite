@@ -69,7 +69,7 @@ body {
 .ct-topbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 14px 20px;
   padding-top: calc(14px + env(safe-area-inset-top, 0px));
   background: var(--ct-tile);

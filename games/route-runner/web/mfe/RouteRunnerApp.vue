@@ -53,6 +53,10 @@
             <span class="bonus-icon"></span><span class="bonus-label">One continuous drag</span>
           </li>
         </ul>
+        <form class="save-score-row" id="saveScoreForm">
+          <input type="text" id="playerName" class="player-name-input" placeholder="Your name for the leaderboard" maxlength="24">
+          <button type="submit" class="btn-primary">Save Score</button>
+        </form>
         <div class="modal-actions">
           <button type="button" class="btn-ghost" id="winClose">Close</button>
           <button type="button" class="btn-primary" id="winCopy">Copy result</button>
@@ -67,5 +71,20 @@
 <script setup>
 import useEmbeddedGame from '../../../shared/useEmbeddedGame';
 
-useEmbeddedGame('route-runner', { extraScripts: ['generator.js'] });
+// dealerId/userId/username come from the host page's logged-in user (see
+// RouteRunnerPage.vue in acv-web-vuejs) — null there for now until that's
+// wired up; username still gets prefilled from a remembered value if this
+// stays null (see loadSavedUsername in this game's app.js).
+const props = defineProps({
+  dealerId: { type: [Number, String], default: null },
+  userId: { type: [Number, String], default: null },
+  username: { type: String, default: null },
+});
+
+useEmbeddedGame('route-runner', {
+  extraScripts: ['generator.js'],
+  dealerId: props.dealerId,
+  userId: props.userId,
+  username: props.username,
+});
 </script>

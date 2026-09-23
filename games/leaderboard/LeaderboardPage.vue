@@ -1,6 +1,8 @@
 <template>
   <div class="leaderboard-page">
-    <GameJamBackButton />
+    <nav class="lp-nav">
+      <a href="/game-jam">&larr; Home</a>
+    </nav>
 
     <div class="lp-wrap">
       <header class="lp-top">
@@ -68,18 +70,19 @@
             </div>
           </div>
           <div class="lp-config-group">
-            <label class="lp-config-label">Dealer identity</label>
+            <label class="lp-config-label">Dealer</label>
             <div class="lp-seg">
               <button
                 type="button"
-                :class="{ active: identity === 'username' }"
-                @click="identity = 'username'"
-              >Username</button>
+                :disabled="dealerId == null"
+                :class="{ active: scope === 'mine' }"
+                @click="scope = 'mine'"
+              >Your dealer</button>
               <button
                 type="button"
-                :class="{ active: identity === 'real' }"
-                @click="identity = 'real'"
-              >Real name</button>
+                :class="{ active: scope === 'all' }"
+                @click="scope = 'all'"
+              >All of ACV</button>
             </div>
           </div>
         </div>
@@ -109,13 +112,22 @@
         </div>
 
         <div
-          v-if="!rankedEntries.length"
+          v-if="loading"
+          class="lp-empty"
+        >
+          Loading…
+        </div>
+
+        <div
+          v-else-if="!rankedEntries.length"
           class="lp-empty"
         >
           <span class="glyph">{{ isFreePlay ? '☀' : '—' }}</span>
           {{ isFreePlay
             ? 'Sunday is free play — dealers can still play for fun, but nothing posts to the daily or weekly leaderboard today.'
-            : 'No qualifying scores yet for this view.' }}
+            : fetchError
+              ? "Couldn't load scores — try again in a moment."
+              : 'No qualifying scores yet for this view.' }}
         </div>
 
         <ol
@@ -124,11 +136,11 @@
         >
           <LeaderboardRow
             v-for="entry in top20"
-            :key="entry.dealerId"
+            :key="entry.username"
             :entry="entry"
             :game="game"
-            :name="dealerName(dealerById(entry.dealerId))"
-            :avatar-color="avatarColor(entry.dealerId)"
+            :name="entry.username"
+            :avatar-color="avatarColor(entry.username)"
           />
         </ol>
       </div>
@@ -137,43 +149,39 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import GameJamBackButton from '../shared/GameJamBackButton.vue';
+import { ref, computed, watch } from 'vue';
 import LeaderboardRow from './LeaderboardRow.vue';
+import { isSupabaseConfigured, supabaseHeaders, supabaseRestUrl } from '../shared/supabaseClient';
+
+const props = defineProps({
+  dealerId: { type: [Number, String], default: null },
+  userId: { type: [Number, String], default: null },
+  username: { type: String, default: null },
+});
 
 // Each entry matches an actual game we've built (see the routes this remote
 // exposes) rather than a made-up set — unit/better/min/max/fmt describe how
-// that game's own scoring already works.
+// that game's own scoring already works, and gameId is exactly the value
+// each game's app.js saves to the Scores table (see saveScoreRemote calls).
 const GAMES = [
-  { id: 'guess-the-deal', name: 'Guess the Deal', unit: 'pts', better: 'high', min: 380, max: 1180, step: 10, fmt: 'plain' },
-  { id: 'lot-jam', name: 'Lot Jam', unit: 's', better: 'low', min: 16, max: 140, step: 1, fmt: 'time' },
-  { id: 'car-trivia', name: 'Car Trivia', unit: 'pts', better: 'high', min: 0, max: 5, step: 1, fmt: 'plain' },
-  { id: 'cardle', name: 'Cardle', unit: 'guesses', better: 'low', min: 1, max: 6, step: 1, fmt: 'plain' },
-  { id: 'reveal-the-deal', name: 'Reveal the Deal', unit: 'guesses', better: 'low', min: 1, max: 6, step: 1, fmt: 'plain' },
-  { id: 'route-runner', name: 'Route Runner', unit: 's', better: 'low', min: 20, max: 150, step: 1, fmt: 'time' },
+  { id: 'guess-the-deal', name: 'Guess the Deal', unit: 'pts', better: 'high', fmt: 'plain' },
+  { id: 'lot-jam', name: 'Lot Jam', unit: 's', better: 'low', fmt: 'time' },
+  { id: 'car-trivia', name: 'Car Trivia', unit: 'pts', better: 'high', fmt: 'plain' },
+  { id: 'cardle', name: 'Cardle', unit: 'guesses', better: 'low', fmt: 'plain' },
+  { id: 'reveal-the-deal', name: 'Reveal the Deal', unit: 'guesses', better: 'low', fmt: 'plain' },
+  { id: 'route-runner', name: 'Route Runner', unit: 's', better: 'low', fmt: 'time' },
 ];
 const GAME_BY_ID = Object.fromEntries(GAMES.map((g) => [g.id, g]));
 
 const DAY_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-const REAL_NAMES = ['Marcus Ibe', 'Priya Anand', 'Dana Kowalski', 'Leon Fischer', 'Grace Okafor', 'Tomás Rivera', 'Wendy Park',
-  'Andre Silva', 'Naomi Cohen', 'Caleb Stroud', 'Renee Duval', 'Sam Whitfield', 'Julia Ferreira', 'Owen Marsh', 'Ines Castillo',
-  'Tyler Bloom', 'Priyanka Rao', 'Dmitri Volkov', 'Alicia Nguyen', 'Ben Harding', 'Farah Haddad', 'Carter Voss',
-  "Meg O'Sullivan", 'Rafael Cruz', 'Simone Laurent', 'Jordan Blake', 'Nadia Petrov', 'Evan McAllister'];
-const USERNAMES = ['LotShark88', 'LastBidLarry', 'LaneNineLegend', 'ClearTitleClaire', 'GavelGuy', 'TradeInTitan', 'MileageMaven',
-  'CurbAppealChris', 'AuctionAceDeb', 'RunAndDriveRon', 'FloorboardFinn', 'ArbitrationAnnie', 'BlockPartyBlaine', 'OvernightOffer',
-  'SightUnseenSue', 'HighBidHannah', 'ReserveRae', 'CleanCarfaxCody', 'FrameOffFreddy', 'ThirdPartyTerry', 'PowerTrainPete',
-  'VinDecoderVic', 'ClosingBellCarl', 'FairMarketFiona', 'ProxyBidPaula', 'LaneChangeLuis', 'CertifiedCarla', 'SalvageSavvySam'];
-
 const AVATAR_TINTS = ['#8074cf', '#4f8fae', '#5a9a73', '#c06a56', '#6c7480', '#a8791b'];
-
-const DEALERS = REAL_NAMES.map((name, i) => ({ id: `d${i}`, realName: name, username: USERNAMES[i] }));
 
 // The last 7 real calendar days ending today (index 6 = today), so the day
 // picker shows actual dates instead of an abstract "day 0-6" — and, unlike
 // anchoring to a Sunday-start calendar week, this never shows a date that
-// hasn't happened yet. Scores below are still simulated for demonstration,
-// not live data.
+// hasn't happened yet. All in the browser's local timezone, matched by
+// dayIndexForRow below when bucketing rows fetched from Supabase.
 function lastSevenDays() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -189,37 +197,9 @@ function formatDay(d) {
   return `${DAY_SHORT[d.getDay()]} ${d.getMonth() + 1}/${d.getDate()}`;
 }
 
-function rand(min, max, step) {
-  const n = min + Math.random() * (max - min);
-  return Math.round(n / step) * step;
+function isBetterScore(a, b, better) {
+  return better === 'high' ? a > b : a < b;
 }
-function randomScoreFor(g) { return rand(g.min, g.max, g.step); }
-function betterOf(a, b, better) {
-  if (a == null) return b;
-  if (b == null) return a;
-  return better === 'high' ? Math.max(a, b) : Math.min(a, b);
-}
-
-// base[gameId][dayIndex][dealerId] = score | undefined, regenerated fresh per page load.
-const base = {};
-GAMES.forEach((g) => {
-  base[g.id] = [];
-  for (let d = 0; d < 7; d += 1) {
-    const dayMap = {};
-    DEALERS.forEach((dealer) => {
-      if (Math.random() < 0.78) dayMap[dealer.id] = randomScoreFor(g);
-    });
-    base[g.id].push(dayMap);
-  }
-});
-// Force at least one visible tie near the top of each game's board for
-// today (the default view), so the shared-rank rule always has something
-// to demonstrate on load.
-GAMES.forEach((g) => {
-  const todayBoard = base[g.id][6];
-  const ids = Object.keys(todayBoard);
-  if (ids.length >= 2) todayBoard[ids[0]] = todayBoard[ids[1]];
-});
 
 // Each game's "Leaderboard →" link (see games/guess-the-deal/web/app.js's
 // renderGameNav) points here with `?game=<slug>`, so arriving from a
@@ -236,7 +216,7 @@ function initialGameId() {
 const gameId = ref(initialGameId());
 const cycle = ref('daily');
 const agg = ref('best');
-const identity = ref('username');
+const scope = ref(props.dealerId != null ? 'mine' : 'all');
 const day = ref(6);
 
 const game = computed(() => GAME_BY_ID[gameId.value]);
@@ -244,18 +224,79 @@ const isWeekly = computed(() => cycle.value === 'weekly');
 const isSunday = computed(() => weekDates[day.value].getDay() === 0);
 const isFreePlay = computed(() => !isWeekly.value && isSunday.value);
 
-function dealerName(dealer) { return identity.value === 'username' ? dealer.username : dealer.realName; }
-function dealerById(id) { return DEALERS.find((d) => d.id === id); }
+const rawRows = ref([]);
+const loading = ref(false);
+const fetchError = ref(false);
 
-function effectiveScore(gId, d, dealerId) { return base[gId][d][dealerId]; }
-function effectiveEntries(gId, d) {
-  const out = [];
-  DEALERS.forEach((dealer) => {
-    const score = effectiveScore(gId, d, dealer.id);
-    if (score != null) out.push({ dealerId: dealer.id, score });
-  });
-  return out;
+// Fetches cover the whole window a view could need (through the selected
+// day for weekly, just that one day for daily) in one request; per-day
+// bests and weekly aggregates are then computed client-side from that flat
+// row set, since PostgREST alone can't express "best score per player per
+// day" as a query.
+function queryRange() {
+  const from = isWeekly.value ? weekDates[0] : weekDates[day.value];
+  const to = new Date(weekDates[day.value].getTime() + 86400000);
+  return { from, to };
 }
+
+async function fetchRows() {
+  if (!isSupabaseConfigured()) {
+    rawRows.value = [];
+    return;
+  }
+  loading.value = true;
+  fetchError.value = false;
+  try {
+    const { from, to } = queryRange();
+    const params = new URLSearchParams();
+    params.set('select', 'username,score,dealerId,created_at');
+    params.append('gameId', `eq.${gameId.value}`);
+    params.append('created_at', `gte.${from.toISOString()}`);
+    params.append('created_at', `lt.${to.toISOString()}`);
+    if (scope.value === 'mine' && props.dealerId != null) {
+      params.append('dealerId', `eq.${props.dealerId}`);
+    }
+    params.append('order', 'created_at.desc');
+    params.append('limit', '1000');
+    const res = await fetch(`${supabaseRestUrl('Scores')}?${params.toString()}`, {
+      headers: supabaseHeaders(),
+    });
+    if (!res.ok) throw new Error('bad response');
+    rawRows.value = await res.json();
+  } catch (e) {
+    fetchError.value = true;
+    rawRows.value = [];
+  } finally {
+    loading.value = false;
+  }
+}
+watch([gameId, cycle, day, scope], fetchRows, { immediate: true });
+
+// Which index in weekDates a fetched row's created_at (UTC) falls on, once
+// converted to the viewer's local calendar day — mirrors how weekDates
+// itself is built above.
+function dayIndexForRow(row) {
+  const d = new Date(row.created_at);
+  d.setHours(0, 0, 0, 0);
+  const t = d.getTime();
+  return weekDates.findIndex((wd) => wd.getTime() === t);
+}
+
+// dayBests[dayIndex][username] = { score, dealerId } — each player's best
+// attempt that day, collapsed from however many rows they actually played.
+const dayBests = computed(() => {
+  const map = {};
+  rawRows.value.forEach((row) => {
+    const di = dayIndexForRow(row);
+    if (di === -1) return;
+    if (!map[di]) map[di] = {};
+    const current = map[di][row.username];
+    if (!current || isBetterScore(row.score, current.score, game.value.better)) {
+      map[di][row.username] = { score: row.score, dealerId: row.dealerId };
+    }
+  });
+  return map;
+});
 
 // Standard competition ranking: ties share a rank, the next distinct score
 // resumes at its true 1-based position (so a tie for 1st is followed by 3rd).
@@ -266,7 +307,7 @@ function rankEntries(entries, better) {
   let prevRank = 0;
   sorted.forEach((e, i) => {
     const rank = (prevScore !== null && e.score === prevScore) ? prevRank : i + 1;
-    out.push({ dealerId: e.dealerId, score: e.score, rank });
+    out.push({ username: e.username, score: e.score, dealerId: e.dealerId, rank });
     prevScore = e.score;
     prevRank = rank;
   });
@@ -279,24 +320,24 @@ function weeklyWindow(d) {
   // are currently on screen.
   return Array.from({ length: d + 1 }, (_, i) => i).filter((i) => weekDates[i].getDay() !== 0);
 }
-function weeklyEntries(gId, d, aggMode) {
-  const g = GAME_BY_ID[gId];
+function weeklyEntries(d, aggMode) {
   const days = weeklyWindow(d);
-  const out = [];
-  DEALERS.forEach((dealer) => {
-    const scores = [];
-    days.forEach((dd) => {
-      const s = effectiveScore(gId, dd, dealer.id);
-      if (s != null) scores.push(s);
+  const perUser = {};
+  days.forEach((di) => {
+    const dayMap = dayBests.value[di] || {};
+    Object.keys(dayMap).forEach((username) => {
+      if (!perUser[username]) perUser[username] = { scores: [], dealerId: dayMap[username].dealerId };
+      perUser[username].scores.push(dayMap[username].score);
     });
-    if (!scores.length) return;
+  });
+  return Object.keys(perUser).map((username) => {
+    const { scores, dealerId } = perUser[username];
     let value;
     if (aggMode === 'sum') value = scores.reduce((a, b) => a + b, 0);
     else if (aggMode === 'avg') value = Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 10) / 10;
-    else value = scores.reduce((a, b) => betterOf(a, b, g.better));
-    out.push({ dealerId: dealer.id, score: value });
+    else value = scores.reduce((a, b) => (isBetterScore(b, a, game.value.better) ? b : a));
+    return { username, score: value, dealerId };
   });
-  return out;
 }
 
 function hashStr(s) {
@@ -304,12 +345,14 @@ function hashStr(s) {
   for (let i = 0; i < s.length; i += 1) h = (h * 31 + s.charCodeAt(i)) >>> 0;
   return h;
 }
-function avatarColor(dealerId) { return AVATAR_TINTS[hashStr(dealerId) % AVATAR_TINTS.length]; }
+function avatarColor(username) { return AVATAR_TINTS[hashStr(username) % AVATAR_TINTS.length]; }
 
 const rankedEntries = computed(() => {
   if (isFreePlay.value) return [];
-  if (isWeekly.value) return rankEntries(weeklyEntries(gameId.value, day.value, agg.value), game.value.better);
-  return rankEntries(effectiveEntries(gameId.value, day.value), game.value.better);
+  if (isWeekly.value) return rankEntries(weeklyEntries(day.value, agg.value), game.value.better);
+  const dayMap = dayBests.value[day.value] || {};
+  const entries = Object.keys(dayMap).map((username) => ({ username, ...dayMap[username] }));
+  return rankEntries(entries, game.value.better);
 });
 
 const boardTitle = computed(() => `${game.value.name} — ${isWeekly.value ? 'Weekly' : 'Daily'}`);
@@ -365,6 +408,18 @@ const top20 = computed(() => rankedEntries.value.slice(0, 20));
   font-family: "Roboto", Helvetica, Arial, sans-serif;
   margin: 0;
 }
+
+.lp-nav {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 8px 20px;
+  padding-top: calc(8px + env(safe-area-inset-top, 0px));
+  border-bottom: 1px solid var(--lp-hairline);
+}
+.lp-nav a {
+  font-size: 12px; font-weight: 600; color: var(--lp-ink-dim); text-decoration: none;
+  padding: 5px 11px; border-radius: 999px; border: 1px solid var(--lp-hairline); background: var(--lp-surface);
+}
+.lp-nav a:hover { color: var(--lp-ink); background: var(--lp-surface-2); }
 
 .lp-wrap { max-width: 900px; margin: 0 auto; padding: 12px 20px 40px; }
 

@@ -123,6 +123,21 @@
   var endTiles = document.getElementById('endTiles');
   var endClose = document.getElementById('endClose');
   var endCopy = document.getElementById('endCopy');
+  var saveScoreForm = document.getElementById('saveScoreForm');
+  var playerName = document.getElementById('playerName');
+
+  // Shared player-identity convention across every game in the suite — see
+  // guess-the-deal/web/app.js for the full write-up.
+  function loadSavedUsername() {
+    try { return localStorage.getItem('gamejam-username') || ''; } catch (e) { return ''; }
+  }
+  function rememberUsername(name) {
+    try { if (name) localStorage.setItem('gamejam-username', name); } catch (e) { /* storage unavailable */ }
+  }
+  function prefilledUsername() {
+    var user = window.__GAME_JAM_USER__;
+    return (user && user.username) || loadSavedUsername();
+  }
 
   var rounds = [];
   var vehicles = [];
@@ -138,6 +153,8 @@
   var highlightIndex = -1;
   var currentSuggestions = [];
   var toastTimer = null;
+  var roundStartTs = null;
+  var finalAttemptSec = 0;
 
   function toast(msg) {
     toastEl.textContent = msg;
@@ -270,6 +287,7 @@
   function finish(won) {
     done = true;
     guessInput.disabled = true;
+    finalAttemptSec = Math.round((Date.now() - roundStartTs) / 1000);
     var improved = saveBestIfBetter(round.id, guesses.length, totalTiles);
     renderBestNote();
     setTimeout(function () { showEndModal(won, improved); }, 350);
@@ -283,8 +301,24 @@
       : "That one got away — here's today's listing.";
     endGuesses.textContent = guesses.length + '/' + maxGuesses;
     endTiles.textContent = totalTiles + '/' + totalTiles;
+    playerName.value = prefilledUsername();
     endBackdrop.hidden = false;
   }
+
+  saveScoreForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = playerName.value.trim();
+    rememberUsername(name);
+    if (window.__GAME_JAM_SAVE_SCORE__) {
+      window.__GAME_JAM_SAVE_SCORE__({
+        gameId: 'reveal-the-deal',
+        score: guesses.length,
+        attemptLength: finalAttemptSec,
+        username: name
+      });
+    }
+    toast('Score saved');
+  });
 
   endClose.addEventListener('click', function () { endBackdrop.hidden = true; });
   endCopy.addEventListener('click', function () {
@@ -341,6 +375,7 @@
     round = rounds[i];
     guesses = [];
     done = false;
+    roundStartTs = Date.now();
     guessInput.disabled = false;
     guessInput.value = '';
     currentSuggestions = [];

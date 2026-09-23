@@ -40,7 +40,7 @@ import useEmbeddedGame from '../shared/useEmbeddedGame';
  * every other game's MFE component wraps (see e.g.
  * games/guess-the-deal/web/mfe/GuessTheDealApp.vue) — one tile grid, driven
  * entirely by app.js, works identically standalone (python3 -m http.server)
- * and embedded here. No GameJamBackButton: this already is the home page.
+ * and embedded here. No Home nav here: this already is the home page.
  */
 useEmbeddedGame('home');
 </script>

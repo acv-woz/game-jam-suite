@@ -3,18 +3,27 @@
     class="game-jam-page"
     data-e2e-id="game-jam-route-runner"
   >
-    <RouteRunnerApp />
+    <RouteRunnerApp
+      :dealer-id="dealerId"
+      :user-id="userId"
+      :username="username"
+    />
   </div>
 </template>
 
 <script setup>
-import { defineAsyncComponent } from 'vue';
+import { computed, defineAsyncComponent } from 'vue';
+import { store } from '@/appContext';
 import importFederation from '@/utilities/mfe/importFederation';
 
 const RouteRunnerApp = defineAsyncComponent(
   // eslint-disable-next-line import/no-unresolved
   () => importFederation('gameJam/RouteRunnerApp'),
 );
+
+const dealerId = computed(() => store.getters.currentUser.defaultDealerId);
+const userId = computed(() => store.getters.currentUser.id);
+const username = computed(() => store.getters.currentUser.fullName);
 </script>
 
 <style scoped>

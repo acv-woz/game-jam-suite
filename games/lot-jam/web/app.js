@@ -108,6 +108,21 @@
   var winRank = document.getElementById('winRank');
   var winClose = document.getElementById('winClose');
   var winCopy = document.getElementById('winCopy');
+  var saveScoreForm = document.getElementById('saveScoreForm');
+  var playerName = document.getElementById('playerName');
+
+  // Shared player-identity convention across every game in the suite — see
+  // guess-the-deal/web/app.js for the full write-up.
+  function loadSavedUsername() {
+    try { return localStorage.getItem('gamejam-username') || ''; } catch (e) { return ''; }
+  }
+  function rememberUsername(name) {
+    try { if (name) localStorage.setItem('gamejam-username', name); } catch (e) { /* storage unavailable */ }
+  }
+  function prefilledUsername() {
+    var user = window.__GAME_JAM_USER__;
+    return (user && user.username) || loadSavedUsername();
+  }
 
   var GRID = 6;
   var CELL = 60;
@@ -430,9 +445,26 @@
     winPar.textContent = String(puzzle.par);
     winTime.textContent = fmtTime(finalElapsedMs);
     winRank.textContent = rankFor(moveCount, puzzle.par);
+    playerName.value = prefilledUsername();
     winBackdrop.hidden = false;
     renderBestNote();
   }
+
+  saveScoreForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = playerName.value.trim();
+    rememberUsername(name);
+    if (window.__GAME_JAM_SAVE_SCORE__) {
+      var attemptSec = Math.round(finalElapsedMs / 1000);
+      window.__GAME_JAM_SAVE_SCORE__({
+        gameId: 'lot-jam',
+        score: attemptSec,
+        attemptLength: attemptSec,
+        username: name
+      });
+    }
+    toast('Score saved');
+  });
 
   winClose.addEventListener('click', function () { winBackdrop.hidden = true; solved = false; });
   winCopy.addEventListener('click', function () {

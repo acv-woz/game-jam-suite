@@ -4,10 +4,6 @@
     <nav class="game-nav" id="gameNav"></nav>
 
     <header class="topbar">
-      <div class="brand">
-        <span class="brand-mark">GTD</span>
-        <span class="brand-name">Guess&nbsp;the&nbsp;Deal</span>
-      </div>
       <div class="topbar-score" id="topbarScore" hidden>
         <span class="score-label">Score</span>
         <span class="score-value" id="liveScore">0</span>
@@ -131,17 +127,8 @@
           <div class="end-actions">
             <button class="btn btn-primary btn-lg" id="btnPlayAgain">Play Again</button>
             <button class="btn btn-ghost" id="btnViewBoardEnd">View Leaderboard</button>
+            <button type="button" class="btn btn-ghost" id="btnCopyResult">Copy result</button>
           </div>
-        </div>
-      </section>
-
-      <!-- LEADERBOARD SCREEN -->
-      <section class="screen screen-board" id="screen-board" hidden>
-        <div class="card board-card">
-          <h2>Leaderboard</h2>
-          <ol class="board-list" id="boardList"></ol>
-          <p class="board-empty" id="boardEmpty" hidden>No scores yet &mdash; be the first!</p>
-          <button class="btn btn-primary btn-lg" id="btnBackFromBoard">Back</button>
         </div>
       </section>
 
@@ -152,5 +139,19 @@
 <script setup>
 import useEmbeddedGame from '../../../shared/useEmbeddedGame';
 
-useEmbeddedGame('guess-the-deal');
+// dealerId/userId/username come from the host page's logged-in user (see
+// GuessTheDealPage.vue in acv-web-vuejs) — null there for now until that's
+// wired up; username still gets prefilled from a remembered value if this
+// stays null (see loadSavedUsername in this game's app.js).
+const props = defineProps({
+  dealerId: { type: [Number, String], default: null },
+  userId: { type: [Number, String], default: null },
+  username: { type: String, default: null },
+});
+
+useEmbeddedGame('guess-the-deal', {
+  dealerId: props.dealerId,
+  userId: props.userId,
+  username: props.username,
+});
 </script>
