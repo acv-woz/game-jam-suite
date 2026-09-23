@@ -6,7 +6,7 @@
           id="topNav"
           class="top-nav"
         ></nav>
-        <h1>Game Jam Suite</h1>
+        <h1>ACV Arcade</h1>
         <p class="sub">Play. Compete. Win.</p>
       </header>
 
