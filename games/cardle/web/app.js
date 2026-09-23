@@ -158,7 +158,23 @@
   var endStreak = document.getElementById('endStreak');
   var endClose = document.getElementById('endClose');
   var endCopy = document.getElementById('endCopy');
+  var saveScoreForm = document.getElementById('saveScoreForm');
+  var playerName = document.getElementById('playerName');
+  var btnSaveScore = document.getElementById('btnSaveScore');
   var clueChipsEl = document.getElementById('clueChips');
+
+  // Shared player-identity convention across every game in the suite — see
+  // guess-the-deal/web/app.js for the full write-up.
+  function loadSavedUsername() {
+    try { return localStorage.getItem('gamejam-username') || ''; } catch (e) { return ''; }
+  }
+  function rememberUsername(name) {
+    try { if (name) localStorage.setItem('gamejam-username', name); } catch (e) { /* storage unavailable */ }
+  }
+  function prefilledUsername() {
+    var user = window.__GAME_JAM_USER__;
+    return (user && user.username) || loadSavedUsername();
+  }
   var toggleCandidatesBtn = document.getElementById('toggleCandidates');
   var candidateListEl = document.getElementById('candidateList');
 
@@ -171,6 +187,9 @@
   var highlightIndex = -1;
   var currentSuggestions = [];
   var toastTimer = null;
+  var puzzleStartTs = null;
+  var finalAttemptSec = 0;
+  var scoreSaved = false;
 
   colLabelsEl.innerHTML = COLUMNS.map(function (c) { return '<span>' + c.label + '</span>'; }).join('');
 
@@ -404,6 +423,7 @@
   function finish(won) {
     done = true;
     guessInput.disabled = true;
+    finalAttemptSec = Math.round((Date.now() - puzzleStartTs) / 1000);
     saveState(currentDateStr);
     var streakCount = updateStreakOnFinish(won);
     renderStreak();
@@ -420,8 +440,29 @@
     if (!isToday) endEyebrow.textContent += ' (practice)';
     endGuesses.textContent = guesses.length + '/' + MAX_GUESSES;
     endStreak.textContent = String(streakCount);
+    playerName.value = prefilledUsername();
     endBackdrop.hidden = false;
   }
+
+  saveScoreForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (scoreSaved) return;
+    var name = playerName.value.trim();
+    rememberUsername(name);
+    if (window.__GAME_JAM_SAVE_SCORE__) {
+      window.__GAME_JAM_SAVE_SCORE__({
+        gameId: 'cardle',
+        score: guesses.length,
+        attemptLength: finalAttemptSec,
+        username: name
+      });
+    }
+    scoreSaved = true;
+    playerName.disabled = true;
+    btnSaveScore.disabled = true;
+    btnSaveScore.textContent = 'Saved';
+    toast('Score saved');
+  });
 
   endClose.addEventListener('click', function () { endBackdrop.hidden = true; });
   endCopy.addEventListener('click', function () {
@@ -450,6 +491,11 @@
     target = pickTargetForDate(dateStr, vehicles);
     guesses = [];
     done = false;
+    puzzleStartTs = Date.now();
+    scoreSaved = false;
+    playerName.disabled = false;
+    btnSaveScore.disabled = false;
+    btnSaveScore.textContent = 'Save Score';
     guessInput.disabled = false;
     guessInput.value = '';
     currentSuggestions = [];

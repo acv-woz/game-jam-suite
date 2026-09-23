@@ -4,14 +4,9 @@
     <nav class="game-nav" id="gameNav"></nav>
 
     <header class="topbar">
-      <div class="brand">
-        <span class="brand-mark">GTD</span>
-        <span class="brand-name">Guess&nbsp;the&nbsp;Deal</span>
-      </div>
       <div class="topbar-score" id="topbarScore" hidden>
         <span class="score-label">Score</span>
         <span class="score-value" id="liveScore">0</span>
-        <span class="streak" id="liveStreak" hidden></span>
       </div>
     </header>
 
@@ -22,17 +17,16 @@
         <div class="hero-card">
           <h1>How sharp is your eye on a deal?</h1>
           <p class="subtitle">
-            You'll see an appraisal card for a sample vehicle sale.
-            One number is hidden &mdash; the sale price or the mileage.
-            Guess as close as you can. Closer guesses score higher, and
-            a hot streak earns bonus points.
+            One real sold vehicle, once a day. One number is hidden
+            &mdash; the sale price or the mileage. Guess as close as
+            you can.
           </p>
           <ul class="rules">
-            <li><strong>12 rounds</strong>, mixed price &amp; mileage guesses</li>
-            <li>Score up to <strong>1,000</strong> points per round</li>
-            <li>3 correct guesses in a row = <strong>streak bonus</strong></li>
+            <li><strong>One car a day</strong>, price or mileage guess</li>
+            <li>Score up to <strong>1,000</strong> points</li>
+            <li>New car <strong>tomorrow</strong></li>
           </ul>
-          <button class="btn btn-primary btn-lg" id="btnStart">Start Game</button>
+          <button class="btn btn-primary btn-lg" id="btnStart">Play Today's Deal</button>
           <button class="btn btn-ghost" id="btnShowBoard">View Leaderboard</button>
         </div>
       </section>
@@ -40,14 +34,12 @@
       <!-- GAME SCREEN -->
       <section class="screen screen-game" id="screen-game" hidden>
         <div class="progress-row">
-          <div class="progress-track">
-            <div class="progress-fill" id="progressFill"></div>
-          </div>
-          <span class="progress-label" id="progressLabel">Round 1 / 12</span>
+          <span class="progress-label" id="progressLabel">Guess the Deal #1</span>
         </div>
 
         <div class="card vehicle-card" id="vehicleCard">
           <div class="vehicle-art" id="vehicleArt">
+            <img class="vehicle-photo" id="vehiclePhoto" alt="" hidden>
             <svg viewBox="0 0 240 120" class="car-svg" id="carSvg" aria-hidden="true">
               <rect x="10" y="70" width="220" height="8" rx="4" fill="var(--road)"></rect>
               <path d="M25 82 L40 45 Q48 32 65 32 L165 32 Q182 32 190 45 L205 82 Z" fill="var(--car-body)"></path>
@@ -108,10 +100,9 @@
 
           <div class="reveal-points">
             <span id="revealPoints">+0</span> pts
-            <span class="reveal-streak-bonus" id="revealStreakBonus" hidden></span>
           </div>
 
-          <button class="btn btn-primary btn-lg" id="btnNextRound">Next Round</button>
+          <button class="btn btn-primary btn-lg" id="btnNextRound">See Today's Result</button>
         </div>
       </section>
 
@@ -119,29 +110,20 @@
       <section class="screen screen-end" id="screen-end" hidden>
         <div class="card end-card">
           <div class="end-rank" id="endRank">🥈 Sharp Appraiser</div>
-          <div class="end-score-label">Final Score</div>
+          <div class="end-score-label">Today's Score</div>
           <div class="end-score" id="endScore">0</div>
-          <div class="end-sub" id="endSub">out of 12,000 possible</div>
+          <div class="end-sub" id="endSub">out of 1,000 possible today</div>
 
           <form class="save-score-row" id="saveScoreForm">
             <input type="text" id="playerName" class="player-name-input" placeholder="Your name for the leaderboard" maxlength="24" />
-            <button type="submit" class="btn btn-primary">Save Score</button>
+            <button type="submit" class="btn btn-primary" id="btnSaveScore">Save Score</button>
           </form>
 
           <div class="end-actions">
-            <button class="btn btn-primary btn-lg" id="btnPlayAgain">Play Again</button>
+            <button class="btn btn-primary btn-lg" id="btnPlayAgain">Play Today's Car Again</button>
             <button class="btn btn-ghost" id="btnViewBoardEnd">View Leaderboard</button>
+            <button type="button" class="btn btn-ghost" id="btnCopyResult">Copy result</button>
           </div>
-        </div>
-      </section>
-
-      <!-- LEADERBOARD SCREEN -->
-      <section class="screen screen-board" id="screen-board" hidden>
-        <div class="card board-card">
-          <h2>Leaderboard</h2>
-          <ol class="board-list" id="boardList"></ol>
-          <p class="board-empty" id="boardEmpty" hidden>No scores yet &mdash; be the first!</p>
-          <button class="btn btn-primary btn-lg" id="btnBackFromBoard">Back</button>
         </div>
       </section>
 
@@ -152,5 +134,19 @@
 <script setup>
 import useEmbeddedGame from '../../../shared/useEmbeddedGame';
 
-useEmbeddedGame('guess-the-deal');
+// dealerId/userId/username come from the host page's logged-in user (see
+// GuessTheDealPage.vue in acv-web-vuejs) — null there for now until that's
+// wired up; username still gets prefilled from a remembered value if this
+// stays null (see loadSavedUsername in this game's app.js).
+const props = defineProps({
+  dealerId: { type: [Number, String], default: null },
+  userId: { type: [Number, String], default: null },
+  username: { type: String, default: null },
+});
+
+useEmbeddedGame('guess-the-deal', {
+  dealerId: props.dealerId,
+  userId: props.userId,
+  username: props.username,
+});
 </script>

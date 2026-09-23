@@ -75,8 +75,6 @@ const THEME_LABELS = {
 };
 
 const QUESTIONS_PER_ROUND = 5;
-const LEADERBOARD_KEY = "cartrivia_leaderboard";
-const LEADERBOARD_MAX = 10;
 // Arbitrary Monday reference for daily numbering — same convention as Lot Jam.
 const EPOCH = Date.UTC(2026, 8, 14);
 
@@ -90,23 +88,45 @@ const state = {
   timerInterval: null,
   elapsedMs: 0,
   finalElapsedMs: 0,
+  scoreSaved: false,
 };
 
 const el = {};
 [
-  "screen-start", "screen-game", "screen-end", "screen-board",
-  "btnStart", "btnShowBoard", "btnBackFromBoard", "btnViewBoardEnd",
+  "screen-start", "screen-game", "screen-end",
+  "btnStart", "btnShowBoard", "btnViewBoardEnd",
   "topbarStats", "liveScore", "liveTime",
   "progressFill", "progressLabel",
   "themeBadge", "clueQuestion", "options",
   "btnSubmit", "btnNext",
   "feedback", "feedbackBanner", "feedbackIcon", "feedbackText",
-  "endRank", "endScore", "endSub", "saveScoreForm", "playerName",
-  "btnPlayAgain", "boardList", "boardEmpty",
+  "endRank", "endScore", "endSub", "saveScoreForm", "playerName", "btnSaveScore", "btnCopyResult",
+  "btnPlayAgain",
 ].forEach((id) => { el[id] = document.getElementById(id); });
 
+// The real leaderboard is a federation-only page (see games/leaderboard/) —
+// no standalone counterpart, same as the "Leaderboard →" nav link built by
+// renderGameNav above, so these buttons are hidden outside the host too
+// (see init below) instead of linking nowhere useful.
+function goToLeaderboard() {
+  if (window.__GAME_JAM_DATA_BASE__) window.location.href = "/game-jam/leaderboard?game=car-trivia";
+}
+
+// Shared player-identity convention across every game in the suite — see
+// guess-the-deal/web/app.js for the full write-up.
+function loadSavedUsername() {
+  try { return localStorage.getItem("gamejam-username") || ""; } catch (e) { return ""; }
+}
+function rememberUsername(name) {
+  try { if (name) localStorage.setItem("gamejam-username", name); } catch (e) { /* storage unavailable */ }
+}
+function prefilledUsername() {
+  const user = window.__GAME_JAM_USER__;
+  return (user && user.username) || loadSavedUsername();
+}
+
 function showScreen(name) {
-  ["start", "game", "end", "board"].forEach((n) => {
+  ["start", "game", "end"].forEach((n) => {
     el[`screen-${n}`].hidden = n !== name;
   });
   el.topbarStats.hidden = name === "start";
@@ -325,51 +345,8 @@ function endGame() {
   el.endRank.textContent = rankForScore(state.score, state.daily.length);
   el.endScore.textContent = `${state.score} / ${state.daily.length}`;
   el.endSub.textContent = `Finished in ${fmtTime(state.finalElapsedMs)}`;
-  el.playerName.value = "";
+  el.playerName.value = prefilledUsername();
   showScreen("end");
-}
-
-function loadLeaderboard() {
-  try {
-    const raw = localStorage.getItem(LEADERBOARD_KEY);
-    const list = raw ? JSON.parse(raw) : [];
-    return Array.isArray(list) ? list : [];
-  } catch (e) {
-    return [];
-  }
-}
-
-function saveLeaderboardEntry(name, score, timeMs) {
-  try {
-    const list = loadLeaderboard();
-    list.push({ name: name || "Anonymous", score, timeMs, date: new Date().toISOString() });
-    // higher score wins; ties broken by whoever finished faster
-    list.sort((a, b) => (b.score - a.score) || (a.timeMs - b.timeMs));
-    localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(list.slice(0, LEADERBOARD_MAX)));
-  } catch (e) {
-    /* localStorage unavailable — leaderboard just won't persist */
-  }
-}
-
-function escapeHtml(str) {
-  const div = document.createElement("div");
-  div.textContent = str;
-  return div.innerHTML;
-}
-
-function renderLeaderboard() {
-  const list = loadLeaderboard();
-  el.boardEmpty.hidden = list.length > 0;
-  el.boardList.innerHTML = list
-    .map(
-      (entry, i) => `<li>
-        <span class="ct-board-rank">#${i + 1}</span>
-        <span class="ct-board-name">${escapeHtml(entry.name)}</span>
-        <span class="ct-board-time">${fmtTime(entry.timeMs || 0)}</span>
-        <span class="ct-board-score">${entry.score}</span>
-      </li>`
-    )
-    .join("");
 }
 
 function startGame() {
@@ -379,30 +356,55 @@ function startGame() {
   el.liveTime.textContent = "0:00";
   state.elapsedMs = 0;
   state.finalElapsedMs = 0;
+  state.scoreSaved = false;
+  el.playerName.disabled = false;
+  el.btnSaveScore.disabled = false;
+  el.btnSaveScore.textContent = "Save Score";
   startTimer();
   renderQuestion();
 }
 
 function bindEvents() {
   el.btnStart.addEventListener("click", startGame);
-  el.btnShowBoard.addEventListener("click", () => {
-    renderLeaderboard();
-    showScreen("board");
-  });
-  el.btnBackFromBoard.addEventListener("click", () => showScreen("start"));
-  el.btnViewBoardEnd.addEventListener("click", () => {
-    renderLeaderboard();
-    showScreen("board");
-  });
+  el.btnShowBoard.addEventListener("click", goToLeaderboard);
+  el.btnViewBoardEnd.addEventListener("click", goToLeaderboard);
 
   el.btnSubmit.addEventListener("click", submitAnswer);
   el.btnNext.addEventListener("click", nextQuestion);
 
   el.saveScoreForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    saveLeaderboardEntry(el.playerName.value.trim(), state.score, state.finalElapsedMs);
-    renderLeaderboard();
-    showScreen("board");
+    if (state.scoreSaved) return;
+    const name = el.playerName.value.trim();
+    rememberUsername(name);
+    if (window.__GAME_JAM_SAVE_SCORE__) {
+      window.__GAME_JAM_SAVE_SCORE__({
+        gameId: "car-trivia",
+        score: state.score,
+        attemptLength: Math.round(state.finalElapsedMs / 1000),
+        username: name,
+      });
+    }
+    state.scoreSaved = true;
+    el.playerName.disabled = true;
+    el.btnSaveScore.disabled = true;
+    el.btnSaveScore.textContent = "Saved";
+  });
+
+  el.btnCopyResult.addEventListener("click", () => {
+    const text = `Car Trivia — ${state.score} / ${state.daily.length}\n` +
+      `${el.endRank.textContent} · finished in ${fmtTime(state.finalElapsedMs)}`;
+    const btn = el.btnCopyResult;
+    const originalLabel = btn.textContent;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text)
+        .then(() => { btn.textContent = "Copied!"; })
+        .catch(() => { btn.textContent = "Could not copy"; })
+        .finally(() => { setTimeout(() => { btn.textContent = originalLabel; }, 1600); });
+    } else {
+      btn.textContent = "Copy not supported";
+      setTimeout(() => { btn.textContent = originalLabel; }, 1600);
+    }
   });
 
   el.btnPlayAgain.addEventListener("click", startGame);
@@ -410,6 +412,10 @@ function bindEvents() {
 
 async function init() {
   bindEvents();
+  if (!window.__GAME_JAM_DATA_BASE__) {
+    el.btnShowBoard.hidden = true;
+    el.btnViewBoardEnd.hidden = true;
+  }
   const pool = await loadQuestions();
   state.daily = pickDailyQuestions(pool, daysSinceEpoch());
   showScreen("start");

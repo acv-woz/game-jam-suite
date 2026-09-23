@@ -191,6 +191,12 @@ h1, h2{ margin: 0; font-weight: 800; letter-spacing: -.01em; }
 .win-stats div{ text-align:center; }
 .win-stats b{ display:block; font-size: 20px; font-variant-numeric: tabular-nums; }
 .win-stats span{ font-size: 10px; text-transform: uppercase; letter-spacing:.08em; color: var(--ink-dim); }
+.save-score-row{ display:flex; gap:8px; margin: 0 0 14px; }
+.player-name-input{
+  flex:1; padding: 10px 12px; border:1px solid var(--hairline); border-radius: 10px;
+  background: var(--card-2); color: var(--ink); font-size: 13.5px; outline:none; min-width:0;
+}
+.player-name-input:focus{ border-color: var(--accent); }
 .modal-actions{ display:flex; gap: 10px; justify-content:center; }
 
 #toast{

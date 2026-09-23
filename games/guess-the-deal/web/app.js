@@ -44,8 +44,6 @@ const FALLBACK_ROUNDS = [
 // across the suite's daily games.
 const EPOCH = Date.UTC(2026, 8, 14);
 const QUALIFYING_SCORE = 650;
-const LEADERBOARD_KEY = "gtd_leaderboard";
-const LEADERBOARD_MAX = 10;
 
 function daysSinceEpoch() {
   return Math.max(0, Math.floor((Date.now() - EPOCH) / 86400000));
@@ -56,24 +54,51 @@ const state = {
   round: null,
   dayNumber: 1,
   score: 0,
+  gameStartTs: null,
+  finalAttemptSec: 0,
+  scoreSaved: false,
 };
 
 const el = {};
 [
-  "screen-start", "screen-game", "screen-reveal", "screen-end", "screen-board",
-  "btnStart", "btnShowBoard", "btnBackFromBoard", "btnViewBoardEnd",
+  "screen-start", "screen-game", "screen-reveal", "screen-end",
+  "btnStart", "btnShowBoard", "btnViewBoardEnd",
   "topbarScore", "liveScore",
   "progressLabel",
   "vehicleTitle", "vehicleTrim", "specGrid", "conditionNotes", "carSvg", "vehiclePhoto",
   "guessQuestion", "guessPrefix", "guessSuffix", "guessNumber", "guessSlider", "btnSubmitGuess",
   "revealTier", "revealGuess", "revealActual", "revealBarFill", "revealBarMarker",
   "revealOff", "revealPoints", "btnNextRound",
-  "endRank", "endScore", "endSub", "saveScoreForm", "playerName",
-  "btnPlayAgain", "boardList", "boardEmpty",
+  "endRank", "endScore", "endSub", "saveScoreForm", "playerName", "btnSaveScore", "btnCopyResult",
+  "btnPlayAgain",
 ].forEach((id) => { el[id] = document.getElementById(id); });
 
+// The real leaderboard is a federation-only page (see games/leaderboard/) —
+// no standalone counterpart, same as the "Leaderboard →" nav link built by
+// renderGameNav above, so these buttons are hidden outside the host too
+// (see init below) instead of linking nowhere useful.
+function goToLeaderboard() {
+  if (window.__GAME_JAM_DATA_BASE__) window.location.href = "/game-jam/leaderboard?game=guess-the-deal";
+}
+
+// Shared player-identity convention across every game in the suite: the
+// host page can pass a real username in via window.__GAME_JAM_USER__ (see
+// useEmbeddedGame.js); short of that, remember whatever the player last
+// typed into a save-score form so it prefills next time instead of starting
+// blank every round.
+function loadSavedUsername() {
+  try { return localStorage.getItem("gamejam-username") || ""; } catch (e) { return ""; }
+}
+function rememberUsername(name) {
+  try { if (name) localStorage.setItem("gamejam-username", name); } catch (e) { /* storage unavailable */ }
+}
+function prefilledUsername() {
+  const user = window.__GAME_JAM_USER__;
+  return (user && user.username) || loadSavedUsername();
+}
+
 function showScreen(name) {
-  ["start", "game", "reveal", "end", "board"].forEach((n) => {
+  ["start", "game", "reveal", "end"].forEach((n) => {
     el[`screen-${n}`].hidden = n !== name;
   });
   el.topbarScore.hidden = name === "start";
@@ -268,53 +293,12 @@ function rankForScore(score, maxScore) {
 
 function endGame() {
   const maxScore = 1000;
+  state.finalAttemptSec = Math.round((Date.now() - state.gameStartTs) / 1000);
   el.endRank.textContent = rankForScore(state.score, maxScore);
   el.endSub.textContent = `out of ${maxScore.toLocaleString("en-US")} possible today`;
-  el.playerName.value = "";
+  el.playerName.value = prefilledUsername();
   showScreen("end");
   animateNumber(el.endScore, 0, state.score, 900);
-}
-
-function loadLeaderboard() {
-  try {
-    const raw = localStorage.getItem(LEADERBOARD_KEY);
-    const list = raw ? JSON.parse(raw) : [];
-    return Array.isArray(list) ? list : [];
-  } catch (e) {
-    return [];
-  }
-}
-
-function saveLeaderboardEntry(name, score) {
-  try {
-    const list = loadLeaderboard();
-    list.push({ name: name || "Anonymous", score, date: new Date().toISOString() });
-    list.sort((a, b) => b.score - a.score);
-    const trimmed = list.slice(0, LEADERBOARD_MAX);
-    localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(trimmed));
-  } catch (e) {
-    /* localStorage unavailable — leaderboard just won't persist */
-  }
-}
-
-function renderLeaderboard() {
-  const list = loadLeaderboard();
-  el.boardEmpty.hidden = list.length > 0;
-  el.boardList.innerHTML = list
-    .map(
-      (entry, i) => `<li>
-        <span class="board-rank">#${i + 1}</span>
-        <span class="board-name">${escapeHtml(entry.name)}</span>
-        <span class="board-score">${entry.score.toLocaleString("en-US")}</span>
-      </li>`
-    )
-    .join("");
-}
-
-function escapeHtml(str) {
-  const div = document.createElement("div");
-  div.textContent = str;
-  return div.innerHTML;
 }
 
 function startGame() {
@@ -322,21 +306,19 @@ function startGame() {
   state.dayNumber = day + 1;
   state.round = state.allRounds[day % state.allRounds.length];
   state.score = 0;
+  state.gameStartTs = Date.now();
+  state.scoreSaved = false;
+  el.playerName.disabled = false;
+  el.btnSaveScore.disabled = false;
+  el.btnSaveScore.textContent = "Save Score";
   el.liveScore.textContent = "0";
   renderRound();
 }
 
 function bindEvents() {
   el.btnStart.addEventListener("click", startGame);
-  el.btnShowBoard.addEventListener("click", () => {
-    renderLeaderboard();
-    showScreen("board");
-  });
-  el.btnBackFromBoard.addEventListener("click", () => showScreen("start"));
-  el.btnViewBoardEnd.addEventListener("click", () => {
-    renderLeaderboard();
-    showScreen("board");
-  });
+  el.btnShowBoard.addEventListener("click", goToLeaderboard);
+  el.btnViewBoardEnd.addEventListener("click", goToLeaderboard);
 
   el.btnSubmitGuess.addEventListener("click", submitGuess);
   el.guessNumber.addEventListener("keydown", (e) => {
@@ -354,9 +336,38 @@ function bindEvents() {
 
   el.saveScoreForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    saveLeaderboardEntry(el.playerName.value.trim(), state.score);
-    renderLeaderboard();
-    showScreen("board");
+    if (state.scoreSaved) return;
+    const name = el.playerName.value.trim();
+    rememberUsername(name);
+    if (window.__GAME_JAM_SAVE_SCORE__) {
+      window.__GAME_JAM_SAVE_SCORE__({
+        gameId: "guess-the-deal",
+        score: state.score,
+        attemptLength: state.finalAttemptSec,
+        username: name,
+      });
+    }
+    state.scoreSaved = true;
+    el.playerName.disabled = true;
+    el.btnSaveScore.disabled = true;
+    el.btnSaveScore.textContent = "Saved";
+  });
+
+  el.btnCopyResult.addEventListener("click", () => {
+    const maxScore = 1000;
+    const text = `Guess the Deal — ${state.score.toLocaleString("en-US")} / ${maxScore.toLocaleString("en-US")}\n` +
+      `${el.endRank.textContent}`;
+    const btn = el.btnCopyResult;
+    const originalLabel = btn.textContent;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text)
+        .then(() => { btn.textContent = "Copied!"; })
+        .catch(() => { btn.textContent = "Could not copy"; })
+        .finally(() => { setTimeout(() => { btn.textContent = originalLabel; }, 1600); });
+    } else {
+      btn.textContent = "Copy not supported";
+      setTimeout(() => { btn.textContent = originalLabel; }, 1600);
+    }
   });
 
   el.btnPlayAgain.addEventListener("click", startGame);
@@ -364,6 +375,10 @@ function bindEvents() {
 
 async function init() {
   bindEvents();
+  if (!window.__GAME_JAM_DATA_BASE__) {
+    el.btnShowBoard.hidden = true;
+    el.btnViewBoardEnd.hidden = true;
+  }
   state.allRounds = await loadRounds();
   showScreen("start");
 }

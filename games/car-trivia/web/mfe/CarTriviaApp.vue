@@ -3,10 +3,6 @@
     <nav class="game-nav" id="gameNav"></nav>
 
     <header class="ct-topbar">
-      <div class="ct-brand">
-        <span class="ct-brand-mark">CT</span>
-        <span class="ct-brand-name">Car&nbsp;Trivia</span>
-      </div>
       <div class="ct-topbar-stats" id="topbarStats" hidden>
         <div class="ct-topbar-stat">
           <span class="ct-topbar-stat-label">Score</span>
@@ -70,23 +66,14 @@
 
           <form class="ct-save-score-row" id="saveScoreForm">
             <input type="text" id="playerName" class="ct-player-name-input" placeholder="Your name for the leaderboard" maxlength="24" />
-            <button type="submit" class="ct-btn ct-btn-primary">Save Score</button>
+            <button type="submit" class="ct-btn ct-btn-primary" id="btnSaveScore">Save Score</button>
           </form>
 
           <div class="ct-end-actions">
             <button class="ct-btn ct-btn-primary ct-btn-lg" id="btnPlayAgain">Play Again</button>
             <button class="ct-btn ct-btn-ghost" id="btnViewBoardEnd">View Leaderboard</button>
+            <button type="button" class="ct-btn ct-btn-ghost" id="btnCopyResult">Copy result</button>
           </div>
-        </div>
-      </section>
-
-      <!-- LEADERBOARD SCREEN -->
-      <section class="ct-screen ct-screen-board" id="screen-board" hidden>
-        <div class="ct-board-card">
-          <h2>Leaderboard</h2>
-          <ol class="ct-board-list" id="boardList"></ol>
-          <p class="ct-board-empty" id="boardEmpty" hidden>No scores yet &mdash; be the first!</p>
-          <button class="ct-btn ct-btn-primary ct-btn-lg" id="btnBackFromBoard">Back</button>
         </div>
       </section>
 
@@ -104,5 +91,19 @@
 <script setup>
 import useEmbeddedGame from '../../../shared/useEmbeddedGame';
 
-useEmbeddedGame('car-trivia');
+// dealerId/userId/username come from the host page's logged-in user (see
+// CarTriviaPage.vue in acv-web-vuejs) — null there for now until that's
+// wired up; username still gets prefilled from a remembered value if this
+// stays null (see loadSavedUsername in this game's app.js).
+const props = defineProps({
+  dealerId: { type: [Number, String], default: null },
+  userId: { type: [Number, String], default: null },
+  username: { type: String, default: null },
+});
+
+useEmbeddedGame('car-trivia', {
+  dealerId: props.dealerId,
+  userId: props.userId,
+  username: props.username,
+});
 </script>

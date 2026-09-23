@@ -69,27 +69,12 @@ body {
 .topbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 14px 20px;
   padding-top: calc(14px + env(safe-area-inset-top, 0px));
   background: var(--surface);
   border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  z-index: 5;
 }
-
-.brand { display: flex; align-items: center; gap: 10px; }
-.brand-mark {
-  background: var(--primary);
-  color: var(--primary-contrast);
-  font-weight: 800;
-  font-size: 13px;
-  padding: 6px 8px;
-  border-radius: 8px;
-  letter-spacing: 0.02em;
-}
-.brand-name { font-weight: 700; font-size: 15px; }
 
 .topbar-score {
   display: flex;
@@ -364,30 +349,6 @@ main {
 .player-name-input:focus { border-color: var(--primary); }
 
 .end-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
-
-/* LEADERBOARD */
-.board-card h2 { margin: 0 0 14px; font-size: 20px; }
-.board-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.board-list li {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 10px;
-  background: var(--bg-accent);
-  font-size: 14px;
-}
-.board-rank { font-weight: 800; width: 24px; color: var(--text-muted); }
-.board-name { flex: 1; font-weight: 600; }
-.board-score { font-weight: 800; font-variant-numeric: tabular-nums; }
-.board-empty { color: var(--text-muted); font-size: 14px; text-align: center; }
 
 @keyframes pulse {
   0%, 100% { opacity: 1; }
